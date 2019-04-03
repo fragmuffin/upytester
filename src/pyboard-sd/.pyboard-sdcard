@@ -1,2 +1,3 @@
-this file just indicates that this mounted drive is, or is intended to be 
-synchronised with a pyboard's sd card.
+this file just indicates that this folder is either:
+ - the contents of a pyboard's SD card, or
+ - is intended to be synchronised with a pyboard's SD card.
