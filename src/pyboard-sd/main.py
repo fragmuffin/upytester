@@ -11,6 +11,7 @@ from utils import external_interrupt
 from cmd import interpret, get_sender
 import components
 
+
 # Allocate memory for callback debugging
 micropython.alloc_emergency_exception_buf(100)
 
@@ -21,7 +22,7 @@ def _startup_flash():
         time.sleep(0.05)
         pyb.LED(i).off()
 
-_flashy_startup()
+_startup_flash()
 
 vcp = pyb.USB_VCP()
 
