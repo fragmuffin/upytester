@@ -7,7 +7,7 @@ import threading
 import queue
 
 # Local libs
-from .utils import find_comport, find_mountpoint, mount_sd, unmount_sd
+from .utils import find_comport, find_mountpoint_sd, mount_sd, unmount_sd
 from .exceptions import ResponseTimeoutException
 
 # Logging
