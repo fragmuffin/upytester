@@ -17,4 +17,4 @@ __all__ = [
     'PyBoard',
 ]
 
-from .pyboard.device import PyBoard
+from .pyboard import PyBoard

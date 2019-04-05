@@ -1,9 +1,7 @@
 __all__ = [
     'PyBoard',
-    'get_pyboard_map', 'clear_pyboard_map',
     'sync_path_to_sd',
 ]
 
-from .device import PyBoard
-from .map import get_pyboard_map
+from .pyboard import PyBoard
 from .sync import sync_path_to_sd

@@ -7,7 +7,8 @@ import threading
 import queue
 
 # Local libs
-from .map import get_pyboard_map
+from .utils import find_comport, find_mountpoint, mount_sd, unmount_sd
+from .exceptions import ResponseTimeoutException
 
 # Logging
 import logging
@@ -27,17 +28,13 @@ class PyBoard(object):
     # Defaults
     DEFAULT_BAUDRATE = 115200
 
-    class ResponseTimeoutException(Exception):
-        """Raised when no 'ok' response is received from the pyboard"""
-        pass
-
     def __init__(self, serial_number, comport=None, auto_open=True):
         self.serial_number = serial_number
 
         if comport is None:
-            pyboard_map = get_pyboard_map()
+            port_info = find_comport(self)
             comport = serial.Serial(
-                port=pyboard_map[serial_number]['port'].device,
+                port=port_info.device,
                 baudrate=self.DEFAULT_BAUDRATE,
             )
         self.comport = comport
@@ -59,6 +56,28 @@ class PyBoard(object):
 
         if auto_open:
             self.open()
+
+    def mount_sd(self):
+        """
+        Mount SD card
+
+        :return: path to mounted folder
+        :rtype: :class:`str`
+        """
+        return mount_sd(self)
+
+    def unmount_sd(self):
+        """
+        Mount SD card
+        """
+        return unmount_sd(self)
+
+    @property
+    def mountpoint_sd(self):
+        """
+        Directory of mounted SD card
+        """
+        return find_mountpoint_sd(self)
 
     @property
     def is_open(self):
@@ -175,7 +194,7 @@ class PyBoard(object):
                         response = self._receive_ok_queue.get(timeout=self.RESPONSE_TIMEOUT)
                         # note: nothing done with response (yet)
                     except queue.Empty:
-                        raise self.ResponseTimeoutException("{!r}".format(self))
+                        raise ResponseTimeoutException("{!r}".format(self))
                     finally:
                         if self._transmit_queue.empty():
                             self._processing_transmit.clear()

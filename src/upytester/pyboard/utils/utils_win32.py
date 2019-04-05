@@ -8,6 +8,13 @@ import os
 MAPFILE_ENVVAR = 'PYBOARD_MAP'
 
 
+# FIXME: Experimental Code
+#   As of writing this, most of this module's code was written in an attempt
+#   to get a reliable working system on Windows 10.
+#   The challenge was in mapping:
+#       serial_number -> comport (eg: 'COM3')
+#       serial_number -> mountpoint (eg: 'D:\')
+
 # --- Variable(s)
 _cached_map = None
 
@@ -160,3 +167,50 @@ def get_pyboard_map(refresh=False):
     if refresh or (_cached_map is None):
         _cached_map = _get_map()
     return _cached_map
+
+
+def sync_path_to_sd(source_path, pyboard):
+    """
+    :param source_path: Source folder to sync with SD card
+    :type source_path: :class:`str`
+    """
+    # Validate Request
+    if not os.path.isdir(source_path):
+        raise ValueError(
+            "given source_path '{}' does not exist (or is not a folder)".format(source_path)
+        )
+
+    mountpoint = pyboard.mountpoint_sd
+    if not os.path.isdir(mountpoint):
+        raise ValueError(
+            "pyboard's mountpoint '{}' does not exist (or is not a folder)".format(mountpoint)
+        )
+
+    CHECK_FILES = ['main.py', '.pyboard-sdcard']
+    if not all(os.path.exists(os.path.join(mountpoint, f)) for f in CHECK_FILES):
+        raise ValueError(
+            (
+                "mountpoint does not contain {files} file(s), are you sure you "
+                "want to overwrite everything on that drive? manually create "
+                "files with these names to the SD card if you wish to continue."
+            ).format(
+                files=', '.join(CHECK_FILES)
+            )
+        )
+
+    # Create & Run process
+    process = subprocess.Popen(
+        [
+            'Robocopy.exe',
+            os.path.abspath(source_path),
+            os.path.abspath(mountpoint),
+            '/MIR', '/Z', '/W:5',
+        ],
+        shell=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    for line in process.stdout:
+        process.poll()
+        print(line.decode().rstrip('\n'))
+    process.wait()
