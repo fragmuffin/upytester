@@ -7,7 +7,7 @@ import threading
 import queue
 
 # Local libs
-from .utils import find_comport, find_mountpoint_sd, mount_sd, unmount_sd
+from . import utils
 from .exceptions import ResponseTimeoutException
 
 # Logging
@@ -16,9 +16,17 @@ log = logging.getLogger(__name__)
 
 
 class PyBoard(object):
+    """
+    The primary interface to a physical device running the `upytester`
+    firmware.
+
+    Can also be used more passively to mount / unmount file-systems, get
+    the device's mountpoint (a folder name)
+    """
+
     # Timeouts
     #   maximum timeout value is the max time to wait for threads to finish.
-    READ_TIMEOUT = 0.1  # maximum time per read (unit: sec
+    READ_TIMEOUT = 0.1  # maximum time per read (unit: sec)
     READ_CHUNKSIZE = 1  # maximum bytes to receive
 
     WRITE_TIMEOUT = 0.1 # maximum time to wait while reading transmit queue
@@ -28,16 +36,23 @@ class PyBoard(object):
     # Defaults
     DEFAULT_BAUDRATE = 115200
 
-    def __init__(self, serial_number, comport=None, auto_open=True):
-        self.serial_number = serial_number
+    def __init__(self, serial_number, name=None, comport=None, auto_open=True):
+        """
+        :param serial_number: Serial number of PyBoard instance
+        :type serial_number: :class:`str`
+        :param name: Pyboard's Name [optional] to identify more easily in a
+                     larger scale project.
+        :type name: :class:`str`
 
-        if comport is None:
-            port_info = find_comport(self)
-            comport = serial.Serial(
-                port=port_info.device,
-                baudrate=self.DEFAULT_BAUDRATE,
-            )
-        self.comport = comport
+        To get a list of valid `serial_number` values call
+        :meth:`<upytester.PyBoard.connected_serial_numbers> connected_serial_numbers`::
+
+            >>> from upytester import PyBoard
+            >>> list(PyBoard.connected_serial_numbers())
+            ['3976346C3436', '397631234567']
+        """
+        self.serial_number = serial_number
+        self.name = name
 
         # Events
         self._halt_transmit = threading.Event()
@@ -54,9 +69,20 @@ class PyBoard(object):
         # Instruction List
         self._instruction_list = None
 
+        self._comport = comport
+
         if auto_open:
             self.open()
 
+    # ==================== OS-level Management ====================
+    # Such as:
+    #   - Listing units connected to host
+    #   - Mounting / Unmounting file-systems (sd / flash)
+    @classmethod
+    def connected_serial_numbers(cls):
+        return utils.connected_serial_numbers()
+
+    # ----- SD Card
     def mount_sd(self):
         """
         Mount SD card
@@ -64,20 +90,90 @@ class PyBoard(object):
         :return: path to mounted folder
         :rtype: :class:`str`
         """
-        return mount_sd(self)
+        return utils.mount_sd(self)
 
     def unmount_sd(self):
         """
-        Mount SD card
+        Unmount SD card
         """
-        return unmount_sd(self)
+        return utils.unmount_sd(self)
 
     @property
     def mountpoint_sd(self):
         """
         Directory of mounted SD card
         """
-        return find_mountpoint_sd(self)
+        return utils.find_mountpoint_sd(self)
+
+    def sync_to_sd(self, source, force=False, dryrun=False, quiet=False):
+        """
+        Synchronise files from the given `source` to the pyboard's SD card
+
+        :param source: Directory containing files to syncronise _to_ pyboard
+        :type source: :class:`str`
+        :param force: If `True`, assertion of the pre-existence of placeholder
+                      files will be ignored.
+        :type force: :class:`bool`
+        :param dryrun: If `True`, sync will not be performed, but everything else
+                       will be done. Use to manually confirm folder sync if
+                       you're concerned about what it'll do.
+        :type dryrun: :class:`bool`
+        :param quiet: If `True` process will not print anything to stdout
+        :type quiet: :class:`bool`
+        """
+        self.mount_sd()
+        return utils.sync_files_to_sd(
+            source, self,
+            force=force, dryrun=dryrun, quiet=quiet,
+        )
+        self.unmount_sd()
+
+    # ----- Flash
+    def mount_flash(self):
+        """
+        Mount on-board flash
+
+        :return: path to mounted folder
+        :rtype: :class:`str`
+        """
+        return utils.mount_flash(self)
+
+    def unmount_flash(self):
+        """
+        Unmount on-board flash
+        """
+        return utils.unmount_flash(self)
+
+    @property
+    def mountpoint_flash(self):
+        """
+        Directory of mounted on-board flash
+        """
+        return utils.find_mountpoint_flash(self)
+
+    def sync_to_flash(self, source, force=False, dryrun=False, quiet=False):
+        """
+        Just like :meth:`PyBoard.sync_to_sd` but to Flash
+        (instead of the SD card).
+        """
+        self.mount_flash()
+        return utils.sync_files_to_flash(
+            source, self,
+            force=force, dryrun=dryrun, quiet=quiet,
+        )
+        self.unmount_flash()
+
+    # ==================== Serial Communication ====================
+    @property
+    def comport(self):
+        if self._comport is None:
+            port_info = utils.find_portinfo(self)
+            self._comport = serial.Serial(
+                port=port_info.device,
+                baudrate=self.DEFAULT_BAUDRATE,
+            )
+
+        return self._comport
 
     @property
     def is_open(self):
@@ -247,27 +343,6 @@ class PyBoard(object):
             self._instruction_list = self.receive(timeout=0.1)
         return self._instruction_list
 
-    def __repr__(self):
-        return "<{cls}: {serial}>".format(
-            cls=type(self).__name__,
-            serial=self.serial_number,
-        )
-
-    def __getattr__(self, key):
-        if (self._instruction_list is not None) and (key in self._instruction_list):
-            # Create a callable that will send apropriately formatted object
-            def instruction(*args, **kwargs):
-                obj = kwargs
-                if args:
-                    obj['args'] = args
-                obj['i'] = key
-                return self.send(obj)
-
-            instruction.__name__ = key
-            return instruction
-
-        raise AttributeError("'{}' object has no attribute '{}'".format(type(self).__name__, key))
-
     def send(self, obj):
         """
         Transmit given object encoded as json
@@ -324,3 +399,26 @@ class PyBoard(object):
         # FIXME: this is just polling, is there a better way to block until queue is empty?
         while not (self._transmit_queue.empty() and not self._processing_transmit.is_set()):
             time.sleep(period)
+
+    # ==================== Housekeeping ====================
+    def __repr__(self):
+        return "<{cls}[{serial}]{name}>".format(
+            cls=type(self).__name__,
+            serial=self.serial_number,
+            name=(": {}".format(self.name)) if self.name else "",
+        )
+
+    def __getattr__(self, key):
+        if (self._instruction_list is not None) and (key in self._instruction_list):
+            # Create a callable that will send apropriately formatted object
+            def instruction(*args, **kwargs):
+                obj = kwargs
+                if args:
+                    obj['args'] = args
+                obj['i'] = key
+                return self.send(obj)
+
+            instruction.__name__ = key
+            return instruction
+
+        raise AttributeError("'{}' object has no attribute '{}'".format(type(self).__name__, key))

@@ -1,9 +1,18 @@
 __all__ = [
-    'find_comport',
+    'connected_serial_numbers',
+    'find_portinfo',
+
+    # Storage Functions : SD card
     'find_mountpoint_sd',
     'mount_sd',
     'unmount_sd',
-    'sync_path_to_sd',
+    'sync_files_to_sd',
+
+    # Storage Functions : Flash
+    'find_mountpoint_flash',
+    'mount_flash',
+    'unmount_flash',
+    'sync_files_to_flash',
 ]
 
 # Import platform's utils module
