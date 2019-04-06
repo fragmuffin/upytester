@@ -44,7 +44,7 @@ def find_portinfo(pyboard):
     """
     # --- All serial ports
     port_info_list = [
-        c for c in connected_serial_numbers()
+        c for c in comports()
         if c.serial_number == pyboard.serial_number
     ]
 
