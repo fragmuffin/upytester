@@ -9,7 +9,10 @@ import uasyncio as asyncio
 
 from utils import external_interrupt
 from cmd import interpret, get_sender
-import components
+try:
+    import components
+except ImportError:
+    pass  # fail quietly
 
 
 # Allocate memory for callback debugging
@@ -25,15 +28,6 @@ def _startup_flash():
 _startup_flash()
 
 vcp = pyb.USB_VCP()
-
-# Interrupt on 'USR' button press. stop mainloop
-keepalive = True
-
-@external_interrupt('SW', machine.Pin.PULL_UP, pyb.ExtInt.IRQ_FALLING)
-def stop_mainloop(interrupt):
-    global keepalive
-    keepalive = False
-
 
 _sender_func = get_sender(vcp)
 
@@ -52,7 +46,10 @@ async def listener():
     """
     # TODO: create a global buffer, and populate via memoryview
     line = b''
-    while keepalive:
+
+    # Stop mainloop on 'USR' button press
+    usr_button = pyb.Switch()
+    while not usr_button.value():
         c = vcp.recv(1, timeout=0)  # non-blocking
         if c:
             if c == b'\r':
