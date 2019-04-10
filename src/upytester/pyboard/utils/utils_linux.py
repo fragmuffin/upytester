@@ -201,18 +201,23 @@ class _StorageDevice:
             )
 
         # Create & Run sync process
+        abs_source = "{}/".format(os.path.abspath(source_path))
+        abs_dest = "{}/".format(os.path.abspath(mountpoint))
+
+        assert os.path.relpath(abs_dest, '/') != '.', "destination is ROOT!!?"
+
         if not quiet:
             print("Synchronising files:")
-            print("    - source: {!r}".format(source_path))
-            print("    - dest:   {!r}".format(mountpoint))
+            print("    - source: {!r}".format(abs_source))
+            print("    - dest:   {!r}".format(abs_dest))
 
         if not dryrun:
             process = subprocess.Popen(
                 [
                     'rsync',
                     '-rLptgoDIvzhi', '--delete',
-                    "{}/".format(os.path.abspath(source_path)),
-                    "{}/".format(os.path.abspath(mountpoint)),
+                    abs_source,
+                    abs_dest,
                 ],
                 #shell=True,
                 stdout=subprocess.PIPE,
