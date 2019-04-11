@@ -213,9 +213,21 @@ class _StorageDevice:
 
         if not dryrun:
             process = subprocess.Popen(
+                # rsync Options
+                #   --archive == -rlnnptgoD (but we need -L)
+                #       -r  recurse into directories
+                #       -L  transform symlink into referent file/dir
+                #       -p  preserve permissions
+                #       -t  preserve modification times
+                #       -g  preserve group
+                #       -o  preserve owner (super-user only)
+                #       -D  preserve devices & special files
+                #
+                #   -h  output numbers in a human-readable format
+                #   -v  verbose
                 [
                     'rsync',
-                    '-rLptgoDIvzhi', '--delete',
+                    '-rLptgoDhv', '--delete',
                     abs_source,
                     abs_dest,
                 ],
