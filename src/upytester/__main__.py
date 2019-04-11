@@ -147,10 +147,10 @@ def action_mount():
 
 def action_unmount():
     medium = 'flash' if args.flash else 'sd'
-    for context in retry_loop("Mounting " + medium):
+    for context in retry_loop("Unmounting " + medium):
         with context:
             pyboard = upytester.PyBoard(args.serialnum, auto_open=False)
-            getattr(pyboard, 'mount_' + medium)()
+            getattr(pyboard, 'unmount_' + medium)()
             break
 
 
@@ -172,26 +172,38 @@ def action_sync():
                     "could not find serial: {!r}".format(args.serialnum)
                 )
             serial_num = serial_numbers[0]
-            _log('{}\n'.format(serial_num))
+            _log('{}'.format(serial_num))
             break
 
     # Create instance
     for context in retry_loop("Object"):
         with context:
             pyboard = upytester.PyBoard(serial_num, auto_open=False)
-            _log('{!r}\n'.format(pyboard))
+            _log('{!r}'.format(pyboard))
+            break
+
+    # Mount filesystem
+    medium = 'flash' if args.flash else 'sd'
+    for context in retry_loop("Mounting " + medium):
+        with context:
+            getattr(pyboard, 'mount_' + medium)()
             break
 
     # Sync Files
-    meth = 'sync_to_flash' if args.flash else 'sync_to_sd'
     for context in retry_loop("Sync"):
         with context:
-            getattr(pyboard, meth)(
+            getattr(pyboard, 'sync_to_' + medium)(
                 args.folder,
                 force=args.force,
                 dryrun=args.dryrun,
                 quiet=args.quiet,
             )
+            break
+
+    # Unmount filesystem
+    for context in retry_loop("Unmounting " + medium):
+        with context:
+            getattr(pyboard, 'unmount_' + medium)()
             break
 
     return 0
