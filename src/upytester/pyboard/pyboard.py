@@ -244,7 +244,7 @@ class PyBoard(object):
                         self._receive_ok_queue.put(line)
                     else:
                         # everything else
-                        obj = json.loads(line.rstrip(b'\r'))
+                        obj = json.loads(line.rstrip(b'\r').decode())
                         if obj is None:  # ie: json.loads('null')
                             raise ValueError(
                                 ("Received '%s' from remote which decodes to 'None', " % line) +
