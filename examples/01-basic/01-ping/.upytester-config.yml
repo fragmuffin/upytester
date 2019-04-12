@@ -1,0 +1,3 @@
+devices:
+    pyb_a:
+        serial: '3976346C3436'
