@@ -1,0 +1,9 @@
+devices:
+  default:
+    lib-folder:
+      flash: blah
+      sd: foo
+  PYB_A:
+    serial: '123456673456'
+  PYB_B:
+    serial: '884832432234'
