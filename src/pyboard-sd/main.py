@@ -9,6 +9,7 @@ import uasyncio as asyncio
 
 from utils import external_interrupt
 from cmd import interpret, get_sender
+import sched
 try:
     import components
 except ImportError:
@@ -61,7 +62,7 @@ async def listener():
 
     # Stop mainloop on 'USR' button press
     usr_button = pyb.Switch()
-    while not usr_button.value():
+    while sched.keepalive:
         c = vcp.recv(1, timeout=0)  # non-blocking
         if c:
             if c == b'\r':
@@ -73,9 +74,10 @@ async def listener():
             await asyncio.sleep_ms(1)
 
 # Main loop
-from sched import loop  # asyncio.get_event_loop()
+sched.init_loop()  # initialize asyncio loop object
 try:
-    loop.run_until_complete(listener())
+    # start asyncio.get_event_loop()
+    sched.loop.run_until_complete(listener())
 except Exception as e:
     with open('/sd/exception.txt', 'w') as fh:
         fh.write(repr(e))

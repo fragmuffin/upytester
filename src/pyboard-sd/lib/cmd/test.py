@@ -1,9 +1,15 @@
 import pyb
 import time
 
-from sched import loop
+import sched
 
 from .mapping import instruction
+
+
+# ------- ping
+@instruction
+def ping(send, value=0):
+    send({'r': 'ping', 'value': value + 1})
 
 
 # ------- LEDs
@@ -23,7 +29,7 @@ def blink_led(send, led=1, intensity=0xff, duration=1):
     # Turn LED on
     led_obj.intensity(intensity)
     # Turn LED off (after a delay)
-    loop.call_later_ms(duration, lambda: led_obj.intensity(0))
+    sched.loop.call_later_ms(duration, lambda: led_obj.intensity(0))
 
 
 @instruction
@@ -40,7 +46,8 @@ def set_led(send, led=1, intensity=0xff):
     led_obj.intensity(intensity)
 
 
-# ------- ping
+# ------- Switch
 @instruction
-def ping(send, value=0):
-    send({'r': 'ping', 'value': value + 1})
+def get_switch(send):
+    switch_obj = pyb.Switch()
+    send({'value': switch_obj.value()})

@@ -4,7 +4,7 @@ import uasyncio as asyncio
 
 from .mapping import instruction
 
-from sched import loop
+import sched
 
 # ------- Maps
 can_bus_map = {}
@@ -86,7 +86,7 @@ def _can_tx_p_callback(bus, id):
             #   - Transmitted frame ACK bit not set
             #       (occurs if all other ECUs are off or passive)
             pass  # do nothing; retry next period
-        loop.call_later_ms(p, _can_tx_p_callback, bus, id)
+        sched.loop.call_later_ms(p, _can_tx_p_callback, bus, id)
 
 @instruction
 def can_tx_p(send, bus, id, data, period):
@@ -113,7 +113,7 @@ def can_tx_p(send, bus, id, data, period):
     can_tx_msg[bus][id] = (bytes(data), period)
 
     if start_async:
-        loop.call_later_ms(0, _can_tx_p_callback, bus, id)
+        sched.loop.call_later_ms(0, _can_tx_p_callback, bus, id)
 
 @instruction
 def can_tx_p_stop(send, bus, id):

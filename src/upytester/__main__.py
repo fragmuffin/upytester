@@ -15,6 +15,7 @@ ALLOWED_ACTIONS = (
     'comport',
     'sync',
     'reset',
+    'break',
 )
 
 def t_action(value):
@@ -213,6 +214,12 @@ def action_sync():
 def action_reset():
     pyboard = upytester.PyBoard(args.serialnum)
     pyboard.machine_reset(t=500)
+    pyboard.close()
+
+
+def action_break():
+    pyboard = upytester.PyBoard(args.serialnum)
+    pyboard.break_loop()
     pyboard.close()
 
 
