@@ -14,6 +14,7 @@ ALLOWED_ACTIONS = (
     'unmount',
     'comport',
     'sync',
+    'reset',
 )
 
 def t_action(value):
@@ -207,6 +208,13 @@ def action_sync():
             break
 
     return 0
+
+
+def action_reset():
+    pyboard = upytester.PyBoard(args.serialnum)
+    pyboard.machine_reset(t=500)
+    pyboard.close()
+
 
 # ====================== Mainline ======================
 errorcode = 0
