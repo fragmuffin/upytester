@@ -27,4 +27,7 @@ def get_device(name, config=None):
         config = get_config()
 
     from ..pyboard import PyBoard
-    return PyBoard(config['devices'][name]['serial'])
+    return PyBoard(
+        serial_number=config['devices'][name]['serial'],
+        name=name,
+    )

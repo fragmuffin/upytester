@@ -43,7 +43,7 @@ class RJ45Socket(object):
         :param value: if set, output value is set to given value
         :type value: :class:`bool`
         """
-        pin = self._pins[pin]
+        pin = self._pins[index]
 
         if value is None:
             receiver = pin.device.get_pin(pin.pin)

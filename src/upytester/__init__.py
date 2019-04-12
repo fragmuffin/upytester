@@ -15,6 +15,14 @@ __keywords__ = ['micropython', 'pyboard', 'testing', 'unittest', 'hardware']
 # ------- Imports
 __all__ = [
     'PyBoard',
+
+    # sub-modules
+    'project',
+    'pyboard',
 ]
 
 from .pyboard import PyBoard
+
+# sub-modules
+from . import project
+from . import pyboard

@@ -15,7 +15,7 @@ class BenchTest(unittest.TestCase):
         super(BenchTest, cls).setUpClass()
 
         # Connect to PyBoards
-        cls.pyb_a = upytester.project.get_device('PYB_A')
+        cls.pyb_a = upytester.project.get_device('pyb_a')
 
         # Create Sockets
         cls.socket_stim = RJ45Socket(
