@@ -11,7 +11,7 @@ def get_config(filename=None):
 
     # Decode
     with open('.upytester-config.yml', 'r') as fh:
-        data = yaml.load(fh)
+        data = yaml.safe_load(fh)
 
     return data
 

@@ -57,17 +57,18 @@ def find_portinfo(pyboard):
 
 
 # ========================== Disks (SD card / Flash) ==========================
-class _StorageDevice:
+class StorageDevice:
     # Override in inheriting class
     DEVICE_FILE_PREFIX = None
     DEVICE_MARKER_FILE = None
 
     @classmethod
-    def find_device_file(cls, pyboard):
+    def find_device_file(cls, pyboard, suffix='-part1'):
         device_list = glob(
-            '/dev/disk/by-id/usb-uPy_microSD_{prefix}_{serial}-*-part1'.format(
+            '/dev/disk/by-id/usb-uPy_microSD_{prefix}_{serial}-*{suffix}'.format(
                 prefix=cls.DEVICE_FILE_PREFIX,
                 serial=pyboard.serial_number,
+                suffix=suffix,
             )
         )
         if len(device_list) != 1:
@@ -243,7 +244,7 @@ class _StorageDevice:
 
 
 # --- SD Card
-class SDCard(_StorageDevice):
+class SDCard(StorageDevice):
     DEVICE_FILE_PREFIX = 'SD_card'
     DEVICE_MARKER_FILE = '.pyboard-sdcard'
 
@@ -262,7 +263,7 @@ def sync_files_to_sd(*args, **kwargs):
 
 
 # --- Flash
-class Flash(_StorageDevice):
+class Flash(StorageDevice):
     DEVICE_FILE_PREFIX = 'Flash'
     DEVICE_MARKER_FILE = '.pyboard-flash'
 
