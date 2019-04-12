@@ -400,6 +400,14 @@ class PyBoard(object):
         while not (self._transmit_queue.empty() and not self._processing_transmit.is_set()):
             time.sleep(period)
 
+    # ==================== Context Management ====================
+    def __enter__(self):
+        self.open()
+        return self
+
+    def __exit__(self, *args):
+        self.close()
+
     # ==================== Housekeeping ====================
     def __repr__(self):
         return "<{cls}[{serial}]{name}>".format(
