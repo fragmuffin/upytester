@@ -1,9 +1,9 @@
+libs:
+    sd: device-libs/sd
+    flash: device-libs/flash
+
 devices:
-  default:
-    lib-folder:
-      flash: blah
-      sd: foo
-  PYB_A:
-    serial: '123456673456'
-  PYB_B:
-    serial: '884832432234'
+    pyb_a:
+        serial: '3976346C3436'
+    pyb_b:
+        serial: '0123456789AB'
