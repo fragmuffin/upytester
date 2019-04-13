@@ -46,7 +46,7 @@ communication, among other resources may all be necessary for your project.
 * [`02-interrupt-eval`](02-on-board-components/02-interrupt-eval) - Accurate timing evaluation using an interrupt
 * [`03-can-seq-signal`](02-on-board-components/03-can-seq-signal) - Cyclic CAN frame sequential counter
 
-## `03-sample-pPoject`
+## `03-sample-project`
 
 A contrived example of a "product" is designed for an Arduino Nano board.
 
