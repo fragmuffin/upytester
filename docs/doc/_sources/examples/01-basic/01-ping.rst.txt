@@ -26,7 +26,7 @@ For this test, we use the :meth:`get_device() <upytester.project.get_device>`
 method to return a :class:`PyBoard <upytester.PyBoard>` instance to send
 commands to, and assign it to ``self.pyb_a``.
 
-.. literalinclude:: ../../../../examples/01-basic/01-ping/test_ping.py
+.. literalinclude:: src/01-ping/test_ping.py
    :pyobject: PingTest.setUp
 
 Test
@@ -34,7 +34,7 @@ Test
 
 The test is done in 3 parts:
 
-.. literalinclude:: ../../../../examples/01-basic/01-ping/test_ping.py
+.. literalinclude:: src/01-ping/test_ping.py
    :pyobject: PingTest.test_ping
 
 #. ``ping`` is called on the :class:`PyBoard <upytester.PyBoard>` instance.
@@ -60,7 +60,7 @@ To compliment :meth:`setUp() <unittest.TestCase.setUp>`,
 The serial link to the pyboard is closed by calling
 :meth:`close() <upytester.PyBoard.close>`
 
-.. literalinclude:: ../../../../examples/01-basic/01-ping/test_ping.py
+.. literalinclude:: src/01-ping/test_ping.py
    :pyobject: PingTest.tearDown
 
 
