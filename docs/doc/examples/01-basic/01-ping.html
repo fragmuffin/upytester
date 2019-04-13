@@ -195,23 +195,10 @@ to be useful for your peojct.</p>
 For this test, we use the <code class="xref py py-meth docutils literal"><span class="pre">get_device()</span></code>
 method to return a <code class="xref py py-class docutils literal"><span class="pre">PyBoard</span></code> instance to send
 commands to, and assign it to <code class="docutils literal"><span class="pre">self.pyb_a</span></code>.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pyb_a</span> <span class="o">=</span> <span class="n">upytester</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">get_device</span><span class="p">(</span><span class="s1">&#39;pyb_a&#39;</span><span class="p">)</span>
-</pre></div>
-</div>
 </div>
 <div class="section" id="test">
 <h3>Test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h3>
 <p>The test is done in 3 parts:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">test_ping</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="sd">&quot;&quot;&quot;</span>
-<span class="sd">        Send a ping request over serial to the pyboard identified as ``pyb_a``.</span>
-<span class="sd">        &quot;&quot;&quot;</span>
-        <span class="n">receiver</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">pyb_a</span><span class="o">.</span><span class="n">ping</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">100</span><span class="p">)</span>
-        <span class="n">response</span> <span class="o">=</span> <span class="n">receiver</span><span class="p">()</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">response</span><span class="p">[</span><span class="s1">&#39;value&#39;</span><span class="p">],</span> <span class="mi">101</span><span class="p">)</span>  <span class="c1"># ping sends back value + 1</span>
-</pre></div>
-</div>
 <ol class="arabic simple">
 <li><code class="docutils literal"><span class="pre">ping</span></code> is called on the <code class="xref py py-class docutils literal"><span class="pre">PyBoard</span></code> instance.
 This command is serialized and set to to the pyboard via USB.
@@ -231,10 +218,6 @@ the pyboard.</li>
 <a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.tearDown" title="(in Python v3.7)"><code class="xref py py-meth docutils literal"><span class="pre">tearDown()</span></code></a> is called <em>after</em> each test.</p>
 <p>The serial link to the pyboard is closed by calling
 <code class="xref py py-meth docutils literal"><span class="pre">close()</span></code></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
-        <span class="bp">self</span><span class="o">.</span><span class="n">pyb_a</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
-</pre></div>
-</div>
 </div>
 </div>
 <div class="section" id="improvements">
