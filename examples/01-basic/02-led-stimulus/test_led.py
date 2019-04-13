@@ -17,15 +17,15 @@ class LEDTest(BenchTest):
 
     def test_blink(self):
         """
-        Turn red LED on for 500ms asynchronously
+        Turn red LED on for 500ms (non-blocking)
         """
         self.pyb_a.blink_led(duration=500)
         time.sleep(0.5)  # just wait so tests don't run at the same time
 
     def test_led_set(self):
         """
-        Turn green LED on for
+        Turn green LED on for 500ms (blocking)
         """
-        self.pyb_a.set_led(led=2)
+        self.pyb_a.set_led(led=2, intensity=0xff)  # on
         time.sleep(0.5)
-        self.pyb_a.set_led(led=2, intensity=0)
+        self.pyb_a.set_led(led=2, intensity=0x00)  # off
