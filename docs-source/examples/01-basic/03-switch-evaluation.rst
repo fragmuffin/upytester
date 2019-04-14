@@ -1,3 +1,6 @@
+.. _examples.basic.switch:
+
+
 Switch Evaluation Example
 =====================================
 

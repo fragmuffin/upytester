@@ -19,4 +19,4 @@ unambiguous.
    01-ping
    02-led-stimulus
    03-switch-evaluation
-   05-cat5-tester
+   04-wire-tester

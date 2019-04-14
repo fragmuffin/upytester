@@ -1,9 +1,0 @@
-libs:
-    sd: device-libs/sd
-    flash: device-libs/flash
-
-devices:
-    pyb_a:
-        serial: '3976346C3436'
-    pyb_b:
-        serial: '0123456789AB'
