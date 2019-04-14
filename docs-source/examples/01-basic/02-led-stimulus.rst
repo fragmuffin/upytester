@@ -1,4 +1,4 @@
-LED Stimulus Example
+LED Stimulus
 ===================================
 
 This test will just turn on some of the pyboard's onboard LEDs, nothing

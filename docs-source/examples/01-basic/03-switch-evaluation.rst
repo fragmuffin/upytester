@@ -1,7 +1,7 @@
 .. _examples.basic.switch:
 
 
-Switch Evaluation Example
+Switch Evaluation
 =====================================
 
 The ``test_switch_pressed`` test will pass if the ``USR`` button is being

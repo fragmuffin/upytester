@@ -1,4 +1,4 @@
-Basic Examples
+Basic
 ============================
 
 These examples step through a few basic concepts of the ``upytester``, and

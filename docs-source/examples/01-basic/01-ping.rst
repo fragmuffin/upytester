@@ -1,4 +1,7 @@
-Ping Example
+.. _examples.basic.ping:
+
+
+Ping
 ========================
 
 This is the simplest example of a ``upytester`` test-case. It tests that the

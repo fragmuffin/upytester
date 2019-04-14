@@ -1,6 +1,6 @@
 .. _examples.basic.wire:
 
-Wire Tester Example
+Wire Tester
 ===============================================
 
 This is the first example to introduce hardware to our *test-bench*.
