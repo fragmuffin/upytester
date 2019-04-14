@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Switch Evaluation Example &mdash; upytester 0.1 documentation</title>
+  <title>Switch Evaluation &mdash; upytester 0.1 documentation</title>
   
 
   
@@ -36,9 +36,9 @@
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
     <link rel="top" title="upytester 0.1 documentation" href="../../index.html"/>
-        <link rel="up" title="Basic Examples" href="index.html"/>
-        <link rel="next" title="Network Cable Tester Example" href="04-cat5-tester.html"/>
-        <link rel="prev" title="LED Stimulus Example" href="02-led-stimulus.html"/> 
+        <link rel="up" title="Basic" href="index.html"/>
+        <link rel="next" title="Wire Tester" href="04-wire-tester.html"/>
+        <link rel="prev" title="LED Stimulus" href="02-led-stimulus.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -94,11 +94,15 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="index.html">Basic Examples</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="01-ping.html">Ping Example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="02-led-stimulus.html">LED Stimulus Example</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Switch Evaluation Example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="04-cat5-tester.html">Network Cable Tester Example</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Basic</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="01-ping.html">Ping</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02-led-stimulus.html">LED Stimulus</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Switch Evaluation</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#bench-setup">Bench Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#test-case">Test Case</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="04-wire-tester.html">Wire Tester</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#running-tests">Running Tests</a></li>
@@ -150,9 +154,9 @@
         
           <li><a href="../index.html">Examples</a> &raquo;</li>
         
-          <li><a href="index.html">Basic Examples</a> &raquo;</li>
+          <li><a href="index.html">Basic</a> &raquo;</li>
         
-      <li>Switch Evaluation Example</li>
+      <li>Switch Evaluation</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -171,8 +175,49 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="switch-evaluation-example">
-<h1>Switch Evaluation Example<a class="headerlink" href="#switch-evaluation-example" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="switch-evaluation">
+<span id="examples-basic-switch"></span><h1>Switch Evaluation<a class="headerlink" href="#switch-evaluation" title="Permalink to this headline">¶</a></h1>
+<p>The <code class="docutils literal"><span class="pre">test_switch_pressed</span></code> test will pass if the <code class="docutils literal"><span class="pre">USR</span></code> button is being
+pressed, and fail otherwise.</p>
+<p>This example introduces the use of a container class (<code class="docutils literal"><span class="pre">Switch</span></code>) for the
+pyboard’s <code class="docutils literal"><span class="pre">USR</span></code> switch to make test code more readable.</p>
+<div class="section" id="bench-setup">
+<h2>Bench Setup<a class="headerlink" href="#bench-setup" title="Permalink to this headline">¶</a></h2>
+<p>The only requirement for this test is a pyboard connected via USB.</p>
+<p>The <code class="docutils literal"><span class="pre">USR</span></code> switch on the pyboard is used for evaluation. The <em>value</em> of the
+switch is made accessible via the <code class="docutils literal"><span class="pre">Switch</span></code> class:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Switch</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
+
+    <span class="nd">@property</span>
+    <span class="k">def</span> <span class="nf">value</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">get_switch</span><span class="p">()()[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
+</pre></div>
+</div>
+<p>An instance of <code class="docutils literal"><span class="pre">Switch</span></code> is then created in the <code class="docutils literal"><span class="pre">BenchTest</span></code>’s
+overridden <a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUpClass" title="(in Python v3.7)"><code class="xref py py-meth docutils literal"><span class="pre">setUpClass()</span></code></a> method,
+referencing the <code class="docutils literal"><span class="pre">pyb_a</span></code> pyboard as the relevant <code class="docutils literal"><span class="pre">device</span></code>:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">setUpClass</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">pyb_a</span> <span class="o">=</span> <span class="n">upytester</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">get_device</span><span class="p">(</span><span class="s1">&#39;pyb_a&#39;</span><span class="p">)</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">switch</span> <span class="o">=</span> <span class="n">Switch</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">pyb_a</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="test-case">
+<h2>Test Case<a class="headerlink" href="#test-case" title="Permalink to this headline">¶</a></h2>
+<p>Setting up the <code class="docutils literal"><span class="pre">BenchTest</span></code> like this alows the test-code to be very
+short and unambiguous:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SwitchTest</span><span class="p">(</span><span class="n">BenchTest</span><span class="p">):</span>
+    <span class="k">def</span> <span class="nf">test_switch_pressed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Turn red LED on for 500ms asynchronously</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertTrue</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">switch</span><span class="o">.</span><span class="n">value</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
 </div>
 
 
@@ -185,10 +230,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="04-cat5-tester.html" class="btn btn-neutral float-right" title="Network Cable Tester Example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="04-wire-tester.html" class="btn btn-neutral float-right" title="Wire Tester" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="02-led-stimulus.html" class="btn btn-neutral" title="LED Stimulus Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="02-led-stimulus.html" class="btn btn-neutral" title="LED Stimulus" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

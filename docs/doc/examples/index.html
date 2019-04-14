@@ -36,7 +36,7 @@
               href="../genindex.html"/>
         <link rel="search" title="Search" href="../search.html"/>
     <link rel="top" title="upytester 0.1 documentation" href="../index.html"/>
-        <link rel="next" title="Basic Examples" href="01-basic/index.html"/>
+        <link rel="next" title="Basic" href="01-basic/index.html"/>
         <link rel="prev" title="Welcome to upytester’s documentation!" href="../index.html"/> 
 
   
@@ -93,8 +93,11 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="01-basic/index.html">Basic Examples</a></li>
 <li class="toctree-l2"><a class="reference internal" href="#running-tests">Running Tests</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#example-list">Example List</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="01-basic/index.html">Basic</a></li>
+</ul>
+</li>
 </ul>
 </li>
 </ul>
@@ -164,22 +167,6 @@
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
 <p>Example tests are stored in the
 <a class="reference external" href="https://github.com/fragmuffin/upytester/tree/master/examples">examples folder</a>.</p>
-<p>The following pages in this documentation walk through each example, and how
-they’re different from the last.</p>
-<p>It’s recommended you have a rough understanding of the <a class="reference external" href="https://docs.python.org/3/library/unittest.html#module-unittest" title="(in Python v3.7)"><code class="xref py py-mod docutils literal"><span class="pre">unittest</span></code></a> framework
-and how to use it.</p>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Example Index:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="01-basic/index.html">Basic Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="01-basic/01-ping.html">Ping Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="01-basic/02-led-stimulus.html">LED Stimulus Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="01-basic/03-switch-evaluation.html">Switch Evaluation Example</a></li>
-<li class="toctree-l2"><a class="reference internal" href="01-basic/04-cat5-tester.html">Network Cable Tester Example</a></li>
-</ul>
-</li>
-</ul>
-</div>
 <div class="section" id="running-tests">
 <h2>Running Tests<a class="headerlink" href="#running-tests" title="Permalink to this headline">¶</a></h2>
 <p>Each of the test folders contains a <code class="docutils literal"><span class="pre">.upytester-config.yml</span></code> file. This file
@@ -200,9 +187,36 @@ Connected PyBoards: &lt;serial&gt; &lt;comport&gt; &lt;mountpoint&gt;
 </div>
 <p>Change the serial number in the <code class="docutils literal"><span class="pre">.upytester-config.yml</span></code> file to your
 pyboard’s serial number.</p>
-<p>Then run the test with:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ python -m unittest discover -v
+<p>Then run the test(s) from within the example folder.
+For <a class="reference internal" href="01-basic/01-ping.html#examples-basic-ping"><span class="std std-ref">Ping</span></a> you would run:</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span>$ cd examples/01-basic/01-ping
+$ python -m unittest discover -v
+test_ping (test_ping.PingTest) ... ok
+
+----------------------------------------------------------------------
+Ran 1 test in 0.226s
+
+OK
 </pre></div>
+</div>
+</div>
+<div class="section" id="example-list">
+<h2>Example List<a class="headerlink" href="#example-list" title="Permalink to this headline">¶</a></h2>
+<p>The following pages in this documentation walk through each example, and how
+they’re different from the last.</p>
+<p>It’s recommended you have a rough understanding of the <a class="reference external" href="https://docs.python.org/3/library/unittest.html#module-unittest" title="(in Python v3.7)"><code class="xref py py-mod docutils literal"><span class="pre">unittest</span></code></a> framework
+and how to use it.</p>
+<div class="toctree-wrapper compound">
+<p class="caption"><span class="caption-text">Example Index:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="01-basic/index.html">Basic</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="01-basic/01-ping.html">Ping</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01-basic/02-led-stimulus.html">LED Stimulus</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01-basic/03-switch-evaluation.html">Switch Evaluation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="01-basic/04-wire-tester.html">Wire Tester</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -217,7 +231,7 @@ pyboard’s serial number.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="01-basic/index.html" class="btn btn-neutral float-right" title="Basic Examples" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="01-basic/index.html" class="btn btn-neutral float-right" title="Basic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
         <a href="../index.html" class="btn btn-neutral" title="Welcome to upytester’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>

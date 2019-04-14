@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>LED Stimulus Example &mdash; upytester 0.1 documentation</title>
+  <title>LED Stimulus &mdash; upytester 0.1 documentation</title>
   
 
   
@@ -36,9 +36,9 @@
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
     <link rel="top" title="upytester 0.1 documentation" href="../../index.html"/>
-        <link rel="up" title="Basic Examples" href="index.html"/>
-        <link rel="next" title="Switch Evaluation Example" href="03-switch-evaluation.html"/>
-        <link rel="prev" title="Ping Example" href="01-ping.html"/> 
+        <link rel="up" title="Basic" href="index.html"/>
+        <link rel="next" title="Switch Evaluation" href="03-switch-evaluation.html"/>
+        <link rel="prev" title="Ping" href="01-ping.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -94,11 +94,15 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="index.html">Basic Examples</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="01-ping.html">Ping Example</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">LED Stimulus Example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="03-switch-evaluation.html">Switch Evaluation Example</a></li>
-<li class="toctree-l3"><a class="reference internal" href="04-cat5-tester.html">Network Cable Tester Example</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Basic</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="01-ping.html">Ping</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">LED Stimulus</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#bench-setup">Bench Setup</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#test-case">Test Case</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="03-switch-evaluation.html">Switch Evaluation</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04-wire-tester.html">Wire Tester</a></li>
 </ul>
 </li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#running-tests">Running Tests</a></li>
@@ -150,9 +154,9 @@
         
           <li><a href="../index.html">Examples</a> &raquo;</li>
         
-          <li><a href="index.html">Basic Examples</a> &raquo;</li>
+          <li><a href="index.html">Basic</a> &raquo;</li>
         
-      <li>LED Stimulus Example</li>
+      <li>LED Stimulus</li>
     
     
       <li class="wy-breadcrumbs-aside">
@@ -171,8 +175,54 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="led-stimulus-example">
-<h1>LED Stimulus Example<a class="headerlink" href="#led-stimulus-example" title="Permalink to this headline">¶</a></h1>
+  <div class="section" id="led-stimulus">
+<h1>LED Stimulus<a class="headerlink" href="#led-stimulus" title="Permalink to this headline">¶</a></h1>
+<p>This test will just turn on some of the pyboard’s onboard LEDs, nothing
+is actually asserted.</p>
+<p>The concept of creating a <em>bench</em> <code class="docutils literal"><span class="pre">TestCase</span></code> class is introduced.</p>
+<div class="section" id="bench-setup">
+<h2>Bench Setup<a class="headerlink" href="#bench-setup" title="Permalink to this headline">¶</a></h2>
+<p>The only requirement for this test is a pyboard connected via USB.</p>
+<p>The setup of the <em>bench</em> is absracted to a <code class="docutils literal"><span class="pre">BenchTest</span></code> class.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">BenchTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">setUpClass</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">pyb_a</span> <span class="o">=</span> <span class="n">upytester</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">get_device</span><span class="p">(</span><span class="s1">&#39;pyb_a&#39;</span><span class="p">)</span>
+
+    <span class="nd">@classmethod</span>
+    <span class="k">def</span> <span class="nf">tearDownClass</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
+        <span class="bp">cls</span><span class="o">.</span><span class="n">pyb_a</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+</pre></div>
+</div>
+<p>The <a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUpClass" title="(in Python v3.7)"><code class="xref py py-meth docutils literal"><span class="pre">setUpClass()</span></code></a> and
+<a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.tearDownClass" title="(in Python v3.7)"><code class="xref py py-meth docutils literal"><span class="pre">tearDownClass()</span></code></a> methods
+are used to configure the pyboard for all tests in any inheriting class.</p>
+</div>
+<div class="section" id="test-case">
+<h2>Test Case<a class="headerlink" href="#test-case" title="Permalink to this headline">¶</a></h2>
+<p>The <code class="docutils literal"><span class="pre">LEDTest</span></code> class inherits from <code class="docutils literal"><span class="pre">BenchTest</span></code>, giving each test
+contextual access to the configured pyboard as <code class="docutils literal"><span class="pre">self.pyb_a</span></code>.</p>
+<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">LEDTest</span><span class="p">(</span><span class="n">BenchTest</span><span class="p">):</span>
+
+    <span class="k">def</span> <span class="nf">test_blink</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Turn red LED on for 500ms (non-blocking)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pyb_a</span><span class="o">.</span><span class="n">blink_led</span><span class="p">(</span><span class="n">duration</span><span class="o">=</span><span class="mi">500</span><span class="p">)</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>  <span class="c1"># just wait so tests don&#39;t run at the same time</span>
+
+    <span class="k">def</span> <span class="nf">test_led_set</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Turn green LED on for 500ms (blocking)</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pyb_a</span><span class="o">.</span><span class="n">set_led</span><span class="p">(</span><span class="n">led</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">intensity</span><span class="o">=</span><span class="mh">0xff</span><span class="p">)</span>  <span class="c1"># on</span>
+        <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.5</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pyb_a</span><span class="o">.</span><span class="n">set_led</span><span class="p">(</span><span class="n">led</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">intensity</span><span class="o">=</span><span class="mh">0x00</span><span class="p">)</span>  <span class="c1"># off</span>
+</pre></div>
+</div>
+<p>Each test simply turns on a LED for 500ms. No evalution is performed, so both
+tests pass as long as no exceptions are raised due to communication problems.</p>
+</div>
 </div>
 
 
@@ -185,10 +235,10 @@
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="03-switch-evaluation.html" class="btn btn-neutral float-right" title="Switch Evaluation Example" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+        <a href="03-switch-evaluation.html" class="btn btn-neutral float-right" title="Switch Evaluation" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="01-ping.html" class="btn btn-neutral" title="Ping Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="01-ping.html" class="btn btn-neutral" title="Ping" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

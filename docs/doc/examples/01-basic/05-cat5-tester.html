@@ -8,7 +8,7 @@
   
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   
-  <title>Basic &mdash; upytester 0.1 documentation</title>
+  <title>Network Cable Tester Example &mdash; upytester 0.1 documentation</title>
   
 
   
@@ -36,9 +36,8 @@
               href="../../genindex.html"/>
         <link rel="search" title="Search" href="../../search.html"/>
     <link rel="top" title="upytester 0.1 documentation" href="../../index.html"/>
-        <link rel="up" title="Examples" href="../index.html"/>
-        <link rel="next" title="Ping" href="01-ping.html"/>
-        <link rel="prev" title="Examples" href="../index.html"/> 
+        <link rel="up" title="Basic Examples" href="index.html"/>
+        <link rel="prev" title="Wire Tester Example" href="04-wire-tester.html"/> 
 
   
   <script src="../../_static/js/modernizr.min.js"></script>
@@ -94,17 +93,15 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">Basic Examples</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="01-ping.html">Ping Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02-led-stimulus.html">LED Stimulus Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="03-switch-evaluation.html">Switch Evaluation Example</a></li>
+<li class="toctree-l3"><a class="reference internal" href="04-wire-tester.html">Wire Tester Example</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Network Cable Tester Example</a></li>
+</ul>
+</li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#running-tests">Running Tests</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../index.html#example-list">Example List</a><ul class="current">
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Basic</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="01-ping.html">Ping</a></li>
-<li class="toctree-l4"><a class="reference internal" href="02-led-stimulus.html">LED Stimulus</a></li>
-<li class="toctree-l4"><a class="reference internal" href="03-switch-evaluation.html">Switch Evaluation</a></li>
-<li class="toctree-l4"><a class="reference internal" href="04-wire-tester.html">Wire Tester</a></li>
-</ul>
-</li>
-</ul>
-</li>
 </ul>
 </li>
 </ul>
@@ -153,13 +150,15 @@
         
           <li><a href="../index.html">Examples</a> &raquo;</li>
         
-      <li>Basic</li>
+          <li><a href="index.html">Basic Examples</a> &raquo;</li>
+        
+      <li>Network Cable Tester Example</li>
     
     
       <li class="wy-breadcrumbs-aside">
         
             
-            <a href="../../_sources/examples/01-basic/index.rst.txt" rel="nofollow"> View page source</a>
+            <a href="../../_sources/examples/01-basic/05-cat5-tester.rst.txt" rel="nofollow"> View page source</a>
           
         
       </li>
@@ -172,43 +171,8 @@
           <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
            <div itemprop="articleBody">
             
-  <div class="section" id="basic">
-<h1>Basic<a class="headerlink" href="#basic" title="Permalink to this headline">¶</a></h1>
-<p>These examples step through a few basic concepts of the <code class="docutils literal"><span class="pre">upytester</span></code>, and
-puts them into functioning examples.</p>
-<p>I will also introduce the general concept of abstracting the complexities of
-a test-bench, and various test components for a project into separate
-files and modules.
-Although this isn’t strictly necessary to use <code class="docutils literal"><span class="pre">upytester</span></code>,
-I’ve made this part of the lesson-plan because I feel it’s important to
-keep your test suite coherant, and maintainable, and your tests simple and
-unambiguous.</p>
-<div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Contents:</span></p>
-<ul>
-<li class="toctree-l1"><a class="reference internal" href="01-ping.html">Ping</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="01-ping.html#bench-setup">Bench Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="01-ping.html#test-case">Test Case</a></li>
-<li class="toctree-l2"><a class="reference internal" href="01-ping.html#improvements">Improvements</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="02-led-stimulus.html">LED Stimulus</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="02-led-stimulus.html#bench-setup">Bench Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="02-led-stimulus.html#test-case">Test Case</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="03-switch-evaluation.html">Switch Evaluation</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="03-switch-evaluation.html#bench-setup">Bench Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="03-switch-evaluation.html#test-case">Test Case</a></li>
-</ul>
-</li>
-<li class="toctree-l1"><a class="reference internal" href="04-wire-tester.html">Wire Tester</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="04-wire-tester.html#bench-setup">Bench Setup</a></li>
-<li class="toctree-l2"><a class="reference internal" href="04-wire-tester.html#test-case">Test Case</a></li>
-</ul>
-</li>
-</ul>
-</div>
+  <div class="section" id="network-cable-tester-example">
+<h1>Network Cable Tester Example<a class="headerlink" href="#network-cable-tester-example" title="Permalink to this headline">¶</a></h1>
 </div>
 
 
@@ -221,10 +185,8 @@ unambiguous.</p>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
-        <a href="01-ping.html" class="btn btn-neutral float-right" title="Ping" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-      
-        <a href="../index.html" class="btn btn-neutral" title="Examples" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="04-wire-tester.html" class="btn btn-neutral" title="Wire Tester Example" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   

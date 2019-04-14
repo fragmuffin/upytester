@@ -4,20 +4,6 @@ Examples
 Example tests are stored in the
 `examples folder <https://github.com/fragmuffin/upytester/tree/master/examples>`_.
 
-The following pages in this documentation walk through each example, and how
-they're different from the last.
-
-It's recommended you have a rough understanding of the :mod:`unittest` framework
-and how to use it.
-
-.. toctree::
-   :maxdepth: 2
-   :caption: Example Index:
-
-   01-basic/index
-   02-on-board-components/index
-   03-sample-project/index
-
 Running Tests
 --------------------
 
@@ -42,6 +28,32 @@ Find your pyboard's serial number by connecting it, and running::
 Change the serial number in the ``.upytester-config.yml`` file to your
 pyboard's serial number.
 
-Then run the test with::
+Then run the test(s) from within the example folder.
+For :ref:`examples.basic.ping` you would run::
 
+   $ cd examples/01-basic/01-ping
    $ python -m unittest discover -v
+   test_ping (test_ping.PingTest) ... ok
+
+   ----------------------------------------------------------------------
+   Ran 1 test in 0.226s
+
+   OK
+
+
+Example List
+--------------------
+
+The following pages in this documentation walk through each example, and how
+they're different from the last.
+
+It's recommended you have a rough understanding of the :mod:`unittest` framework
+and how to use it.
+
+.. toctree::
+   :maxdepth: 2
+   :caption: Example Index:
+
+   01-basic/index
+   02-on-board-components/index
+   03-sample-project/index
