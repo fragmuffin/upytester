@@ -1,5 +1,6 @@
 import pyb
 import machine
+import sys
 import micropython
 
 import time
@@ -12,6 +13,14 @@ from cmd import interpret, set_serial_port
 import sched
 try:
     import components
+except ImportError:
+    pass  # fail quietly
+
+# Bench Libraries
+sys.path.append('/sd/lib_bench')
+sys.path.append('/flash/lib_bench')
+try:
+    import bench
 except ImportError:
     pass  # fail quietly
 
