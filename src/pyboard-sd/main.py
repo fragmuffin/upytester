@@ -8,7 +8,7 @@ import json
 import uasyncio as asyncio
 
 from utils import external_interrupt
-from cmd import interpret, get_sender
+from cmd import interpret, set_serial_port
 import sched
 try:
     import components
