@@ -16,14 +16,6 @@ try:
 except ImportError:
     pass  # fail quietly
 
-# Bench Libraries
-sys.path.append('/sd/lib_bench')
-sys.path.append('/flash/lib_bench')
-try:
-    import bench
-except ImportError:
-    pass  # fail quietly
-
 
 # Allocate memory for callback debugging
 micropython.alloc_emergency_exception_buf(100)
@@ -81,8 +73,19 @@ async def listener():
         else:
             await asyncio.sleep_ms(1)
 
-# Main loop
 sched.init_loop()  # initialize asyncio loop object
+
+# Bench Libraries
+#   note: imported after scheduler loop initialised, just incase somebody has
+#         used "from sched import loop" in a custom lib
+sys.path.append('/sd/lib_bench')
+sys.path.append('/flash/lib_bench')
+try:
+    import bench
+except ImportError:
+    pass  # fail quietly
+
+# Main loop
 try:
     # start asyncio.get_event_loop()
     sched.loop.run_until_complete(listener())

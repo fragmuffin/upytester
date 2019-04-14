@@ -262,7 +262,7 @@ class PyBoard(object):
                     for l in line_iter(end_on_timeout=True):
                         yield l
 
-                log.error("ERROR from pyboard: {}".format(self.serial_number))
+                log.error("ERROR from pyboard: {!r}".format(self))
                 for l in _err_line_gen():
                     log.error('  {}'.format(l.decode().lstrip('\r\n').rstrip('\r\n')))
                 raise

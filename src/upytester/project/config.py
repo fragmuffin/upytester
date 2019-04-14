@@ -1,16 +1,27 @@
+import os
 import yaml
-
 
 # Constants (sort of)
 DEFAULT_CONFIG_FILENAME = '.upytester-config.yml'
 
+
 def get_config(filename=None):
     # Default parameter value(s)
     if filename is None:
-        filename = DEFAULT_CONFIG_FILENAME
+        # Check local directory
+        if os.path.isfile(DEFAULT_CONFIG_FILENAME):
+            filename = DEFAULT_CONFIG_FILENAME
+        else:
+            # Check home directory
+            _home_filename = os.path.join(
+                os.path.expanduser('~'),
+                DEFAULT_CONFIG_FILENAME
+            )
+            if os.path.isfile(_home_filename):
+                filename = _home_filename
 
     # Decode
-    with open('.upytester-config.yml', 'r') as fh:
+    with open(filename, 'r') as fh:
         data = yaml.safe_load(fh)
 
     return data
