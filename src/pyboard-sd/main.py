@@ -29,8 +29,7 @@ def _startup_flash():
 _startup_flash()
 
 vcp = pyb.USB_VCP()
-
-_sender_func = get_sender(vcp)
+set_serial_port(vcp)
 
 def process_line(line):
     # Receive & decode data
@@ -50,7 +49,7 @@ def process_line(line):
     vcp.write(b'ok\r')
 
     # Interpret command
-    interpret(_sender_func, obj)
+    interpret(obj)
 
 async def listener():
     """

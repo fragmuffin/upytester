@@ -11,15 +11,11 @@ def instruction(func):
     Usage::
 
         @instruction
-        def ping(send, value=0):
-            send({'r': 'ping', 'value': value + 1})
+        def ping(value=0):
+            return {'r': 'ping', 'value': value + 1}
 
     With this implemented, when a host sends ``{'i': 'ping', 'value': 10}``,
     it will receive ``{'r': 'ping', 'value': 11}``
-
-    **First Parameter**\
-    The first parameter of the callback method is always ``send``, ``send`` will
-    be a callable that can be used to transmit an object back to the host.
 
     **Format of Request**\
     When transmitting a request from a host machine, the ``dict`` format is::
@@ -42,23 +38,37 @@ def instruction(func):
 
 
 @instruction
-def list_instructions(send):
-    send(sorted(_instruction_map.keys()))
+def list_instructions():
+    return sorted(_instruction_map.keys())
 
 # -------------- Interpreter --------------
+_serial_port = None
 
-def get_sender(serial_port):
+
+def set_serial_port(given_port):
     """
-    Returns callable to transmit objects over serial
+    Set the serial object through which to send serialized data.
+    See :meth:`send` for more details.
 
-    :param serial_port: com port instance
-    :type serial_port: :class:`pyb.CAN_VCP`
+    :param given_port: Port through which to send serialized data
+    :type given_port: :class:`pyb.USB_VCP`
+    """
+    global _serial_port
+    _serial_port = given_port
 
-    Usage::
 
-        >>> from cmd import get_sender
+def send(obj):
+    """
+    Send serial data over the preset serial port
+
+    Usage:
+
+        >>> import pyb
+        >>> from cmd import set_serial_port, send
+
+        # Setup Port
         >>> com_port = pyb.USB_VCP()
-        >>> send = get_sender(com_port)
+        >>> set_serial_port(com_port)
 
         # Sender transmits json encoding of given obj over VCP
         >>> send('abc')
@@ -66,25 +76,31 @@ def get_sender(serial_port):
         >>> send([1, 2, 3])
         >>> send({'a': 1, 'b': 2})
     """
-    def send(obj):
-        serial_port.write(json.dumps(obj).encode() + b'\r')
-    return send
+    global _serial_port
+    _serial_port.write(json.dumps(obj).encode() + b'\r')
 
 
-def interpret(sender_func, obj):
+def interpret(obj):
     """
     Perform the action defined in the given object
 
-    :param sender_func: callable funtion for a reply
-                        (ideally the callable returned by :meth:`get_sender`)
-    :type sender_func: callable
     :param obj: deserialized JSON object received from host
     :type obj: :class:`dict`
     """
 
-    if isinstance(obj, dict):
-        instruction_name = obj.pop('i', None)
-        if instruction_name in _instruction_map:
-            func = _instruction_map[instruction_name]
-            args = obj.pop('args', [])
-            func(sender_func, *args, **obj)
+    # Find referenced function
+    if not isinstance(obj, dict):
+        return
+
+    instruction_name = obj.pop('i', None)
+    if instruction_name not in _instruction_map:
+        return
+
+    # Execute function
+    func = _instruction_map[instruction_name]
+    args = obj.pop('args', [])
+    response = func(*args, **obj)
+
+    # Send response (if any given)
+    if response is not None:
+        send(response)

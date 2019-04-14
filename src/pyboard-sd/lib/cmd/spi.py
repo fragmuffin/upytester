@@ -1,6 +1,6 @@
 import pyb
 
-from .mapping import instruction
+from .mapping import instruction, send
 
 
 # ------- Map(s)
@@ -9,7 +9,7 @@ spi_map = {}  # {<idx>: <pyb.SPI>, ... }
 
 # ------- Configure
 @instruction
-def config_spi(send, idx):
+def config_spi(idx):
     """
     Configure SPI bus
 
@@ -21,7 +21,7 @@ def config_spi(send, idx):
 
 
 @instruction
-def spi_send(send, idx, data):
+def spi_send(idx, data):
     """
     Note: SPI must be configured via instruction :meth:`config_spi` before
     sending with this method.

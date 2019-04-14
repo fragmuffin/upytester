@@ -5,12 +5,12 @@ import time
 
 import sched
 
-from .mapping import instruction
+from .mapping import instruction, send
 
 
 # ------- machine_reset
 @instruction
-def machine_reset(send, t=50):
+def machine_reset(t=50):
     """
     Resets the pyboard
 
@@ -22,7 +22,7 @@ def machine_reset(send, t=50):
     sched.loop.call_later_ms(t, machine.reset)
 
 @instruction
-def bootloader_mode(send, t=50):
+def bootloader_mode(t=50):
     """
     Reets pyboard, and it will boot into bootloader mode
 
@@ -35,22 +35,22 @@ def bootloader_mode(send, t=50):
 
 
 @instruction
-def break_loop(send):
+def break_loop():
     import sched
     sched.keepalive = False
 
 # ------- system info
 @instruction
-def get_system_info(send):
-    send({
+def get_system_info():
+    return {
         'imp': list(sys.implementation),
         'ver': sys.version,
         'platform': sys.platform,
-    })
+    }
 
 @instruction
-def get_ticks_ms(send):
+def get_ticks_ms():
     """
     Get ticks since boot
     """
-    send(time.ticks_ms())
+    return time.ticks_ms()

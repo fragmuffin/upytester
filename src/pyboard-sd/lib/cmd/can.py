@@ -2,7 +2,7 @@ import pyb
 import micropython
 import uasyncio as asyncio
 
-from .mapping import instruction
+from .mapping import instruction, send
 
 import sched
 

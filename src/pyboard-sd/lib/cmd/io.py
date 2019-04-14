@@ -1,7 +1,7 @@
 import machine
 import pyb
 
-from .mapping import instruction
+from .mapping import instruction, send
 
 
 # ------- Map(s)
@@ -10,7 +10,7 @@ pin_map = {}
 # ------- Configure
 
 @instruction
-def config_pin(send, id, mode, pull=None, value=None):
+def config_pin(id, mode, pull=None, value=None):
     r"""
     :param id: name of pin (eg: ``SW``, ``X7``)
     :type id: :class:`str`
@@ -77,12 +77,12 @@ def config_pin(send, id, mode, pull=None, value=None):
 # ------- Get / Set
 
 @instruction
-def get_pin(send, id):
+def get_pin(id):
     pin = pin_map[id]
-    send({'pin': id, 'v': pin.value()})
+    return {'pin': id, 'v': pin.value()}
 
 
 @instruction
-def set_pin(send, id, v):
+def set_pin(id, v):
     pin = pin_map[id]
     pin.value(v)
