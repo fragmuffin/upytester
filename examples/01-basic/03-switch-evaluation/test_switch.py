@@ -10,9 +10,7 @@ class Switch(object):
 
     @property
     def value(self):
-        receiver = self.device.get_switch()
-        response = receiver()
-        return response['value']
+        return self.device.get_switch()()['value']
 
 
 class BenchTest(unittest.TestCase):
@@ -29,7 +27,6 @@ class BenchTest(unittest.TestCase):
 # ------------ Tests ------------
 
 class SwitchTest(BenchTest):
-
     def test_switch_pressed(self):
         """
         Turn red LED on for 500ms asynchronously
