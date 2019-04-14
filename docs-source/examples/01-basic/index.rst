@@ -15,8 +15,7 @@ keep your test suite coherant, and maintainable, and your tests simple and
 unambiguous.
 
 .. toctree::
-   :maxdepth: 2
-   :caption: Contents:
+   :maxdepth: 1
 
    01-ping
    02-led-stimulus

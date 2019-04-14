@@ -7,26 +7,30 @@ Example tests are stored in the
 Running Tests
 --------------------
 
-Each of the test folders contains a ``.upytester-config.yml`` file. This file
-maps a pyboard's serial number to a name used to setup the bench.
+Each test looks for a ``.upytester.yml`` file, first in the current working
+path, then in your home directory.
+This file maps a pyboard's serial number to a name used to setup the bench.
 
-For example::
+All example tests uses ``pyb_a`` as the name for the pyboard (and for
+examples that use more than 1 pyboard, the second is named ``pyb_b``)
+
+Example ``.upytester.yml`` content::
 
    devices:
        pyb_a:
            serial: '0123456789AB'
+       pyb_b:
+           serial: 'BA9876543210'
 
-``pyb_a`` is the human readable name for the pyboard on the test bench,
-and ``0123456789AB`` is its serial number.
-
-Find your pyboard's serial number by connecting it, and running::
+Find your pyboard serial number(s) by connecting them via USB, and running::
 
    $ upytester list
    Connected PyBoards: <serial> <comport> <mountpoint>
        3976346C3436    /dev/ttyACM0    None
+       497612578916    /dev/ttyACM1    None
 
-Change the serial number in the ``.upytester-config.yml`` file to your
-pyboard's serial number.
+This must be done for each host used to run the example tests because every
+pyboard's serial number is different... that's sort of the point of them.
 
 Then run the test(s) from within the example folder.
 For :ref:`examples.basic.ping` you would run::
@@ -52,7 +56,6 @@ and how to use it.
 
 .. toctree::
    :maxdepth: 2
-   :caption: Example Index:
 
    01-basic/index
    02-on-board-components/index

@@ -2,7 +2,7 @@ import os
 import yaml
 
 # Constants (sort of)
-DEFAULT_CONFIG_FILENAME = '.upytester-config.yml'
+DEFAULT_CONFIG_FILENAME = '.upytester.yml'
 
 
 def get_config(filename=None):
