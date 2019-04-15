@@ -88,6 +88,10 @@ parser.add_argument(
     help="If set, actions such as {mount|unmount|sync} are performed on flash, "
          "the default is sd",
 )
+parser.add_argument(
+    '--reset', '-R', default=False, action='store_true',
+    help="If set with sync action, pyboard is reset after sync is performed",
+)
 
 # Evaluate
 args = parser.parse_args()
@@ -256,6 +260,13 @@ def action_sync():
         global pyboard
         getattr(pyboard, 'unmount_' + medium)()
     unmount_filesystem()
+
+    # optional reset
+    if args.reset and (not args.dryrun):
+        global pyboard
+        pyboard.open()
+        pyboard.machine_reset(t=500)
+        pyboard.close()
 
     return 0
 
