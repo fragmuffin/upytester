@@ -3,6 +3,7 @@
 import sys
 import time
 import argparse
+import functools
 
 import upytester
 
@@ -85,7 +86,7 @@ def _log(text, flush=False):
         if flush:
             sys.stdout.flush()
 
-def retry_loop(title):
+def _retry_loop(title=None):
     """
     Repeatedly runs code until it doesn't raise an exception.
     Run each second, for maximum of 30 seconds.
@@ -97,7 +98,8 @@ def retry_loop(title):
                 perform_task()
                 break
     """
-    _log(title + ': ')
+    if title:
+        _log(title + ': ')
 
     @contextmanager
     def try_except(surpress=False):
@@ -117,6 +119,19 @@ def retry_loop(title):
         yield try_except(i > 0)
         time.sleep(RETRY_PERIOD)
 
+def retry(title=None):
+    """
+    Function will be repeatedly called until it succeeds.
+    """
+    def retry_decorator(func):
+        @functools.wraps(func)
+        def inner(*args, **kwargs):
+            for context in _retry_loop(title):
+                with context:
+                    func(*args, **kwargs)
+                    break
+        return inner
+    return retry_decorator
 
 # ====================== Actions ======================
 def action_list():
@@ -163,50 +178,57 @@ def action_comport():
 
 def action_sync():
     # Find serial number
-    for context in retry_loop("Serial"):
-        with context:
-            serial_numbers = [
-                s for s in upytester.PyBoard.connected_serial_numbers()
-                if fnmatch(s, args.serialnum)
-            ]
-            if len(serial_numbers) != 1:
-                raise PyBoardNotFoundError(
-                    "could not find serial: {!r}".format(args.serialnum)
-                )
-            serial_num = serial_numbers[0]
-            _log('{}'.format(serial_num))
-            break
+    @retry("Serial")
+    def find_serial():
+        serial_numbers = [
+            s for s in upytester.PyBoard.connected_serial_numbers()
+            if fnmatch(s, args.serialnum)
+        ]
+        if len(serial_numbers) != 1:
+            raise PyBoardNotFoundError(
+                "could not find serial: {!r}".format(args.serialnum)
+            )
+        global serial_num
+        serial_num = serial_numbers[0]
+        _log('{}'.format(serial_num))
 
     # Create instance
-    for context in retry_loop("Object"):
-        with context:
-            pyboard = upytester.PyBoard(serial_num, auto_open=False)
-            _log('{!r}'.format(pyboard))
-            break
+    @retry("Object")
+    def create_instance():
+        global pyboard, serial_num
+        pyboard = upytester.PyBoard(serial_num, auto_open=False)
+        _log('{!r}'.format(pyboard))
 
     # Mount filesystem
     medium = 'flash' if args.flash else 'sd'
-    for context in retry_loop("Mounting " + medium):
-        with context:
-            getattr(pyboard, 'mount_' + medium)()
-            break
+    @retry("Mounting " + medium)
+    def mount_filesystem():
+        global pyboard
+        getattr(pyboard, 'mount_' + medium)()
 
-    # Sync Files
-    for context in retry_loop("Sync"):
-        with context:
-            getattr(pyboard, 'sync_to_' + medium)(
-                args.folder,
-                force=args.force,
-                dryrun=args.dryrun,
-                quiet=args.quiet,
-            )
-            break
+    # Sync Files main lib
+    @retry("Sync")
+    def sync():
+        global pyboard
+        getattr(pyboard, 'sync_to_' + medium)(
+            args.folder,
+            force=args.force,
+            dryrun=args.dryrun,
+            quiet=args.quiet,
+        )
 
     # Unmount filesystem
-    for context in retry_loop("Unmounting " + medium):
-        with context:
-            getattr(pyboard, 'unmount_' + medium)()
-            break
+    @retry("Unmounting")
+    def unmount_filesystem():
+        global pyboard
+        getattr(pyboard, 'unmount_' + medium)()
+
+    # Run in sequence
+    find_serial()
+    create_instance()
+    mount_filesystem()
+    sync()
+    unmount_filesystem()
 
     return 0
 
