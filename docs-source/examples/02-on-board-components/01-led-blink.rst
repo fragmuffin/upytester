@@ -3,13 +3,16 @@
 LED Blink
 ======================
 
-In this example we'll create an instruction on the pyboard to perform
-a specific task
+In this example we'll create a custom instruction on the pyboard to perform
+a specific task.
+
 
 Bench Setup
 ------------------
 
-The only requirement for this test is a pyboard connected via USB.
+The only physical requirement for this test is a pyboard connected via USB.
+
+
 
 
 On Board Library

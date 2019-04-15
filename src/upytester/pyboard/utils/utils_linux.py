@@ -146,7 +146,7 @@ class StorageDevice:
             proc.communicate()
 
     @classmethod
-    def sync_files_to_device(cls, source_path, pyboard, force=False, dryrun=False, quiet=False):
+    def sync_files_to_device(cls, source_path, pyboard, subdir='.', force=False, dryrun=False, quiet=False, exclude=None):
         """
         Synchronise a filesystem to the pyboard's storage.
         Used to deploy code onto a test bench
@@ -155,6 +155,8 @@ class StorageDevice:
         :type source_path: :class:`str`
         :param pyboard: PyBoard to sync to
         :type pyboard: :class:`upytester.PyBoard`
+        :param subdir: Subdirectory on pyboard to sync to
+        :type subdir: :class:`str`
         :param force: If `True`, assertion of the pre-existence of placeholder
                       files will be ignored.
         :type force: :class:`bool`
@@ -164,6 +166,8 @@ class StorageDevice:
         :type dryrun: :class:`bool`
         :param quiet: If `True` process will not print anything to stdout
         :type quiet: :class:`bool`
+        :param exclude: Pattern of files to ignore during sync operation
+        :type exclude: :class:`str`
         """
         # Validate Request
         if not os.path.isdir(source_path):
@@ -183,8 +187,7 @@ class StorageDevice:
             cls.DEVICE_MARKER_FILE,
         ]
         file_check_passed = all(
-            os.path.exists(os.path.join(mountpoint, f)) and
-            os.path.exists(os.path.join(source_path, f))
+            os.path.exists(os.path.join(mountpoint, f))
             for f in check_file_list
         )
         if (not file_check_passed) and (not force):
@@ -202,8 +205,8 @@ class StorageDevice:
             )
 
         # Create & Run sync process
-        abs_source = "{}/".format(os.path.abspath(source_path))
-        abs_dest = "{}/".format(os.path.abspath(mountpoint))
+        abs_source = os.path.abspath(source_path) + '/'
+        abs_dest = os.path.abspath(os.path.join(mountpoint, subdir)) + '/'
 
         assert os.path.relpath(abs_dest, '/') != '.', "destination is ROOT!!?"
 
@@ -213,29 +216,33 @@ class StorageDevice:
             print("    - dest:   {!r}".format(abs_dest))
 
         if not dryrun:
+            # Create command list
+            #   rsync Options
+            #       --archive == -rlnnptgoD (but we need -L)
+            #           -r  recurse into directories
+            #           -L  transform symlink into referent file/dir
+            #           -p  preserve permissions
+            #           -t  preserve modification times
+            #           -g  preserve group
+            #           -o  preserve owner (super-user only)
+            #           -D  preserve devices & special files
+            #
+            #       -h  output numbers in a human-readable format
+            #       -v  verbose
+            cmd = ['rsync', '-rLptgoDhv', '--delete']
+            if exclude  is not None:
+                cmd += ['--exclude', exclude]
+            cmd += [abs_source, abs_dest]
+
+            # Start process
             process = subprocess.Popen(
-                # rsync Options
-                #   --archive == -rlnnptgoD (but we need -L)
-                #       -r  recurse into directories
-                #       -L  transform symlink into referent file/dir
-                #       -p  preserve permissions
-                #       -t  preserve modification times
-                #       -g  preserve group
-                #       -o  preserve owner (super-user only)
-                #       -D  preserve devices & special files
-                #
-                #   -h  output numbers in a human-readable format
-                #   -v  verbose
-                [
-                    'rsync',
-                    '-rLptgoDhv', '--delete',
-                    abs_source,
-                    abs_dest,
-                ],
+                cmd,
                 #shell=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
             )
+
+            # Allow process to run
             if not quiet:
                 for line in process.stdout:
                     process.poll()

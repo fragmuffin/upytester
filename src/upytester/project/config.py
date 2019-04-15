@@ -3,6 +3,7 @@ import yaml
 
 # Constants (sort of)
 DEFAULT_CONFIG_FILENAME = '.upytester.yml'
+DEFAULT_BENCH_FILENAME = '.upytester-bench.yml'
 
 
 def get_config(filename=None):
@@ -19,6 +20,21 @@ def get_config(filename=None):
             )
             if os.path.isfile(_home_filename):
                 filename = _home_filename
+
+    # Decode
+    with open(filename, 'r') as fh:
+        data = yaml.safe_load(fh)
+
+    return data
+
+def get_bench_config(filename=None):
+    if filename is None:
+        # Check local directory
+        if os.path.isfile(DEFAULT_BENCH_FILENAME):
+            filename = DEFAULT_BENCH_FILENAME
+
+    if filename is None:
+        return {}
 
     # Decode
     with open(filename, 'r') as fh:

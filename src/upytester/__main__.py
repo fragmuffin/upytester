@@ -1,11 +1,21 @@
 #!/usr/bin/env python
 
 import sys
+import os
 import time
 import argparse
 import functools
+from fnmatch import fnmatch
+import inspect
 
 import upytester
+
+
+_this_path = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
+
+# Defaults
+DEFAULT_SOURCE = os.path.join(_this_path, 'content')
+
 
 # ====================== Argument Parsing ======================
 # Artument Types
@@ -27,6 +37,17 @@ def t_action(value):
         )
     return value
 
+def t_serial_number(pattern):
+    serial_numbers = [
+        s for s in upytester.PyBoard.connected_serial_numbers()
+        if fnmatch(s, pattern)
+    ]
+    if len(serial_numbers) != 1:
+        raise argparse.ArgumentTypeError(
+            "could not find serial matching pattern: {!r}".format(pattern)
+        )
+    return serial_numbers[0]
+
 # Parser
 parser = argparse.ArgumentParser(
     description="Control and query how a PyBoard is connected",
@@ -39,13 +60,13 @@ parser.add_argument(
     ),
 )
 parser.add_argument(
-    'serialnum', default=None, type=str, metavar="SERIAL", nargs="?",
+    'serialnum', default=None, type=t_serial_number, metavar="SERIAL", nargs="?",
     help="PyBoard's serial number (run with --list to list all connected devices)",
 )
 parser.add_argument(
-    'folder', default=None, type=str, metavar="FOLDER", nargs="?",
+    '--source', default=None, type=str,
     help="If the action is to SYNC, the contents of this folder is "
-         "synchronised to the pyboard's SD card",
+         "synchronised to the pyboard's SD card (instead of the default)",
 )
 
 parser.add_argument(
@@ -72,9 +93,19 @@ parser.add_argument(
 args = parser.parse_args()
 
 
+# Default Serial Number
+#   If no serial is given, and only 1 pyboard is connected, default to that
+if (args.serialnum is None) and (args.action not in ('list',)):
+    serial_numbers = serial_numbers = upytester.PyBoard.connected_serial_numbers()
+    if len(serial_numbers) <= 0:
+        raise ValueError("no connected pyboards found")
+    elif len(serial_numbers) > 1:
+        raise ValueError("multiple pyboards found, specify one by SERIAL")
+    else:
+        args.serialnum = serial_numbers[0]
+
 # ====================== Retry Loop Utility ======================
 from contextlib import contextmanager
-from fnmatch import fnmatch
 from upytester.pyboard.utils.exceptions import PyBoardNotFoundError, DeviceFileNotFoundError
 
 RETRY_DURATION = 30  # (unit: seconds)
@@ -87,17 +118,6 @@ def _log(text, flush=False):
             sys.stdout.flush()
 
 def _retry_loop(title=None):
-    """
-    Repeatedly runs code until it doesn't raise an exception.
-    Run each second, for maximum of 30 seconds.
-
-    Usage::
-
-        for context in retry_loop():
-            with context:
-                perform_task()
-                break
-    """
     if title:
         _log(title + ': ')
 
@@ -155,20 +175,20 @@ def action_list():
 
 def action_mount():
     medium = 'flash' if args.flash else 'sd'
-    for context in retry_loop("Mounting " + medium):
-        with context:
-            pyboard = upytester.PyBoard(args.serialnum, auto_open=False)
-            getattr(pyboard, 'mount_' + medium)()
-            break
+    @retry("Mounting " + medium)
+    def mount():
+        pyboard = upytester.PyBoard(args.serialnum, auto_open=False)
+        getattr(pyboard, 'mount_' + medium)()
+    mount()
 
 
 def action_unmount():
     medium = 'flash' if args.flash else 'sd'
-    for context in retry_loop("Unmounting " + medium):
-        with context:
-            pyboard = upytester.PyBoard(args.serialnum, auto_open=False)
-            getattr(pyboard, 'unmount_' + medium)()
-            break
+    @retry("Unmounting " + medium)
+    def unmount():
+        pyboard = upytester.PyBoard(args.serialnum, auto_open=False)
+        getattr(pyboard, 'unmount_' + medium)()
+    unmount()
 
 
 def action_comport():
@@ -177,27 +197,13 @@ def action_comport():
 
 
 def action_sync():
-    # Find serial number
-    @retry("Serial")
-    def find_serial():
-        serial_numbers = [
-            s for s in upytester.PyBoard.connected_serial_numbers()
-            if fnmatch(s, args.serialnum)
-        ]
-        if len(serial_numbers) != 1:
-            raise PyBoardNotFoundError(
-                "could not find serial: {!r}".format(args.serialnum)
-            )
-        global serial_num
-        serial_num = serial_numbers[0]
-        _log('{}'.format(serial_num))
-
     # Create instance
     @retry("Object")
     def create_instance():
-        global pyboard, serial_num
-        pyboard = upytester.PyBoard(serial_num, auto_open=False)
+        global pyboard
+        pyboard = upytester.PyBoard(args.serialnum, auto_open=False)
         _log('{!r}'.format(pyboard))
+    create_instance()
 
     # Mount filesystem
     medium = 'flash' if args.flash else 'sd'
@@ -205,29 +211,50 @@ def action_sync():
     def mount_filesystem():
         global pyboard
         getattr(pyboard, 'mount_' + medium)()
+    mount_filesystem()
 
-    # Sync Files main lib
-    @retry("Sync")
-    def sync():
+    # --- Sync Files
+    prj_data = upytester.project.get_bench_config()
+    # Main source (for given medium)
+    prj_src = args.source
+    if not prj_src:
+        prj_src = prj_data.get('bench', {}).get('source', {}).get(medium, os.path.join(DEFAULT_SOURCE, medium))
+    # Bench lib
+    prj_lib = prj_data.get('bench', {}).get('libraries', {}).get(medium, None)
+
+    # Main
+    @retry("Sync Main")
+    def sync_main():
         global pyboard
         getattr(pyboard, 'sync_to_' + medium)(
-            args.folder,
+            prj_src,
             force=args.force,
             dryrun=args.dryrun,
             quiet=args.quiet,
+            exclude=os.path.join('lib_bench', '*') if prj_lib else None,
+        )
+    sync_main()
+
+    # Sync Project Files
+    @retry("Sync Project")
+    def sync_prj(prj_lib):
+        global pyboard
+        getattr(pyboard, 'sync_to_' + medium)(
+            prj_lib,
+            force=args.force,
+            dryrun=args.dryrun,
+            quiet=args.quiet,
+            subdir='lib_bench',
         )
 
-    # Unmount filesystem
+    if prj_lib:
+        sync_prj(prj_lib)
+
+    # --- Unmount filesystem
     @retry("Unmounting")
     def unmount_filesystem():
         global pyboard
         getattr(pyboard, 'unmount_' + medium)()
-
-    # Run in sequence
-    find_serial()
-    create_instance()
-    mount_filesystem()
-    sync()
     unmount_filesystem()
 
     return 0

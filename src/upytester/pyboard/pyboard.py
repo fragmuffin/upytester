@@ -1,6 +1,7 @@
 import serial
 import json
 import time
+import os
 
 # Threads
 import threading
@@ -105,7 +106,7 @@ class PyBoard(object):
         """
         return utils.find_mountpoint_sd(self)
 
-    def sync_to_sd(self, source, force=False, dryrun=False, quiet=False):
+    def sync_to_sd(self, source, **kwargs):
         """
         Synchronise files from the given `source` to the pyboard's SD card
 
@@ -122,10 +123,7 @@ class PyBoard(object):
         :type quiet: :class:`bool`
         """
         self.mount_sd()
-        return utils.sync_files_to_sd(
-            source, self,
-            force=force, dryrun=dryrun, quiet=quiet,
-        )
+        return utils.sync_files_to_sd(source, self, **kwargs)
         self.unmount_sd()
 
     # ----- Flash
@@ -151,16 +149,13 @@ class PyBoard(object):
         """
         return utils.find_mountpoint_flash(self)
 
-    def sync_to_flash(self, source, force=False, dryrun=False, quiet=False):
+    def sync_to_flash(self, source, **kwargs):
         """
         Just like :meth:`PyBoard.sync_to_sd` but to Flash
         (instead of the SD card).
         """
         self.mount_flash()
-        return utils.sync_files_to_flash(
-            source, self,
-            force=force, dryrun=dryrun, quiet=quiet,
-        )
+        return utils.sync_files_to_flash(source, self, **kwargs)
         self.unmount_flash()
 
     # ==================== Serial Communication ====================

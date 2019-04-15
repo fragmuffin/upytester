@@ -1,0 +1,3 @@
+bench:
+    libraries:
+        sd: 'benchlib-sd'
