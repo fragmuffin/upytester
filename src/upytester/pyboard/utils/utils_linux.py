@@ -253,7 +253,7 @@ class StorageDevice:
 # --- SD Card
 class SDCard(StorageDevice):
     DEVICE_FILE_PREFIX = 'SD_card'
-    DEVICE_MARKER_FILE = '.pyboard-sdcard'
+    DEVICE_MARKER_FILE = '.pyboard-sd'
 
 
 def find_mountpoint_sd(*args, **kwargs):

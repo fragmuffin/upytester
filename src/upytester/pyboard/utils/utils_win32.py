@@ -122,7 +122,7 @@ def sync_path_to_sd(source_path, pyboard):
             "pyboard's mountpoint '{}' does not exist (or is not a folder)".format(mountpoint)
         )
 
-    CHECK_FILES = ['main.py', '.pyboard-sdcard']
+    CHECK_FILES = ['main.py', '.pyboard-sd']
     if not all(os.path.exists(os.path.join(mountpoint, f)) for f in CHECK_FILES):
         raise ValueError(
             (
