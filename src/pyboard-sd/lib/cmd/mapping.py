@@ -14,7 +14,7 @@ def instruction(func):
         def ping(value=0):
             return {'r': 'ping', 'value': value + 1}
 
-    With this implemented, when a host sends ``{'i': 'ping', 'value': 10}``,
+    With this implemented, when a host sends ``{'i': 'ping', 'k': {'value': 10}}``,
     it will receive ``{'r': 'ping', 'value': 11}``
 
     **Format of Request**\
@@ -22,10 +22,11 @@ def instruction(func):
 
         {
             'i': 'some_instruction',  # name of the method
-            'args': [1, 'abc', -5.4],  # optional list arguments
-            'value': True,  # remaining key:value pairs are used as keyword
-                            # arguments.
-            'pin': 'X3',
+            'a': [1, 'abc', -5.4],  # optional list arguments
+            'k': {  # optional keywords argument list
+                'value': True,
+                'pin': 'X3',
+            }
         }
 
     **Instruction Design for Serializing**\
@@ -98,8 +99,7 @@ def interpret(obj):
 
     # Execute function
     func = _instruction_map[instruction_name]
-    args = obj.pop('args', [])
-    response = func(*args, **obj)
+    response = func(*obj.pop('a', []), **obj.pop('k', {}))
 
     # Send response (if any given)
     if response is not None:

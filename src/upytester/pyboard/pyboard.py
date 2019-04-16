@@ -415,13 +415,14 @@ class PyBoard(object):
         if (self._instruction_list is not None) and (key in self._instruction_list):
             # Create a callable that will send apropriately formatted object
             def instruction(*args, **kwargs):
-                obj = kwargs
+                payload = {'i': key}
                 if args:
-                    obj['args'] = args
-                obj['i'] = key
-                return self.send(obj)
+                    payload['a'] = args
+                if kwargs:
+                    payload['k'] = kwargs
+                return self.send(payload)
+            instruction.__name__ = key  # function has key name
 
-            instruction.__name__ = key
             return instruction
 
         raise AttributeError("'{}' object has no attribute '{}'".format(type(self).__name__, key))
