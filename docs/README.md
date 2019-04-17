@@ -1,13 +1,14 @@
 # Published Docs
 
-This documentation is best viewed on the github pages link:
-http://fragmuffin.github.io/upytester
+This documentation is best viewed on: http://fragmuffin.github.io/upytester
 
 
 ## Building Documentation
 
-To build documentation yourself, execute from this folder:
+To build documentation yourself, execute from the
+[`docs-source`](../docs-source) folder:
 
-```
+```bash
+cd ../docs-source
 make html
 ```
