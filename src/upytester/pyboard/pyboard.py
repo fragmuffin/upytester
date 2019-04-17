@@ -418,6 +418,7 @@ class PyBoard(object):
         if hard:
             self.comport.write(b'\x03\r\nimport pyb\r\npyb.hard_reset()\r\n')
             self.comport.close()
+            # note: an alternative is to send ctrl+d (b'\x1a') (untested)
         else:
             self.machine_reset(t=500)
             self.close()
