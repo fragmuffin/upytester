@@ -89,8 +89,12 @@ parser.add_argument(
          "the default is sd",
 )
 parser.add_argument(
-    '--reset', '-R', default=False, action='store_true',
-    help="If set with sync action, pyboard is reset after sync is performed",
+    '--softreset', '-r', default=False, action='store_true',
+    help="If set with sync action, pyboard is soft reset after sync is performed",
+)
+parser.add_argument(
+    '--hardreset', '-R', default=False, action='store_true',
+    help="If set with sync action, pyboard is hard reset after sync is performed",
 )
 
 # Evaluate
@@ -267,18 +271,19 @@ def action_sync():
     unmount_filesystem()
 
     # optional reset
-    if args.reset and (not args.dryrun):
+    if (args.softreset or args.hardreset) and (not args.dryrun):
         global pyboard
-        pyboard.open()
-        pyboard.machine_reset(t=500)
-        pyboard.close()
+        if args.softreset:
+            pyboard.open()
+        pyboard.reset(hard=args.hardreset)
+        #pyboard.close()
 
     return 0
 
 
 def action_reset():
     pyboard = upytester.PyBoard(args.serialnum)
-    pyboard.machine_reset(t=500)
+    pyboard.reset(hard=True)
     pyboard.close()
 
 

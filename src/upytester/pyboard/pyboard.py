@@ -395,6 +395,34 @@ class PyBoard(object):
         while not (self._transmit_queue.empty() and not self._processing_transmit.is_set()):
             time.sleep(period)
 
+    def reset(self, hard=False):
+        """
+        **Soft Reset**
+
+        A soft reset invokes the :meth:`machine_reset` method by using the
+        onboard ``upytester`` library. Obviously this will only work if there
+        is funcitonal ``upytester`` firmware running on the pyboard's SD card.
+
+        **Hard Reset**
+
+        A Ctrl+C character ``ext`` is sent to simulate a :class:`KeyboardInterrupt`
+        exception. Then, assuming a REPL has started on the pyboard, these
+        commands are sent::
+
+            import pyb
+            pyb.hard_reset()
+
+        :param hard: if ``True``, a hard reset is performed, soft by default
+        :type hard: :class:`bool`
+        """
+        if hard:
+            self.comport.write(b'\x03\r\nimport pyb\r\npyb.hard_reset()\r\n')
+            self.comport.close()
+        else:
+            self.machine_reset(t=500)
+            self.close()
+        self._comport = None
+
     # ==================== Context Management ====================
     def __enter__(self):
         self.open()
