@@ -230,12 +230,17 @@ def action_sync():
     @retry("Sync Main")
     def sync_main():
         global pyboard
+        # Excluded patterns
+        exclude = ['.git']  # always ignore .git folders
+        if prj_lib:
+            exclude.append(os.path.join('lib_bench', '*'))
+        # run sync
         getattr(pyboard, 'sync_to_' + medium)(
             prj_src,
             force=args.force,
             dryrun=args.dryrun,
             quiet=args.quiet,
-            exclude=os.path.join('lib_bench', '*') if prj_lib else None,
+            exclude=exclude,
         )
     sync_main()
 

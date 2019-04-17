@@ -146,7 +146,7 @@ class StorageDevice:
             proc.communicate()
 
     @classmethod
-    def sync_files_to_device(cls, source_path, pyboard, subdir='.', force=False, dryrun=False, quiet=False, exclude=None):
+    def sync_files_to_device(cls, source_path, pyboard, subdir='.', force=False, dryrun=False, quiet=False, exclude=[]):
         """
         Synchronise a filesystem to the pyboard's storage.
         Used to deploy code onto a test bench
@@ -166,8 +166,8 @@ class StorageDevice:
         :type dryrun: :class:`bool`
         :param quiet: If `True` process will not print anything to stdout
         :type quiet: :class:`bool`
-        :param exclude: Pattern of files to ignore during sync operation
-        :type exclude: :class:`str`
+        :param exclude: List of file patterns of files to ignore during sync operation
+        :type exclude: :class:`list` of :class:`str`
         """
         # Validate Request
         if not os.path.isdir(source_path):
@@ -230,8 +230,8 @@ class StorageDevice:
             #       -h  output numbers in a human-readable format
             #       -v  verbose
             cmd = ['rsync', '-rLptgoDhv', '--delete']
-            if exclude  is not None:
-                cmd += ['--exclude', exclude]
+            for pattern in exclude:
+                cmd += ['--exclude', pattern]
             cmd += [abs_source, abs_dest]
 
             # Start process
