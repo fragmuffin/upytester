@@ -17,42 +17,36 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="upytester 0.1 documentation" href="../../index.html"/>
-        <link rel="up" title="Basic" href="index.html"/>
-        <link rel="prev" title="Switch Evaluation" href="03-switch-evaluation.html"/> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="On Board Components" href="../02-on-board-components/index.html" />
+    <link rel="prev" title="Switch Evaluation" href="03-switch-evaluation.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -93,20 +87,22 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="index.html">Basic</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="01-ping.html">Ping</a></li>
-<li class="toctree-l3"><a class="reference internal" href="02-led-stimulus.html">LED Stimulus</a></li>
-<li class="toctree-l3"><a class="reference internal" href="03-switch-evaluation.html">Switch Evaluation</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Wire Tester</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#bench-setup">Bench Setup</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#test-case">Test Case</a></li>
-</ul>
-</li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#running-tests">Running Tests</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#examples-contents">Examples Contents</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Basic</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="01-ping.html">Ping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="02-led-stimulus.html">LED Stimulus</a></li>
+<li class="toctree-l4"><a class="reference internal" href="03-switch-evaluation.html">Switch Evaluation</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Wire Tester</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../02-on-board-components/index.html">On Board Components</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/host/modules.html">upytester</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/pyboard/modules.html">upyt</a></li>
 </ul>
 
             
@@ -118,7 +114,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">upytester</a>
@@ -126,9 +122,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -188,23 +185,23 @@ that it will carry a voltage from an output to the input it’s connected to.</p
 bigger discussion than this diagram gives credit for. For the purposes of
 our “product” test:</p>
 <ul class="simple">
-<li><strong>Device Uner Test</strong> : our “product” (a wire, or 200Ω resistor <a class="footnote-reference" href="#f1" id="id1">[1]</a>)</li>
-<li><strong>Stimulus</strong> : a socket for one end of our wire (pyboard pin <code class="docutils literal"><span class="pre">X8</span></code>)</li>
-<li><strong>Evaluation</strong> : a socket for the other end (pyboard pin <code class="docutils literal"><span class="pre">X9</span></code>)</li>
+<li><p><strong>Device Uner Test</strong> : our “product” (a wire, or 200Ω resistor <a class="footnote-reference brackets" href="#f1" id="id1">1</a>)</p></li>
+<li><p><strong>Stimulus</strong> : a socket for one end of our wire (pyboard pin <code class="docutils literal notranslate"><span class="pre">X8</span></code>)</p></li>
+<li><p><strong>Evaluation</strong> : a socket for the other end (pyboard pin <code class="docutils literal notranslate"><span class="pre">X9</span></code>)</p></li>
 </ul>
-<table class="docutils footnote" frame="void" id="f1" rules="none">
-<colgroup><col class="label" /><col /></colgroup>
-<tbody valign="top">
-<tr><td class="label"><a class="fn-backref" href="#id1">[1]</a></td><td>If you’re concerned about shorting something out while you’re playing around.
+<dl class="footnote brackets">
+<dt class="label" id="f1"><span class="brackets"><a class="fn-backref" href="#id1">1</a></span></dt>
+<dd><p>If you’re concerned about shorting something out while you’re playing around.
 Connecting a 200Ω resistor between the 2 GPIO ports will pass the test,
-and limit the current to below the GPIO’s maximum.</td></tr>
-</tbody>
-</table>
+and limit the current to below the GPIO’s maximum.</p>
+</dd>
+</dl>
 <div class="section" id="stimulus-evaluation-vs-ouput-input">
 <h3>Stimulus/Evaluation vs Ouput/Input ?<a class="headerlink" href="#stimulus-evaluation-vs-ouput-input" title="Permalink to this headline">¶</a></h3>
 <blockquote>
-<div>Why do you use the terms “stimulus” and “evaluation”, when it would be
-easier to just say “output” and “input”?</div></blockquote>
+<div><p>Why do you use the terms “stimulus” and “evaluation”, when it would be
+easier to just say “output” and “input”?</p>
+</div></blockquote>
 <p>Test environments are often discussed from 2 opposing contexts:
 one being the <em>product itself</em>, and the other is the <em>test bench</em>.
 This means that every time the term “input” or “output” is used, we can only
@@ -214,10 +211,10 @@ understand the relevance between the 2 if we also know what it is relative to.</
 </div>
 <div class="section" id="socket-class">
 <h3>Socket class<a class="headerlink" href="#socket-class" title="Permalink to this headline">¶</a></h3>
-<p>Similar to <code class="docutils literal"><span class="pre">Switch</span></code> in <a class="reference internal" href="03-switch-evaluation.html#examples-basic-switch"><span class="std std-ref">Switch Evaluation</span></a>, we’ll create a
+<p>Similar to <code class="docutils literal notranslate"><span class="pre">Switch</span></code> in <a class="reference internal" href="03-switch-evaluation.html#examples-basic-switch"><span class="std std-ref">Switch Evaluation</span></a>, we’ll create a
 class used to stimulate and evaluate a single pin, described more
 physically as a “socket”.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Socket</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Socket</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">,</span> <span class="n">pin</span><span class="p">,</span> <span class="n">mode</span><span class="p">,</span> <span class="n">value</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>  <span class="c1"># PyBoard instance</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pin</span> <span class="o">=</span> <span class="n">pin</span>  <span class="c1"># pin name (eg: &#39;X1&#39;)</span>
@@ -243,7 +240,7 @@ physically as a “socket”.</p>
 </div>
 <div class="section" id="benchtest-class">
 <h3>BenchTest class<a class="headerlink" href="#benchtest-class" title="Permalink to this headline">¶</a></h3>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">BenchTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">BenchTest</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
     <span class="n">PIN_MAP</span> <span class="o">=</span> <span class="p">{</span>
         <span class="s1">&#39;STIM_SOCKET&#39;</span><span class="p">:</span> <span class="s1">&#39;X8&#39;</span><span class="p">,</span>
         <span class="s1">&#39;EVAL_SOCKET&#39;</span><span class="p">:</span> <span class="s1">&#39;X9&#39;</span><span class="p">,</span>
@@ -273,7 +270,7 @@ physically as a “socket”.</p>
 </pre></div>
 </div>
 <p><strong>Pin Mapping</strong></p>
-<p>The <code class="docutils literal"><span class="pre">PIN_MAP</span></code> <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal"><span class="pre">dict</span></code></a> is used to map pins to an intuitive name
+<p>The <code class="docutils literal notranslate"><span class="pre">PIN_MAP</span></code> <a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a> is used to map pins to an intuitive name
 so they may be referenced while configuring the bench.</p>
 <p>This is highly advisable so you can assess your GPIO budget for the bench
 in one place. Larger bench environments would use a whole module for
@@ -288,7 +285,7 @@ and <em>evaluation</em> on another pyboard with a common ground.</p>
 <div class="section" id="test-case">
 <h2>Test Case<a class="headerlink" href="#test-case" title="Permalink to this headline">¶</a></h2>
 <p>Like any well designed test-bench, the test iself is the simplest part:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">WireTest</span><span class="p">(</span><span class="n">BenchTest</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">WireTest</span><span class="p">(</span><span class="n">BenchTest</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">test_wire_low</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Signal connected as LOW</span>
@@ -307,23 +304,23 @@ and <em>evaluation</em> on another pyboard with a common ground.</p>
 </pre></div>
 </div>
 <p>If you disconnect the wire ([cough]… sorry, the “product”), you should see
-<code class="docutils literal"><span class="pre">test_wire_low</span></code> pass (because the evaluating pin is pulled low), and
-<code class="docutils literal"><span class="pre">test_wire_high</span></code> fail.</p>
+<code class="docutils literal notranslate"><span class="pre">test_wire_low</span></code> pass (because the evaluating pin is pulled low), and
+<code class="docutils literal notranslate"><span class="pre">test_wire_high</span></code> fail.</p>
 </div>
 </div>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
     <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
       
+        <a href="../02-on-board-components/index.html" class="btn btn-neutral float-right" title="On Board Components" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
-        <a href="03-switch-evaluation.html" class="btn btn-neutral" title="Switch Evaluation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+        <a href="03-switch-evaluation.html" class="btn btn-neutral float-left" title="Switch Evaluation" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -332,11 +329,11 @@ and <em>evaluation</em> on another pyboard with a common ground.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Peter Boin.
+        &copy; Copyright 2019, Peter Boin
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -349,37 +346,15 @@ and <em>evaluation</em> on another pyboard with a common ground.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

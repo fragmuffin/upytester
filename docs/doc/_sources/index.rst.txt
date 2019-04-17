@@ -6,7 +6,8 @@ Welcome to ``upytester``'s documentation!
    :caption: Contents:
 
    examples/index
-
+   api/host/modules
+   api/pyboard/modules
 
 Indices and tables
 ==================

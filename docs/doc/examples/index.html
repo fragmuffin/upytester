@@ -17,42 +17,36 @@
   
 
   
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../_static/jquery.js"></script>
+        <script type="text/javascript" src="../_static/underscore.js"></script>
+        <script type="text/javascript" src="../_static/doctools.js"></script>
+        <script type="text/javascript" src="../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../genindex.html"/>
-        <link rel="search" title="Search" href="../search.html"/>
-    <link rel="top" title="upytester 0.1 documentation" href="../index.html"/>
-        <link rel="next" title="Basic" href="01-basic/index.html"/>
-        <link rel="prev" title="Welcome to upytester’s documentation!" href="../index.html"/> 
-
-  
-  <script src="../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Basic" href="01-basic/index.html" />
+    <link rel="prev" title="Welcome to upytester’s documentation!" href="../index.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -93,13 +87,21 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="current reference internal" href="#">Examples</a><ul>
-<li class="toctree-l2"><a class="reference internal" href="#running-tests">Running Tests</a></li>
-<li class="toctree-l2"><a class="reference internal" href="#example-list">Example List</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#running-tests">Running Tests</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#configure">Configure</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#synchronise-files-on-pyboard">Synchronise Files on pyboard</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#execute-tests">Execute Tests</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#examples-contents">Examples Contents</a><ul>
 <li class="toctree-l3"><a class="reference internal" href="01-basic/index.html">Basic</a></li>
+<li class="toctree-l3"><a class="reference internal" href="02-on-board-components/index.html">On Board Components</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../api/host/modules.html">upytester</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../api/pyboard/modules.html">upyt</a></li>
 </ul>
 
             
@@ -111,7 +113,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../index.html">upytester</a>
@@ -119,9 +121,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -167,29 +170,69 @@
 <h1>Examples<a class="headerlink" href="#examples" title="Permalink to this headline">¶</a></h1>
 <p>Example tests are stored in the
 <a class="reference external" href="https://github.com/fragmuffin/upytester/tree/master/examples">examples folder</a>.</p>
+<p>Each of the folders in the example directory contains multiple example “projects”
+made in an attempt to showcase the original intent of this library, and how
+to use it.</p>
+<p>As a rule of thumb, all folders in this hierarchy that being with 2 numbers
+(like <code class="docutils literal notranslate"><span class="pre">01-ping</span></code>) contains a sample project; a collection of files that
+can be moved to another location and still work the same way.</p>
+<p>My advice for beginners would be to copy one of those folders and paste it into
+your project as a starting point.</p>
 <div class="section" id="running-tests">
 <h2>Running Tests<a class="headerlink" href="#running-tests" title="Permalink to this headline">¶</a></h2>
-<p>Each of the test folders contains a <code class="docutils literal"><span class="pre">.upytester-config.yml</span></code> file. This file
-maps a pyboard’s serial number to a name used to setup the bench.</p>
-<p>For example:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="n">devices</span><span class="p">:</span>
+<div class="section" id="configure">
+<h3>Configure<a class="headerlink" href="#configure" title="Permalink to this headline">¶</a></h3>
+<p>Each test searches for a <code class="docutils literal notranslate"><span class="pre">.upytester.yml</span></code> file, in the order:</p>
+<ol class="arabic simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">~</span></code> - current working</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">.</span></code> - user’s home directory</p></li>
+</ol>
+<p>This file maps a pyboard’s serial number to a name used to setup the bench.
+You’ll need to create this file.</p>
+<p>All example tests uses <code class="docutils literal notranslate"><span class="pre">pyb_a</span></code> as the name for the pyboard. For
+examples that use more than 1 pyboard, the second is named <code class="docutils literal notranslate"><span class="pre">pyb_b</span></code> (optional).</p>
+<p>Example <code class="docutils literal notranslate"><span class="pre">~/.upytester.yml</span></code> content:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">devices</span><span class="p">:</span>
     <span class="n">pyb_a</span><span class="p">:</span>
         <span class="n">serial</span><span class="p">:</span> <span class="s1">&#39;0123456789AB&#39;</span>
+    <span class="n">pyb_b</span><span class="p">:</span>
+        <span class="n">serial</span><span class="p">:</span> <span class="s1">&#39;BA9876543210&#39;</span>
 </pre></div>
 </div>
-<p><code class="docutils literal"><span class="pre">pyb_a</span></code> is the human readable name for the pyboard on the test bench,
-and <code class="docutils literal"><span class="pre">0123456789AB</span></code> is its serial number.</p>
-<p>Find your pyboard’s serial number by connecting it, and running:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ upytester list
+<p>Find your pyboard serial number(s) by connecting them via USB, and running:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ upytester list
 Connected PyBoards: &lt;serial&gt; &lt;comport&gt; &lt;mountpoint&gt;
     3976346C3436    /dev/ttyACM0    None
+    497612578916    /dev/ttyACM1    None
 </pre></div>
 </div>
-<p>Change the serial number in the <code class="docutils literal"><span class="pre">.upytester-config.yml</span></code> file to your
-pyboard’s serial number.</p>
-<p>Then run the test(s) from within the example folder.
+<p>This must be done for each host used to run the example tests because every
+pyboard’s serial number is different… that’s sort of the point of them.</p>
+</div>
+<div class="section" id="synchronise-files-on-pyboard">
+<h3>Synchronise Files on pyboard<a class="headerlink" href="#synchronise-files-on-pyboard" title="Permalink to this headline">¶</a></h3>
+<p>The <code class="docutils literal notranslate"><span class="pre">upytester</span></code> library runs with the assumption that the referenced
+pyboards will be running the <code class="docutils literal notranslate"><span class="pre">upytester</span></code> software.</p>
+<p>This can simply be done with the <code class="docutils literal notranslate"><span class="pre">sync</span></code> action of the <code class="docutils literal notranslate"><span class="pre">upytester</span></code> command:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ upytester sync 3976346C3436
+</pre></div>
+</div>
+<p>Note: if you’re working with a fresh pyboard, you’ll want to run this command
+with the <code class="docutils literal notranslate"><span class="pre">--force</span></code> flag.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Consider running with <code class="docutils literal notranslate"><span class="pre">--force</span> <span class="pre">--dryrun</span></code> first to confirm the dest folder
+is on the pyboard.</p>
+<p>All files on the dest folder will be deleted and replaced with the <code class="docutils literal notranslate"><span class="pre">upytester</span></code>
+codebase. I don’t want you to accidentally start deleting family photos.</p>
+</div>
+</div>
+<div class="section" id="execute-tests">
+<h3>Execute Tests<a class="headerlink" href="#execute-tests" title="Permalink to this headline">¶</a></h3>
+<p>Now you should be ready to go!</p>
+<p>Run the test(s) from an example folder.
 For <a class="reference internal" href="01-basic/01-ping.html#examples-basic-ping"><span class="std std-ref">Ping</span></a> you would run:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>$ cd examples/01-basic/01-ping
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ cd examples/01-basic/01-ping
 $ python -m unittest discover -v
 test_ping (test_ping.PingTest) ... ok
 
@@ -200,20 +243,24 @@ OK
 </pre></div>
 </div>
 </div>
-<div class="section" id="example-list">
-<h2>Example List<a class="headerlink" href="#example-list" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="examples-contents">
+<h2>Examples Contents<a class="headerlink" href="#examples-contents" title="Permalink to this headline">¶</a></h2>
 <p>The following pages in this documentation walk through each example, and how
 they’re different from the last.</p>
-<p>It’s recommended you have a rough understanding of the <a class="reference external" href="https://docs.python.org/3/library/unittest.html#module-unittest" title="(in Python v3.7)"><code class="xref py py-mod docutils literal"><span class="pre">unittest</span></code></a> framework
+<p>It’s recommended you have a rough understanding of the <a class="reference external" href="https://docs.python.org/3/library/unittest.html#module-unittest" title="(in Python v3.7)"><code class="xref py py-mod docutils literal notranslate"><span class="pre">unittest</span></code></a> framework
 and how to use it.</p>
 <div class="toctree-wrapper compound">
-<p class="caption"><span class="caption-text">Example Index:</span></p>
 <ul>
 <li class="toctree-l1"><a class="reference internal" href="01-basic/index.html">Basic</a><ul>
 <li class="toctree-l2"><a class="reference internal" href="01-basic/01-ping.html">Ping</a></li>
 <li class="toctree-l2"><a class="reference internal" href="01-basic/02-led-stimulus.html">LED Stimulus</a></li>
 <li class="toctree-l2"><a class="reference internal" href="01-basic/03-switch-evaluation.html">Switch Evaluation</a></li>
 <li class="toctree-l2"><a class="reference internal" href="01-basic/04-wire-tester.html">Wire Tester</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="02-on-board-components/index.html">On Board Components</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="02-on-board-components/01-led-blink.html">LED Blink</a></li>
 </ul>
 </li>
 </ul>
@@ -223,9 +270,7 @@ and how to use it.</p>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -234,7 +279,7 @@ and how to use it.</p>
         <a href="01-basic/index.html" class="btn btn-neutral float-right" title="Basic" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="../index.html" class="btn btn-neutral" title="Welcome to upytester’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="../index.html" class="btn btn-neutral float-left" title="Welcome to upytester’s documentation!" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -243,11 +288,11 @@ and how to use it.</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Peter Boin.
+        &copy; Copyright 2019, Peter Boin
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -260,37 +305,15 @@ and how to use it.</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../_static/jquery.js"></script>
-      <script type="text/javascript" src="../_static/underscore.js"></script>
-      <script type="text/javascript" src="../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

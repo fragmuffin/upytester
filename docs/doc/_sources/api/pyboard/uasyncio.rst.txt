@@ -1,0 +1,22 @@
+uasyncio package
+================
+
+Submodules
+----------
+
+uasyncio.core module
+--------------------
+
+.. automodule:: uasyncio.core
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: uasyncio
+    :members:
+    :undoc-members:
+    :show-inheritance:

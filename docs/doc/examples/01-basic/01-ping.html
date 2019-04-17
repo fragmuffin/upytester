@@ -17,43 +17,36 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="upytester 0.1 documentation" href="../../index.html"/>
-        <link rel="up" title="Basic" href="index.html"/>
-        <link rel="next" title="LED Stimulus" href="02-led-stimulus.html"/>
-        <link rel="prev" title="Basic" href="index.html"/> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="LED Stimulus" href="02-led-stimulus.html" />
+    <link rel="prev" title="Basic" href="index.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -95,7 +88,7 @@
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
 <li class="toctree-l2"><a class="reference internal" href="../index.html#running-tests">Running Tests</a></li>
-<li class="toctree-l2 current"><a class="reference internal" href="../index.html#example-list">Example List</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#examples-contents">Examples Contents</a><ul class="current">
 <li class="toctree-l3 current"><a class="reference internal" href="index.html">Basic</a><ul class="current">
 <li class="toctree-l4 current"><a class="current reference internal" href="#">Ping</a></li>
 <li class="toctree-l4"><a class="reference internal" href="02-led-stimulus.html">LED Stimulus</a></li>
@@ -103,10 +96,13 @@
 <li class="toctree-l4"><a class="reference internal" href="04-wire-tester.html">Wire Tester</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../02-on-board-components/index.html">On Board Components</a></li>
 </ul>
 </li>
 </ul>
 </li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/host/modules.html">upytester</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/pyboard/modules.html">upyt</a></li>
 </ul>
 
             
@@ -118,7 +114,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">upytester</a>
@@ -126,9 +122,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -176,10 +173,10 @@
             
   <div class="section" id="ping">
 <span id="examples-basic-ping"></span><h1>Ping<a class="headerlink" href="#ping" title="Permalink to this headline">¶</a></h1>
-<p>This is the simplest example of a <code class="docutils literal"><span class="pre">upytester</span></code> test-case. It tests that the
+<p>This is the simplest example of a <code class="docutils literal notranslate"><span class="pre">upytester</span></code> test-case. It tests that the
 configured pyboard is connected, and responding to serial commands.</p>
 <p>This example’s implementation is far from the best design for a bench test,
-but it is a good starting point to explain how <code class="docutils literal"><span class="pre">upytester</span></code> may be set up
+but it is a good starting point to explain how <code class="docutils literal notranslate"><span class="pre">upytester</span></code> may be set up
 to be useful for your peojct.</p>
 <div class="section" id="bench-setup">
 <h2>Bench Setup<a class="headerlink" href="#bench-setup" title="Permalink to this headline">¶</a></h2>
@@ -189,11 +186,11 @@ to be useful for your peojct.</p>
 <h2>Test Case<a class="headerlink" href="#test-case" title="Permalink to this headline">¶</a></h2>
 <div class="section" id="setup">
 <h3>Setup<a class="headerlink" href="#setup" title="Permalink to this headline">¶</a></h3>
-<p><a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUp" title="(in Python v3.7)"><code class="xref py py-meth docutils literal"><span class="pre">TestCase.setUp()</span></code></a> is called before each test.
-For this test, we use the <code class="xref py py-meth docutils literal"><span class="pre">get_device()</span></code>
-method to return a <code class="xref py py-class docutils literal"><span class="pre">PyBoard</span></code> instance to send
-commands to, and assign it to <code class="docutils literal"><span class="pre">self.pyb_a</span></code>.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<p><a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUp" title="(in Python v3.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">TestCase.setUp()</span></code></a> is called before each test.
+For this test, we use the <a class="reference internal" href="../../api/host/upytester.project.html#upytester.project.get_device" title="upytester.project.get_device"><code class="xref py py-meth docutils literal notranslate"><span class="pre">get_device()</span></code></a>
+method to return a <a class="reference internal" href="../../api/host/upytester.html#upytester.PyBoard" title="upytester.PyBoard"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyBoard</span></code></a> instance to send
+commands to, and assign it to <code class="docutils literal notranslate"><span class="pre">self.pyb_a</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pyb_a</span> <span class="o">=</span> <span class="n">upytester</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">get_device</span><span class="p">(</span><span class="s1">&#39;pyb_a&#39;</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -201,7 +198,7 @@ commands to, and assign it to <code class="docutils literal"><span class="pre">s
 <div class="section" id="test">
 <h3>Test<a class="headerlink" href="#test" title="Permalink to this headline">¶</a></h3>
 <p>The test is done in 3 parts:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">test_ping</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">test_ping</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Send a ping request over serial to the pyboard identified as ``pyb_a``.</span>
 <span class="sd">        &quot;&quot;&quot;</span>
@@ -211,25 +208,25 @@ commands to, and assign it to <code class="docutils literal"><span class="pre">s
 </pre></div>
 </div>
 <ol class="arabic simple">
-<li><code class="docutils literal"><span class="pre">ping</span></code> is called on the <code class="xref py py-class docutils literal"><span class="pre">PyBoard</span></code> instance.
+<li><p><code class="docutils literal notranslate"><span class="pre">ping</span></code> is called on the <a class="reference internal" href="../../api/host/upytester.html#upytester.PyBoard" title="upytester.PyBoard"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyBoard</span></code></a> instance.
 This command is serialized and set to to the pyboard via USB.
 It also returns a callable that can be used to receive a response from
-the pyboard.</li>
-<li>The pyboard’s response is stored in <code class="docutils literal"><span class="pre">response</span></code></li>
-<li>The value of the responce is used to evaluate the test’s verdict.</li>
+the pyboard.</p></li>
+<li><p>The pyboard’s response is stored in <code class="docutils literal notranslate"><span class="pre">response</span></code></p></li>
+<li><p>The value of the responce is used to evaluate the test’s verdict.</p></li>
 </ol>
 <p>Note: this could have all been done in one line.</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pyb_a</span><span class="o">.</span><span class="n">ping</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">100</span><span class="p">)()[</span><span class="s1">&#39;value&#39;</span><span class="p">],</span> <span class="mi">101</span><span class="p">)</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pyb_a</span><span class="o">.</span><span class="n">ping</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">100</span><span class="p">)()[</span><span class="s1">&#39;value&#39;</span><span class="p">],</span> <span class="mi">101</span><span class="p">)</span>
 </pre></div>
 </div>
 </div>
 <div class="section" id="tear-down">
 <h3>Tear Down<a class="headerlink" href="#tear-down" title="Permalink to this headline">¶</a></h3>
-<p>To compliment <a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUp" title="(in Python v3.7)"><code class="xref py py-meth docutils literal"><span class="pre">setUp()</span></code></a>,
-<a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.tearDown" title="(in Python v3.7)"><code class="xref py py-meth docutils literal"><span class="pre">tearDown()</span></code></a> is called <em>after</em> each test.</p>
+<p>To compliment <a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUp" title="(in Python v3.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setUp()</span></code></a>,
+<a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.tearDown" title="(in Python v3.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">tearDown()</span></code></a> is called <em>after</em> each test.</p>
 <p>The serial link to the pyboard is closed by calling
-<code class="xref py py-meth docutils literal"><span class="pre">close()</span></code></p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<a class="reference internal" href="../../api/host/upytester.html#upytester.PyBoard.close" title="upytester.PyBoard.close"><code class="xref py py-meth docutils literal notranslate"><span class="pre">close()</span></code></a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="k">def</span> <span class="nf">tearDown</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">pyb_a</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
 </pre></div>
 </div>
@@ -239,21 +236,19 @@ the pyboard.</li>
 <h2>Improvements<a class="headerlink" href="#improvements" title="Permalink to this headline">¶</a></h2>
 <p>The following improvements can be found in the next example:</p>
 <ul class="simple">
-<li>We create and close a new <code class="xref py py-class docutils literal"><span class="pre">PyBoard</span></code>
+<li><p>We create and close a new <a class="reference internal" href="../../api/host/upytester.html#upytester.PyBoard" title="upytester.PyBoard"><code class="xref py py-class docutils literal notranslate"><span class="pre">PyBoard</span></code></a>
 instance for each test. This could be done in
-<a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUpClass" title="(in Python v3.7)"><code class="xref py py-meth docutils literal"><span class="pre">TestCase.setUpClass()</span></code></a> and
-<a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.tearDownClass" title="(in Python v3.7)"><code class="xref py py-meth docutils literal"><span class="pre">TestCase.tearDownClass()</span></code></a> instead</li>
-<li>The <em>bench</em> deisgn is defined in the test class. Instead this could be
-defined in an inherited class.</li>
+<a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUpClass" title="(in Python v3.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">TestCase.setUpClass()</span></code></a> and
+<a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.tearDownClass" title="(in Python v3.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">TestCase.tearDownClass()</span></code></a> instead</p></li>
+<li><p>The <em>bench</em> deisgn is defined in the test class. Instead this could be
+defined in an inherited class.</p></li>
 </ul>
 </div>
 </div>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -262,7 +257,7 @@ defined in an inherited class.</li>
         <a href="02-led-stimulus.html" class="btn btn-neutral float-right" title="LED Stimulus" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="index.html" class="btn btn-neutral" title="Basic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="index.html" class="btn btn-neutral float-left" title="Basic" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -271,11 +266,11 @@ defined in an inherited class.</li>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Peter Boin.
+        &copy; Copyright 2019, Peter Boin
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -288,37 +283,15 @@ defined in an inherited class.</li>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

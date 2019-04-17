@@ -17,43 +17,36 @@
   
 
   
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
 
-  
-  
     
 
   
-
-  
-  
-    <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
-  
-
-  
-
-  
-        <link rel="index" title="Index"
-              href="../../genindex.html"/>
-        <link rel="search" title="Search" href="../../search.html"/>
-    <link rel="top" title="upytester 0.1 documentation" href="../../index.html"/>
-        <link rel="up" title="Basic" href="index.html"/>
-        <link rel="next" title="Wire Tester" href="04-wire-tester.html"/>
-        <link rel="prev" title="LED Stimulus" href="02-led-stimulus.html"/> 
-
-  
-  <script src="../../_static/js/modernizr.min.js"></script>
-
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Wire Tester" href="04-wire-tester.html" />
+    <link rel="prev" title="LED Stimulus" href="02-led-stimulus.html" /> 
 </head>
 
-<body class="wy-body-for-nav" role="document">
+<body class="wy-body-for-nav">
 
    
   <div class="wy-grid-for-nav">
-
     
     <nav data-toggle="wy-nav-shift" class="wy-nav-side">
       <div class="wy-side-scroll">
-        <div class="wy-side-nav-search">
+        <div class="wy-side-nav-search" >
           
 
           
@@ -94,20 +87,22 @@
               <p class="caption"><span class="caption-text">Contents:</span></p>
 <ul class="current">
 <li class="toctree-l1 current"><a class="reference internal" href="../index.html">Examples</a><ul class="current">
-<li class="toctree-l2 current"><a class="reference internal" href="index.html">Basic</a><ul class="current">
-<li class="toctree-l3"><a class="reference internal" href="01-ping.html">Ping</a></li>
-<li class="toctree-l3"><a class="reference internal" href="02-led-stimulus.html">LED Stimulus</a></li>
-<li class="toctree-l3 current"><a class="current reference internal" href="#">Switch Evaluation</a><ul>
-<li class="toctree-l4"><a class="reference internal" href="#bench-setup">Bench Setup</a></li>
-<li class="toctree-l4"><a class="reference internal" href="#test-case">Test Case</a></li>
-</ul>
-</li>
-<li class="toctree-l3"><a class="reference internal" href="04-wire-tester.html">Wire Tester</a></li>
-</ul>
-</li>
 <li class="toctree-l2"><a class="reference internal" href="../index.html#running-tests">Running Tests</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="../index.html#examples-contents">Examples Contents</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="index.html">Basic</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="01-ping.html">Ping</a></li>
+<li class="toctree-l4"><a class="reference internal" href="02-led-stimulus.html">LED Stimulus</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">Switch Evaluation</a></li>
+<li class="toctree-l4"><a class="reference internal" href="04-wire-tester.html">Wire Tester</a></li>
 </ul>
 </li>
+<li class="toctree-l3"><a class="reference internal" href="../02-on-board-components/index.html">On Board Components</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/host/modules.html">upytester</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../api/pyboard/modules.html">upyt</a></li>
 </ul>
 
             
@@ -119,7 +114,7 @@
     <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
 
       
-      <nav class="wy-nav-top" role="navigation" aria-label="top navigation">
+      <nav class="wy-nav-top" aria-label="top navigation">
         
           <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
           <a href="../../index.html">upytester</a>
@@ -127,9 +122,10 @@
       </nav>
 
 
-      
       <div class="wy-nav-content">
+        
         <div class="rst-content">
+        
           
 
 
@@ -177,16 +173,16 @@
             
   <div class="section" id="switch-evaluation">
 <span id="examples-basic-switch"></span><h1>Switch Evaluation<a class="headerlink" href="#switch-evaluation" title="Permalink to this headline">¶</a></h1>
-<p>The <code class="docutils literal"><span class="pre">test_switch_pressed</span></code> test will pass if the <code class="docutils literal"><span class="pre">USR</span></code> button is being
+<p>The <code class="docutils literal notranslate"><span class="pre">test_switch_pressed</span></code> test will pass if the <code class="docutils literal notranslate"><span class="pre">USR</span></code> button is being
 pressed, and fail otherwise.</p>
-<p>This example introduces the use of a container class (<code class="docutils literal"><span class="pre">Switch</span></code>) for the
-pyboard’s <code class="docutils literal"><span class="pre">USR</span></code> switch to make test code more readable.</p>
+<p>This example introduces the use of a container class (<code class="docutils literal notranslate"><span class="pre">Switch</span></code>) for the
+pyboard’s <code class="docutils literal notranslate"><span class="pre">USR</span></code> switch to make test code more readable.</p>
 <div class="section" id="bench-setup">
 <h2>Bench Setup<a class="headerlink" href="#bench-setup" title="Permalink to this headline">¶</a></h2>
 <p>The only requirement for this test is a pyboard connected via USB.</p>
-<p>The <code class="docutils literal"><span class="pre">USR</span></code> switch on the pyboard is used for evaluation. The <em>value</em> of the
-switch is made accessible via the <code class="docutils literal"><span class="pre">Switch</span></code> class:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Switch</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<p>The <code class="docutils literal notranslate"><span class="pre">USR</span></code> switch on the pyboard is used for evaluation. The <em>value</em> of the
+switch is made accessible via the <code class="docutils literal notranslate"><span class="pre">Switch</span></code> class:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">Switch</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">device</span><span class="p">):</span>
         <span class="bp">self</span><span class="o">.</span><span class="n">device</span> <span class="o">=</span> <span class="n">device</span>
 
@@ -195,10 +191,10 @@ switch is made accessible via the <code class="docutils literal"><span class="pr
         <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">device</span><span class="o">.</span><span class="n">get_switch</span><span class="p">()()[</span><span class="s1">&#39;value&#39;</span><span class="p">]</span>
 </pre></div>
 </div>
-<p>An instance of <code class="docutils literal"><span class="pre">Switch</span></code> is then created in the <code class="docutils literal"><span class="pre">BenchTest</span></code>’s
-overridden <a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUpClass" title="(in Python v3.7)"><code class="xref py py-meth docutils literal"><span class="pre">setUpClass()</span></code></a> method,
-referencing the <code class="docutils literal"><span class="pre">pyb_a</span></code> pyboard as the relevant <code class="docutils literal"><span class="pre">device</span></code>:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span>    <span class="nd">@classmethod</span>
+<p>An instance of <code class="docutils literal notranslate"><span class="pre">Switch</span></code> is then created in the <code class="docutils literal notranslate"><span class="pre">BenchTest</span></code>’s
+overridden <a class="reference external" href="https://docs.python.org/3/library/unittest.html#unittest.TestCase.setUpClass" title="(in Python v3.7)"><code class="xref py py-meth docutils literal notranslate"><span class="pre">setUpClass()</span></code></a> method,
+referencing the <code class="docutils literal notranslate"><span class="pre">pyb_a</span></code> pyboard as the relevant <code class="docutils literal notranslate"><span class="pre">device</span></code>:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>    <span class="nd">@classmethod</span>
     <span class="k">def</span> <span class="nf">setUpClass</span><span class="p">(</span><span class="bp">cls</span><span class="p">):</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">pyb_a</span> <span class="o">=</span> <span class="n">upytester</span><span class="o">.</span><span class="n">project</span><span class="o">.</span><span class="n">get_device</span><span class="p">(</span><span class="s1">&#39;pyb_a&#39;</span><span class="p">)</span>
         <span class="bp">cls</span><span class="o">.</span><span class="n">switch</span> <span class="o">=</span> <span class="n">Switch</span><span class="p">(</span><span class="n">device</span><span class="o">=</span><span class="bp">cls</span><span class="o">.</span><span class="n">pyb_a</span><span class="p">)</span>
@@ -207,9 +203,9 @@ referencing the <code class="docutils literal"><span class="pre">pyb_a</span></c
 </div>
 <div class="section" id="test-case">
 <h2>Test Case<a class="headerlink" href="#test-case" title="Permalink to this headline">¶</a></h2>
-<p>Setting up the <code class="docutils literal"><span class="pre">BenchTest</span></code> like this alows the test-code to be very
+<p>Setting up the <code class="docutils literal notranslate"><span class="pre">BenchTest</span></code> like this alows the test-code to be very
 short and unambiguous:</p>
-<div class="highlight-default"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SwitchTest</span><span class="p">(</span><span class="n">BenchTest</span><span class="p">):</span>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">SwitchTest</span><span class="p">(</span><span class="n">BenchTest</span><span class="p">):</span>
     <span class="k">def</span> <span class="nf">test_switch_pressed</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
         <span class="sd">&quot;&quot;&quot;</span>
 <span class="sd">        Turn red LED on for 500ms asynchronously</span>
@@ -222,9 +218,7 @@ short and unambiguous:</p>
 
 
            </div>
-           <div class="articleComments">
-            
-           </div>
+           
           </div>
           <footer>
   
@@ -233,7 +227,7 @@ short and unambiguous:</p>
         <a href="04-wire-tester.html" class="btn btn-neutral float-right" title="Wire Tester" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
       
       
-        <a href="02-led-stimulus.html" class="btn btn-neutral" title="LED Stimulus" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+        <a href="02-led-stimulus.html" class="btn btn-neutral float-left" title="LED Stimulus" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
       
     </div>
   
@@ -242,11 +236,11 @@ short and unambiguous:</p>
 
   <div role="contentinfo">
     <p>
-        &copy; Copyright 2019, Peter Boin.
+        &copy; Copyright 2019, Peter Boin
 
     </p>
   </div>
-  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/snide/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
 
 </footer>
 
@@ -259,37 +253,15 @@ short and unambiguous:</p>
   
 
 
-  
-
-    <script type="text/javascript">
-        var DOCUMENTATION_OPTIONS = {
-            URL_ROOT:'../../',
-            VERSION:'0.1',
-            COLLAPSE_INDEX:false,
-            FILE_SUFFIX:'.html',
-            HAS_SOURCE:  true,
-            SOURCELINK_SUFFIX: '.txt'
-        };
-    </script>
-      <script type="text/javascript" src="../../_static/jquery.js"></script>
-      <script type="text/javascript" src="../../_static/underscore.js"></script>
-      <script type="text/javascript" src="../../_static/doctools.js"></script>
-      <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.1/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-
-  
-
-  
-  
-    <script type="text/javascript" src="../../_static/js/theme.js"></script>
-  
-
-  
-  
   <script type="text/javascript">
       jQuery(function () {
-          SphinxRtdTheme.StickyNav.enable();
+          SphinxRtdTheme.Navigation.enable(true);
       });
   </script>
+
+  
+  
+    
    
 
 </body>

@@ -1,0 +1,70 @@
+ucmd package
+============
+
+Submodules
+----------
+
+ucmd.can module
+---------------
+
+.. automodule:: ucmd.can
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ucmd.io module
+--------------
+
+.. automodule:: ucmd.io
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ucmd.leds module
+----------------
+
+.. automodule:: ucmd.leds
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ucmd.mapping module
+-------------------
+
+.. automodule:: ucmd.mapping
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ucmd.spi module
+---------------
+
+.. automodule:: ucmd.spi
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ucmd.system module
+------------------
+
+.. automodule:: ucmd.system
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+ucmd.test module
+----------------
+
+.. automodule:: ucmd.test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: ucmd
+    :members:
+    :undoc-members:
+    :show-inheritance:

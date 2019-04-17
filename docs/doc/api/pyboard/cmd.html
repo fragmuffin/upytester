@@ -1,0 +1,479 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>cmd package &mdash; upytester 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="sched module" href="sched.html" />
+    <link rel="prev" title="lib" href="modules.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> upytester
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host/modules.html">upytester</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">lib</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">cmd package</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cmd-can-module">cmd.can module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cmd-io-module">cmd.io module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cmd-leds-module">cmd.leds module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cmd-mapping-module">cmd.mapping module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cmd-spi-module">cmd.spi module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cmd-system-module">cmd.system module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#cmd-test-module">cmd.test module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#module-cmd">Module contents</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="sched.html">sched module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="uasyncio.html">uasyncio package</a></li>
+<li class="toctree-l2"><a class="reference internal" href="utils.html">utils package</a></li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">upytester</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">lib</a> &raquo;</li>
+        
+      <li>cmd package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/api/pyboard/cmd.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="cmd-package">
+<h1>cmd package<a class="headerlink" href="#cmd-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="cmd-can-module">
+<h2>cmd.can module<a class="headerlink" href="#cmd-can-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="cmd-io-module">
+<h2>cmd.io module<a class="headerlink" href="#cmd-io-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="cmd-leds-module">
+<h2>cmd.leds module<a class="headerlink" href="#cmd-leds-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="cmd-mapping-module">
+<h2>cmd.mapping module<a class="headerlink" href="#cmd-mapping-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="cmd-spi-module">
+<h2>cmd.spi module<a class="headerlink" href="#cmd-spi-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="cmd-system-module">
+<h2>cmd.system module<a class="headerlink" href="#cmd-system-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="cmd-test-module">
+<h2>cmd.test module<a class="headerlink" href="#cmd-test-module" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-cmd">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-cmd" title="Permalink to this headline">¶</a></h2>
+<p>A generic class to build line-oriented command interpreters.</p>
+<p>Interpreters constructed with this class obey the following conventions:</p>
+<ol class="arabic simple">
+<li><p>End of file on input is processed as the command ‘EOF’.</p></li>
+<li><p>A command is parsed out of each line by collecting the prefix composed
+of characters in the identchars member.</p></li>
+<li><p>A command <a href="#id1"><span class="problematic" id="id2">`</span></a>foo’ is dispatched to a method ‘do_foo()’; the <a href="#id29"><span class="problematic" id="id30">do_</span></a> method
+is passed a single argument consisting of the remainder of the line.</p></li>
+<li><p>Typing an empty line repeats the last command.  (Actually, it calls the
+method <a href="#id3"><span class="problematic" id="id4">`</span></a>emptyline’, which may be overridden in a subclass.)</p></li>
+<li><p>There is a predefined <a href="#id5"><span class="problematic" id="id6">`</span></a>help’ method.  Given an argument <a href="#id7"><span class="problematic" id="id8">`</span></a>topic’, it
+calls the command <a href="#id9"><span class="problematic" id="id10">`</span></a>help_topic’.  With no arguments, it lists all topics
+with defined <a href="#id31"><span class="problematic" id="id32">help_</span></a> functions, broken into up to three topics; documented
+commands, miscellaneous help topics, and undocumented commands.</p></li>
+<li><p>The command ‘?’ is a synonym for <a href="#id11"><span class="problematic" id="id12">`</span></a>help’.  The command ‘!’ is a synonym
+for <a href="#id13"><span class="problematic" id="id14">`</span></a>shell’, if a do_shell method exists.</p></li>
+<li><p>If completion is enabled, completing commands will be done automatically,
+and completing of commands args is done by calling complete_foo() with
+arguments text, line, begidx, endidx.  text is string we are matching
+against, all returned matches must begin with it.  line is the current
+input line (lstripped), begidx and endidx are the beginning and end
+indexes of the text being matched, which could be used to provide
+different completion depending upon which position the argument is in.</p></li>
+</ol>
+<p>The <a href="#id15"><span class="problematic" id="id16">`</span></a>default’ method may be overridden to intercept commands for which there
+is no <a href="#id33"><span class="problematic" id="id34">do_</span></a> method.</p>
+<p>The <a href="#id17"><span class="problematic" id="id18">`</span></a>completedefault’ method may be overridden to intercept completions for
+commands that have no <a href="#id35"><span class="problematic" id="id36">complete_</span></a> method.</p>
+<p>The data member <a href="#id19"><span class="problematic" id="id20">`</span></a>self.ruler’ sets the character used to draw separator lines
+in the help messages.  If empty, no ruler line is drawn.  It defaults to “=”.</p>
+<p>If the value of <a href="#id21"><span class="problematic" id="id22">`</span></a>self.intro’ is nonempty when the cmdloop method is called,
+it is printed out on interpreter startup.  This value may be overridden
+via an optional argument to the cmdloop() method.</p>
+<p>The data members <a href="#id23"><span class="problematic" id="id24">`</span></a>self.doc_header’, <a href="#id25"><span class="problematic" id="id26">`</span></a>self.misc_header’, and
+<a href="#id27"><span class="problematic" id="id28">`</span></a>self.undoc_header’ set the headers used for the help function’s
+listings of documented functions, miscellaneous topics, and undocumented
+functions respectively.</p>
+<dl class="class">
+<dt id="cmd.Cmd">
+<em class="property">class </em><code class="descclassname">cmd.</code><code class="descname">Cmd</code><span class="sig-paren">(</span><em>completekey='tab'</em>, <em>stdin=None</em>, <em>stdout=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cmd.Cmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference external" href="https://docs.python.org/3/library/functions.html#object" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></a></p>
+<p>A simple framework for writing line-oriented command interpreters.</p>
+<p>These are often useful for test harnesses, administrative tools, and
+prototypes that will later be wrapped in a more sophisticated interface.</p>
+<p>A Cmd instance or subclass instance is a line-oriented interpreter
+framework.  There is no good reason to instantiate Cmd itself; rather,
+it’s useful as a superclass of an interpreter class you define yourself
+in order to inherit Cmd’s methods and encapsulate action methods.</p>
+<dl class="method">
+<dt id="cmd.Cmd.cmdloop">
+<code class="descname">cmdloop</code><span class="sig-paren">(</span><em>intro=None</em><span class="sig-paren">)</span><a class="headerlink" href="#cmd.Cmd.cmdloop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Repeatedly issue a prompt, accept input, parse an initial prefix
+off the received input, and dispatch to action methods, passing them
+the remainder of the line as argument.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmd.Cmd.columnize">
+<code class="descname">columnize</code><span class="sig-paren">(</span><em>list</em>, <em>displaywidth=80</em><span class="sig-paren">)</span><a class="headerlink" href="#cmd.Cmd.columnize" title="Permalink to this definition">¶</a></dt>
+<dd><p>Display a list of strings as a compact set of columns.</p>
+<p>Each column is only as wide as necessary.
+Columns are separated by two spaces (one was not legible enough).</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmd.Cmd.complete">
+<code class="descname">complete</code><span class="sig-paren">(</span><em>text</em>, <em>state</em><span class="sig-paren">)</span><a class="headerlink" href="#cmd.Cmd.complete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Return the next possible completion for ‘text’.</p>
+<p>If a command has not been entered, then complete against command list.
+Otherwise try to call complete_&lt;command&gt; to get list of completions.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmd.Cmd.complete_help">
+<code class="descname">complete_help</code><span class="sig-paren">(</span><em>*args</em><span class="sig-paren">)</span><a class="headerlink" href="#cmd.Cmd.complete_help" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cmd.Cmd.completedefault">
+<code class="descname">completedefault</code><span class="sig-paren">(</span><em>*ignored</em><span class="sig-paren">)</span><a class="headerlink" href="#cmd.Cmd.completedefault" title="Permalink to this definition">¶</a></dt>
+<dd><p>Method called to complete an input line when no command-specific
+complete_*() method is available.</p>
+<p>By default, it returns an empty list.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmd.Cmd.completenames">
+<code class="descname">completenames</code><span class="sig-paren">(</span><em>text</em>, <em>*ignored</em><span class="sig-paren">)</span><a class="headerlink" href="#cmd.Cmd.completenames" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cmd.Cmd.default">
+<code class="descname">default</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#cmd.Cmd.default" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called on an input line when the command prefix is not recognized.</p>
+<p>If this method is not overridden, it prints an error message and
+returns.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmd.Cmd.do_help">
+<code class="descname">do_help</code><span class="sig-paren">(</span><em>arg</em><span class="sig-paren">)</span><a class="headerlink" href="#cmd.Cmd.do_help" title="Permalink to this definition">¶</a></dt>
+<dd><p>List available commands with “help” or detailed help with “help cmd”.</p>
+</dd></dl>
+
+<dl class="attribute">
+<dt id="cmd.Cmd.doc_header">
+<code class="descname">doc_header</code><em class="property"> = 'Documented commands (type help &lt;topic&gt;):'</em><a class="headerlink" href="#cmd.Cmd.doc_header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cmd.Cmd.doc_leader">
+<code class="descname">doc_leader</code><em class="property"> = ''</em><a class="headerlink" href="#cmd.Cmd.doc_leader" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cmd.Cmd.emptyline">
+<code class="descname">emptyline</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cmd.Cmd.emptyline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Called when an empty line is entered in response to the prompt.</p>
+<p>If this method is not overridden, it repeats the last nonempty
+command entered.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmd.Cmd.get_names">
+<code class="descname">get_names</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cmd.Cmd.get_names" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cmd.Cmd.identchars">
+<code class="descname">identchars</code><em class="property"> = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_'</em><a class="headerlink" href="#cmd.Cmd.identchars" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cmd.Cmd.intro">
+<code class="descname">intro</code><em class="property"> = None</em><a class="headerlink" href="#cmd.Cmd.intro" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cmd.Cmd.lastcmd">
+<code class="descname">lastcmd</code><em class="property"> = ''</em><a class="headerlink" href="#cmd.Cmd.lastcmd" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cmd.Cmd.misc_header">
+<code class="descname">misc_header</code><em class="property"> = 'Miscellaneous help topics:'</em><a class="headerlink" href="#cmd.Cmd.misc_header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cmd.Cmd.nohelp">
+<code class="descname">nohelp</code><em class="property"> = '*** No help on %s'</em><a class="headerlink" href="#cmd.Cmd.nohelp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="cmd.Cmd.onecmd">
+<code class="descname">onecmd</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#cmd.Cmd.onecmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Interpret the argument as though it had been typed in response
+to the prompt.</p>
+<p>This may be overridden, but should not normally need to be;
+see the precmd() and postcmd() methods for useful execution hooks.
+The return value is a flag indicating whether interpretation of
+commands by the interpreter should stop.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmd.Cmd.parseline">
+<code class="descname">parseline</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#cmd.Cmd.parseline" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the line into a command name and a string containing
+the arguments.  Returns a tuple containing (command, args, line).
+‘command’ and ‘args’ may be None if the line couldn’t be parsed.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmd.Cmd.postcmd">
+<code class="descname">postcmd</code><span class="sig-paren">(</span><em>stop</em>, <em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#cmd.Cmd.postcmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method executed just after a command dispatch is finished.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmd.Cmd.postloop">
+<code class="descname">postloop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cmd.Cmd.postloop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method executed once when the cmdloop() method is about to
+return.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmd.Cmd.precmd">
+<code class="descname">precmd</code><span class="sig-paren">(</span><em>line</em><span class="sig-paren">)</span><a class="headerlink" href="#cmd.Cmd.precmd" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method executed just before the command line is
+interpreted, but after the input prompt is generated and issued.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmd.Cmd.preloop">
+<code class="descname">preloop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#cmd.Cmd.preloop" title="Permalink to this definition">¶</a></dt>
+<dd><p>Hook method executed once when the cmdloop() method is called.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="cmd.Cmd.print_topics">
+<code class="descname">print_topics</code><span class="sig-paren">(</span><em>header</em>, <em>cmds</em>, <em>cmdlen</em>, <em>maxcol</em><span class="sig-paren">)</span><a class="headerlink" href="#cmd.Cmd.print_topics" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cmd.Cmd.prompt">
+<code class="descname">prompt</code><em class="property"> = '(Cmd) '</em><a class="headerlink" href="#cmd.Cmd.prompt" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cmd.Cmd.ruler">
+<code class="descname">ruler</code><em class="property"> = '='</em><a class="headerlink" href="#cmd.Cmd.ruler" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cmd.Cmd.undoc_header">
+<code class="descname">undoc_header</code><em class="property"> = 'Undocumented commands:'</em><a class="headerlink" href="#cmd.Cmd.undoc_header" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="cmd.Cmd.use_rawinput">
+<code class="descname">use_rawinput</code><em class="property"> = 1</em><a class="headerlink" href="#cmd.Cmd.use_rawinput" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="sched.html" class="btn btn-neutral float-right" title="sched module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="modules.html" class="btn btn-neutral float-left" title="lib" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Peter Boin
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

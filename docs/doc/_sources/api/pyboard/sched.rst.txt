@@ -1,0 +1,7 @@
+sched module
+============
+
+.. automodule:: sched
+    :members:
+    :undoc-members:
+    :show-inheritance:

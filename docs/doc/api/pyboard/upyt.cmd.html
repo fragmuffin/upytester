@@ -1,0 +1,637 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>upyt.cmd package &mdash; upytester 0.1 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script type="text/javascript" src="../../_static/jquery.js"></script>
+        <script type="text/javascript" src="../../_static/underscore.js"></script>
+        <script type="text/javascript" src="../../_static/doctools.js"></script>
+        <script type="text/javascript" src="../../_static/language_data.js"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="upyt.utils package" href="upyt.utils.html" />
+    <link rel="prev" title="upyt package" href="upyt.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> upytester
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.1
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <p class="caption"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../examples/index.html">Examples</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../host/modules.html">upytester</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="modules.html">upyt</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="upyt.html">upyt package</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="upyt.html#subpackages">Subpackages</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">upyt.cmd package</a></li>
+<li class="toctree-l4"><a class="reference internal" href="upyt.utils.html">upyt.utils package</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="upyt.html#submodules">Submodules</a></li>
+<li class="toctree-l3"><a class="reference internal" href="upyt.html#module-upyt.sched">upyt.sched module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="upyt.html#module-upyt">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">upytester</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="modules.html">upyt</a> &raquo;</li>
+        
+          <li><a href="upyt.html">upyt package</a> &raquo;</li>
+        
+      <li>upyt.cmd package</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/api/pyboard/upyt.cmd.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="upyt-cmd-package">
+<h1>upyt.cmd package<a class="headerlink" href="#upyt-cmd-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-upyt.cmd.can">
+<span id="upyt-cmd-can-module"></span><h2>upyt.cmd.can module<a class="headerlink" href="#module-upyt.cmd.can" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="upyt.cmd.can.can_state">
+<code class="descclassname">upyt.cmd.can.</code><code class="descname">can_state</code><span class="sig-paren">(</span><em>send</em>, <em>bus</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.can.can_state" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get the state of a previously configured CAN bus.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bus</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – 1 or 2 (according to the pyboard’s CAN controllers)</p>
+</dd>
+</dl>
+<p>Response:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;r&#39;</span><span class="p">:</span> <span class="s1">&#39;can_state&#39;</span><span class="p">,</span>  <span class="c1"># in response to can_state request</span>
+    <span class="s1">&#39;state&#39;</span><span class="p">:</span> <span class="n">x</span><span class="p">,</span>  <span class="c1"># CAN bus state, as string (or None if not configured)</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.can.can_tx">
+<code class="descclassname">upyt.cmd.can.</code><code class="descname">can_tx</code><span class="sig-paren">(</span><em>send</em>, <em>bus</em>, <em>id</em>, <em>data</em>, <em>rtr=False</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.can.can_tx" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.can.can_tx_p">
+<code class="descclassname">upyt.cmd.can.</code><code class="descname">can_tx_p</code><span class="sig-paren">(</span><em>send</em>, <em>bus</em>, <em>id</em>, <em>data</em>, <em>period</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.can.can_tx_p" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send a CAN message periodically</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>bus</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – bus number (1 or 2)</p></li>
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – arbitration id of frame</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a>) – list of bytes (integers between 0 and 255)</p></li>
+<li><p><strong>period</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – time between transmissions (ms)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.can.can_tx_p_stop">
+<code class="descclassname">upyt.cmd.can.</code><code class="descname">can_tx_p_stop</code><span class="sig-paren">(</span><em>send</em>, <em>bus</em>, <em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.can.can_tx_p_stop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.can.can_tx_p_stopall">
+<code class="descclassname">upyt.cmd.can.</code><code class="descname">can_tx_p_stopall</code><span class="sig-paren">(</span><em>send</em>, <em>bus</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.can.can_tx_p_stopall" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.can.config_can">
+<code class="descclassname">upyt.cmd.can.</code><code class="descname">config_can</code><span class="sig-paren">(</span><em>send</em>, <em>bus</em>, <em>mode='normal'</em>, <em>extframe=False</em>, <em>prescaler=100</em>, <em>sjw=1</em>, <em>bs1=6</em>, <em>bs2=8</em>, <em>auto_restart=False</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.can.config_can" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure CAN bus</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>bus</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – 1 or 2 (for each CAN controller on the pyboard)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-upyt.cmd.io">
+<span id="upyt-cmd-io-module"></span><h2>upyt.cmd.io module<a class="headerlink" href="#module-upyt.cmd.io" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="upyt.cmd.io.config_pin">
+<code class="descclassname">upyt.cmd.io.</code><code class="descname">config_pin</code><span class="sig-paren">(</span><em>id</em>, <em>mode</em>, <em>pull=None</em>, <em>value=None</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.io.config_pin" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – name of pin (eg: <code class="docutils literal notranslate"><span class="pre">SW</span></code>, <code class="docutils literal notranslate"><span class="pre">X7</span></code>)</p></li>
+<li><p><strong>mode</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – pin mode (see table below)</p></li>
+<li><p><strong>pull</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#str" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">str</span></code></a>) – pull up/down resistor (if any), (see table below)</p></li>
+<li><p><strong>value</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – if pin is an output, initial value can be set</p></li>
+</ul>
+</dd>
+</dl>
+<p><strong>Parameter:</strong> <code class="docutils literal notranslate"><span class="pre">mode</span></code></p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 73%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><code class="docutils literal notranslate"><span class="pre">mode</span></code> Value</p></th>
+<th class="head"><p>Pin Behaviour</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'in'</span></code></p></td>
+<td><p>input</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'out'</span></code></p></td>
+<td><p>(synonymn for ‘out_pp’)</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'out_pp'</span></code></p></td>
+<td><p>output, with push-pull control</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'out_od'</span></code></p></td>
+<td><p>output, with open-drain control</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'af_pp'</span></code></p></td>
+<td><p>alternate function, pull-pull</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'af_od'</span></code></p></td>
+<td><p>alternate function, open-drain</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'analog'</span></code></p></td>
+<td><p>analog</p></td>
+</tr>
+</tbody>
+</table>
+<p><strong>Parameter:</strong> <code class="docutils literal notranslate"><span class="pre">pull</span></code></p>
+<table class="docutils align-center">
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 64%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p><code class="docutils literal notranslate"><span class="pre">pull</span></code> Value</p></th>
+<th class="head"><p>Pin Behaviour</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">None</span></code></p></td>
+<td><p>no pull up/down</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'none'</span></code></p></td>
+<td><p>no pull up/down</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">'up'</span></code></p></td>
+<td><p>pull up resistor</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">'down'</span></code></p></td>
+<td><p>pull down resistor</p></td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.io.get_pin">
+<code class="descclassname">upyt.cmd.io.</code><code class="descname">get_pin</code><span class="sig-paren">(</span><em>id</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.io.get_pin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.io.set_pin">
+<code class="descclassname">upyt.cmd.io.</code><code class="descname">set_pin</code><span class="sig-paren">(</span><em>id</em>, <em>v</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.io.set_pin" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-upyt.cmd.leds">
+<span id="upyt-cmd-leds-module"></span><h2>upyt.cmd.leds module<a class="headerlink" href="#module-upyt.cmd.leds" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="upyt.cmd.leds.blink_led">
+<code class="descclassname">upyt.cmd.leds.</code><code class="descname">blink_led</code><span class="sig-paren">(</span><em>led=1</em>, <em>intensity=255</em>, <em>duration=1</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.leds.blink_led" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn LED on for a set duration</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>led</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – index of LED 1=red, 2=green, 3=yellow, and 4=blue</p></li>
+<li><p><strong>intensity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – brightness of LED (0-0xff)</p></li>
+<li><p><strong>duration</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – time to leave LED on</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.leds.set_led">
+<code class="descclassname">upyt.cmd.leds.</code><code class="descname">set_led</code><span class="sig-paren">(</span><em>led=1</em>, <em>intensity=255</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.leds.set_led" title="Permalink to this definition">¶</a></dt>
+<dd><p>Turn LED on for a set duration</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>led</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – index of LED 1=red, 2=green, 3=yellow, and 4=blue</p></li>
+<li><p><strong>intensity</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – brightness of LED (0-0xff)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-upyt.cmd.mapping">
+<span id="upyt-cmd-mapping-module"></span><h2>upyt.cmd.mapping module<a class="headerlink" href="#module-upyt.cmd.mapping" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="upyt.cmd.mapping.instruction">
+<code class="descclassname">upyt.cmd.mapping.</code><code class="descname">instruction</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.mapping.instruction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maps a function to an incoming instruction</p>
+<p>Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@instruction</span>
+<span class="k">def</span> <span class="nf">ping</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;r&#39;</span><span class="p">:</span> <span class="s1">&#39;ping&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">value</span> <span class="o">+</span> <span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>With this implemented, when a host sends <code class="docutils literal notranslate"><span class="pre">{'i':</span> <span class="pre">'ping',</span> <span class="pre">'k':</span> <span class="pre">{'value':</span> <span class="pre">10}}</span></code>,
+it will receive <code class="docutils literal notranslate"><span class="pre">{'r':</span> <span class="pre">'ping',</span> <span class="pre">'value':</span> <span class="pre">11}</span></code></p>
+<p><strong>Format of Request</strong>    When transmitting a request from a host machine, the <code class="docutils literal notranslate"><span class="pre">dict</span></code> format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;i&#39;</span><span class="p">:</span> <span class="s1">&#39;some_instruction&#39;</span><span class="p">,</span>  <span class="c1"># name of the method</span>
+    <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.4</span><span class="p">],</span>  <span class="c1"># optional list arguments</span>
+    <span class="s1">&#39;k&#39;</span><span class="p">:</span> <span class="p">{</span>  <span class="c1"># optional keywords argument list</span>
+        <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s1">&#39;pin&#39;</span><span class="p">:</span> <span class="s1">&#39;X3&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Instruction Design for Serializing</strong>    Because the method name, and keyword arguments are serialized and
+transmitted, consider keeping argument &amp; method names short.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.mapping.interpret">
+<code class="descclassname">upyt.cmd.mapping.</code><code class="descname">interpret</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.mapping.interpret" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform the action defined in the given object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>obj</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – deserialized JSON object received from host</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.mapping.list_instructions">
+<code class="descclassname">upyt.cmd.mapping.</code><code class="descname">list_instructions</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.mapping.list_instructions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.mapping.send">
+<code class="descclassname">upyt.cmd.mapping.</code><code class="descname">send</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.mapping.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send serial data over the preset serial port</p>
+<p>Usage:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyb</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cmd</span> <span class="k">import</span> <span class="n">set_serial_port</span><span class="p">,</span> <span class="n">send</span>
+</pre></div>
+</div>
+<p># Setup Port
+&gt;&gt;&gt; com_port = pyb.USB_VCP()
+&gt;&gt;&gt; set_serial_port(com_port)</p>
+<p># Sender transmits json encoding of given obj over VCP
+&gt;&gt;&gt; send(‘abc’)
+&gt;&gt;&gt; send(123)
+&gt;&gt;&gt; send([1, 2, 3])
+&gt;&gt;&gt; send({‘a’: 1, ‘b’: 2})</p>
+</div></blockquote>
+</dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.mapping.set_serial_port">
+<code class="descclassname">upyt.cmd.mapping.</code><code class="descname">set_serial_port</code><span class="sig-paren">(</span><em>given_port</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.mapping.set_serial_port" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the serial object through which to send serialized data.
+See <a class="reference internal" href="#upyt.cmd.mapping.send" title="upyt.cmd.mapping.send"><code class="xref py py-meth docutils literal notranslate"><span class="pre">send()</span></code></a> for more details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>given_port</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">pyb.USB_VCP</span></code>) – Port through which to send serialized data</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-upyt.cmd.spi">
+<span id="upyt-cmd-spi-module"></span><h2>upyt.cmd.spi module<a class="headerlink" href="#module-upyt.cmd.spi" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="upyt.cmd.spi.config_spi">
+<code class="descclassname">upyt.cmd.spi.</code><code class="descname">config_spi</code><span class="sig-paren">(</span><em>idx</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.spi.config_spi" title="Permalink to this definition">¶</a></dt>
+<dd><p>Configure SPI bus</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>idx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a> (1 or 2)) – pyboard SPI index (1 or 2)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.spi.spi_send">
+<code class="descclassname">upyt.cmd.spi.</code><code class="descname">spi_send</code><span class="sig-paren">(</span><em>idx</em>, <em>data</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.spi.spi_send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Note: SPI must be configured via instruction <a class="reference internal" href="#upyt.cmd.spi.config_spi" title="upyt.cmd.spi.config_spi"><code class="xref py py-meth docutils literal notranslate"><span class="pre">config_spi()</span></code></a> before
+sending with this method.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>idx</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – pyboard SPI index (1 or 2)</p></li>
+<li><p><strong>data</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#list" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">list</span></code></a> of <a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-upyt.cmd.system">
+<span id="upyt-cmd-system-module"></span><h2>upyt.cmd.system module<a class="headerlink" href="#module-upyt.cmd.system" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="upyt.cmd.system.bootloader_mode">
+<code class="descclassname">upyt.cmd.system.</code><code class="descname">bootloader_mode</code><span class="sig-paren">(</span><em>t=50</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.system.bootloader_mode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reets pyboard, and it will boot into bootloader mode</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – time until reset (unit: ms) (default: 50ms)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.system.break_loop">
+<code class="descclassname">upyt.cmd.system.</code><code class="descname">break_loop</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.system.break_loop" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.system.get_system_info">
+<code class="descclassname">upyt.cmd.system.</code><code class="descname">get_system_info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.system.get_system_info" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.system.get_ticks_ms">
+<code class="descclassname">upyt.cmd.system.</code><code class="descname">get_ticks_ms</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.system.get_ticks_ms" title="Permalink to this definition">¶</a></dt>
+<dd><p>Get ticks since boot</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.system.machine_reset">
+<code class="descclassname">upyt.cmd.system.</code><code class="descname">machine_reset</code><span class="sig-paren">(</span><em>t=50</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.system.machine_reset" title="Permalink to this definition">¶</a></dt>
+<dd><p>Resets the pyboard</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>t</strong> (<a class="reference external" href="https://docs.python.org/3/library/functions.html#int" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">int</span></code></a>) – time until reset (unit: ms) (default: 50ms)</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+<div class="section" id="module-upyt.cmd.test">
+<span id="upyt-cmd-test-module"></span><h2>upyt.cmd.test module<a class="headerlink" href="#module-upyt.cmd.test" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="upyt.cmd.test.get_switch">
+<code class="descclassname">upyt.cmd.test.</code><code class="descname">get_switch</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.test.get_switch" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.test.ping">
+<code class="descclassname">upyt.cmd.test.</code><code class="descname">ping</code><span class="sig-paren">(</span><em>value=0</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.test.ping" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+<div class="section" id="module-upyt.cmd">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-upyt.cmd" title="Permalink to this headline">¶</a></h2>
+<dl class="function">
+<dt id="upyt.cmd.instruction">
+<code class="descclassname">upyt.cmd.</code><code class="descname">instruction</code><span class="sig-paren">(</span><em>func</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.instruction" title="Permalink to this definition">¶</a></dt>
+<dd><p>Maps a function to an incoming instruction</p>
+<p>Usage:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nd">@instruction</span>
+<span class="k">def</span> <span class="nf">ping</span><span class="p">(</span><span class="n">value</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">{</span><span class="s1">&#39;r&#39;</span><span class="p">:</span> <span class="s1">&#39;ping&#39;</span><span class="p">,</span> <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="n">value</span> <span class="o">+</span> <span class="mi">1</span><span class="p">}</span>
+</pre></div>
+</div>
+<p>With this implemented, when a host sends <code class="docutils literal notranslate"><span class="pre">{'i':</span> <span class="pre">'ping',</span> <span class="pre">'k':</span> <span class="pre">{'value':</span> <span class="pre">10}}</span></code>,
+it will receive <code class="docutils literal notranslate"><span class="pre">{'r':</span> <span class="pre">'ping',</span> <span class="pre">'value':</span> <span class="pre">11}</span></code></p>
+<p><strong>Format of Request</strong>    When transmitting a request from a host machine, the <code class="docutils literal notranslate"><span class="pre">dict</span></code> format is:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">{</span>
+    <span class="s1">&#39;i&#39;</span><span class="p">:</span> <span class="s1">&#39;some_instruction&#39;</span><span class="p">,</span>  <span class="c1"># name of the method</span>
+    <span class="s1">&#39;a&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="s1">&#39;abc&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mf">5.4</span><span class="p">],</span>  <span class="c1"># optional list arguments</span>
+    <span class="s1">&#39;k&#39;</span><span class="p">:</span> <span class="p">{</span>  <span class="c1"># optional keywords argument list</span>
+        <span class="s1">&#39;value&#39;</span><span class="p">:</span> <span class="kc">True</span><span class="p">,</span>
+        <span class="s1">&#39;pin&#39;</span><span class="p">:</span> <span class="s1">&#39;X3&#39;</span><span class="p">,</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</pre></div>
+</div>
+<p><strong>Instruction Design for Serializing</strong>    Because the method name, and keyword arguments are serialized and
+transmitted, consider keeping argument &amp; method names short.</p>
+</dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.interpret">
+<code class="descclassname">upyt.cmd.</code><code class="descname">interpret</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.interpret" title="Permalink to this definition">¶</a></dt>
+<dd><p>Perform the action defined in the given object</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>obj</strong> (<a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#dict" title="(in Python v3.7)"><code class="xref py py-class docutils literal notranslate"><span class="pre">dict</span></code></a>) – deserialized JSON object received from host</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="function">
+<dt id="upyt.cmd.send">
+<code class="descclassname">upyt.cmd.</code><code class="descname">send</code><span class="sig-paren">(</span><em>obj</em><span class="sig-paren">)</span><a class="headerlink" href="#upyt.cmd.send" title="Permalink to this definition">¶</a></dt>
+<dd><p>Send serial data over the preset serial port</p>
+<p>Usage:</p>
+<blockquote>
+<div><div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">import</span> <span class="nn">pyb</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">cmd</span> <span class="k">import</span> <span class="n">set_serial_port</span><span class="p">,</span> <span class="n">send</span>
+</pre></div>
+</div>
+<p># Setup Port
+&gt;&gt;&gt; com_port = pyb.USB_VCP()
+&gt;&gt;&gt; set_serial_port(com_port)</p>
+<p># Sender transmits json encoding of given obj over VCP
+&gt;&gt;&gt; send(‘abc’)
+&gt;&gt;&gt; send(123)
+&gt;&gt;&gt; send([1, 2, 3])
+&gt;&gt;&gt; send({‘a’: 1, ‘b’: 2})</p>
+</div></blockquote>
+</dd></dl>
+
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="upyt.utils.html" class="btn btn-neutral float-right" title="upyt.utils package" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="upyt.html" class="btn btn-neutral float-left" title="upyt package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2019, Peter Boin
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

@@ -1,0 +1,70 @@
+cmd package
+===========
+
+Submodules
+----------
+
+cmd.can module
+--------------
+
+.. automodule:: cmd.can
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+cmd.io module
+-------------
+
+.. automodule:: cmd.io
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+cmd.leds module
+---------------
+
+.. automodule:: cmd.leds
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+cmd.mapping module
+------------------
+
+.. automodule:: cmd.mapping
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+cmd.spi module
+--------------
+
+.. automodule:: cmd.spi
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+cmd.system module
+-----------------
+
+.. automodule:: cmd.system
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+cmd.test module
+---------------
+
+.. automodule:: cmd.test
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+
+Module contents
+---------------
+
+.. automodule:: cmd
+    :members:
+    :undoc-members:
+    :show-inheritance:
