@@ -20,6 +20,35 @@
 # import sys
 # sys.path.insert(0, os.path.abspath('.'))
 
+import sys
+from os.path import join, abspath
+print(sys.version)
+
+# Adding Paths
+path_list = [
+    abspath(join('..', 'src', 'upytester')),
+    #abspath(join('..', 'src', 'upytester', 'content', 'sd', 'lib')),
+]
+for new_path in path_list:
+    print("adding to sys.path: {!r}".format(new_path))
+    sys.path.insert(0, new_path)
+
+## Mock libraries that don't exist
+#mock_libraries = [
+#    'pyb',
+#    'machine',
+#    'uerrno',
+#    'uselect',
+#    'usocket',
+#    'utime',
+#    'utimeq',
+#    'ucollections',
+#    'micropython',
+#]
+#from unittest import mock
+#for modulename in mock_libraries:
+#    sys.modules[modulename] = mock.MagicMock()
+
 
 # -- General configuration ------------------------------------------------
 
