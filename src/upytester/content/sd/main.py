@@ -8,13 +8,10 @@ import json
 
 import uasyncio as asyncio
 
-from utils import external_interrupt
-from cmd import interpret, set_serial_port
-import sched
-try:
-    import components
-except ImportError:
-    pass  # fail quietly
+# upytester module(s)
+from upyt.utils import external_interrupt
+from upyt.cmd import interpret, set_serial_port
+import upyt.sched
 
 
 # Allocate memory for callback debugging
@@ -62,7 +59,7 @@ async def listener():
 
     # Stop mainloop on 'USR' button press
     usr_button = pyb.Switch()
-    while sched.keepalive:
+    while upyt.sched.keepalive:
         c = vcp.recv(1, timeout=0)  # non-blocking
         if c:
             if c == b'\r':
@@ -73,7 +70,7 @@ async def listener():
         else:
             await asyncio.sleep_ms(1)
 
-sched.init_loop()  # initialize asyncio loop object
+upyt.sched.init_loop()  # initialize asyncio loop object
 
 # Bench Libraries
 #   note: imported after scheduler loop initialised, just incase somebody has
@@ -88,7 +85,7 @@ except ImportError:
 # Main loop
 try:
     # start asyncio.get_event_loop()
-    sched.loop.run_until_complete(listener())
+    upyt.sched.loop.run_until_complete(listener())
 except Exception as e:
     with open('/sd/exception.txt', 'w') as fh:
         fh.write(repr(e))

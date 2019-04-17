@@ -27,8 +27,8 @@ apidoc:
 	rm $(API_DIR)/host/*.rst ; exit 0
 	python $(SPHINXAPIDOC) -o $(API_DIR)/host $(SRC)/upytester
 	# Pyboard
-	#rm $(API_DIR)/pyboard/*.rst ; exit 0
-	#python $(SPHINXAPIDOC) -o $(API_DIR)/pyboard $(SRC)/upytester/content/sd/lib
+	rm $(API_DIR)/pyboard/*.rst ; exit 0
+	python $(SPHINXAPIDOC) -o $(API_DIR)/pyboard $(SRC)/upytester/content/sd/lib/upyt
 
 all: apidoc html
 	@exit 0

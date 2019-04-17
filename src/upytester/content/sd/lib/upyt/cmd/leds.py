@@ -1,6 +1,6 @@
 import pyb
 
-import sched
+import upyt.sched
 from .mapping import instruction, send
 
 
@@ -20,7 +20,7 @@ def blink_led(led=1, intensity=0xff, duration=1):
     # Turn LED on
     led_obj.intensity(intensity)
     # Turn LED off (after a delay)
-    sched.loop.call_later_ms(duration, lambda: led_obj.intensity(0))
+    upyt.sched.loop.call_later_ms(duration, lambda: led_obj.intensity(0))
 
 
 @instruction

@@ -1,5 +1,7 @@
-pyboard
-=======
+upyt
+====
 
-.. note::
-   TBD: shinx doesn't like documenting things it can't import.
+.. toctree::
+   :maxdepth: 4
+
+   upyt

@@ -4,7 +4,7 @@ import uasyncio as asyncio
 
 from .mapping import instruction, send
 
-import sched
+import upyt.sched
 
 # ------- Maps
 can_bus_map = {}

@@ -27,14 +27,31 @@ print(sys.version)
 # Adding Paths
 path_list = [
     abspath(join('..', 'src', 'upytester')),
-    #abspath(join('..', 'src', 'upytester', 'content', 'sd', 'lib')),
+    abspath(join('..', 'src', 'upytester', 'content', 'sd', 'lib')),
 ]
 for new_path in path_list:
     print("adding to sys.path: {!r}".format(new_path))
     sys.path.insert(0, new_path)
 
-## Mock libraries that don't exist
-#mock_libraries = [
+# Mock libraries that don't exist
+mock_libraries = [
+    'pyb',
+    'machine',
+    'uerrno',
+    'uselect',
+    'usocket',
+    'utime',
+    'utimeq',
+    'ucollections',
+    'micropython',
+]
+from unittest import mock
+for modulename in mock_libraries:
+    sys.modules[modulename] = mock.MagicMock()
+
+# FIXME: I've read on the tubes that this has the same effect as above
+#        do I need another extension
+#autodoc_mock_imports = [
 #    'pyb',
 #    'machine',
 #    'uerrno',
@@ -45,10 +62,6 @@ for new_path in path_list:
 #    'ucollections',
 #    'micropython',
 #]
-#from unittest import mock
-#for modulename in mock_libraries:
-#    sys.modules[modulename] = mock.MagicMock()
-
 
 # -- General configuration ------------------------------------------------
 

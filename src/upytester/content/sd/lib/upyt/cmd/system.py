@@ -3,7 +3,7 @@ import pyb
 import machine
 import time
 
-import sched
+import upyt.sched
 
 from .mapping import instruction, send
 
@@ -19,7 +19,7 @@ def machine_reset(t=50):
     """
     # Reset after delay (default: 50ms).
     # Alow host to gracefully disconnect serial port before hard reset occurs.
-    sched.loop.call_later_ms(t, machine.reset)
+    upyt.sched.loop.call_later_ms(t, machine.reset)
 
 @instruction
 def bootloader_mode(t=50):
@@ -31,13 +31,12 @@ def bootloader_mode(t=50):
     """
     # Reset after delay (default: 50ms).
     # Alow host to gracefully disconnect serial port before hard reset occurs.
-    loop.call_later_ms(t, pyb.bootloader)
+    upyt.sched.loop.call_later_ms(t, pyb.bootloader)
 
 
 @instruction
 def break_loop():
-    import sched
-    sched.keepalive = False
+    upyt.sched.keepalive = False
 
 # ------- system info
 @instruction
