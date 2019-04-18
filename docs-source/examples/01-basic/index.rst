@@ -21,3 +21,4 @@ unambiguous.
    02-led-stimulus
    03-switch-evaluation
    04-wire-tester
+   05-remote-exception

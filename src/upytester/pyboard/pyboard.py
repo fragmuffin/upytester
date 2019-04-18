@@ -9,7 +9,7 @@ import queue
 
 # Local libs
 from . import utils
-from .exceptions import ResponseTimeoutException
+from .exceptions import ResponseTimeoutException, PyBoardError
 
 # Logging
 import logging
@@ -245,22 +245,23 @@ class PyBoard(object):
                                 ("Received '%s' from remote which decodes to 'None', " % line) +
                                 "this is a reserved value and should not be transmitted by a remote"
                             )
-
                         self._receive_queue.put(obj)
             except json.decoder.JSONDecodeError:
                 # a JSON decoding error could be because the pyboard has hit
                 # an exception, and returned to a REPL.
                 # This will cause the pyboard-based exception error text to be send
-                # over serial... so we should print out the tntire queue
+                # over serial... so we should print out the entire queue
                 def _err_line_gen():
                     yield line  # this is the line that initially failed
                     for l in line_iter(end_on_timeout=True):
                         yield l
 
-                log.error("ERROR from pyboard: {!r}".format(self))
+                msg_lines = ["{!r}".format(self)]
                 for l in _err_line_gen():
-                    log.error('  {}'.format(l.decode().lstrip('\r\n').rstrip('\r\n')))
-                raise
+                    msg_lines.append(
+                        '  ' + l.decode().lstrip('\r\n').rstrip('\r\n')
+                    )
+                self._receive_queue.put(PyBoardError('\n'.join(msg_lines)))
 
         # start process
         self._receive_thread = threading.Thread(
@@ -353,7 +354,7 @@ class PyBoard(object):
         # return receiver method
         return self.receive
 
-    def receive(self, timeout=None):
+    def receive(self, timeout=1):
         """
         Receive object from remote.
 
@@ -368,6 +369,8 @@ class PyBoard(object):
         """
         try:
             obj = self._receive_queue.get(timeout=timeout)
+            if isinstance(obj, Exception):
+                raise obj
             return obj
         except queue.Empty:
             return None

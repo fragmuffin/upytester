@@ -43,11 +43,19 @@ def process_line(line):
         # TODO: Check what process is using the serial port.
         return
 
-    # Respond
-    vcp.write(b'ok\r')
-
-    # Interpret command
+    # Interpret command, then respond with 'ok'
+    #   Order is imporant:
+    #       The host's transmit() method will block until it receives an 'ok'.
+    #       With the interpret/response in this order, any exception raised
+    #       while interpreting the object will cause the transmit() method
+    #       to fail, causing the test itself to fail.
+    #   Trade-off:
+    #       This makes communication slightly slower, because the command has
+    #       to complete before the host can begin to process the next command.
+    #       However, it does enable tests to... you know... fail when they
+    #       should. So the choice seems like a no-brainer.
     interpret(obj)
+    vcp.write(b'ok\r')
 
 async def listener():
     """
@@ -58,7 +66,6 @@ async def listener():
     line = b''
 
     # Stop mainloop on 'USR' button press
-    usr_button = pyb.Switch()
     while upyt.sched.keepalive:
         c = vcp.recv(1, timeout=0)  # non-blocking
         if c:
