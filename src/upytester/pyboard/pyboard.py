@@ -55,10 +55,11 @@ class PyBoard(object):
         self.serial_number = serial_number
         self.name = name
 
-        # Events
+        # Events (all cleared by default)
         self._halt_transmit = threading.Event()
         self._halt_receive = threading.Event()
-        self._processing_transmit = threading.Event()
+        self._not_transmitting = threading.Event()
+        self._async_transmit = threading.Event()
 
         self._open_flag = False
 
@@ -178,6 +179,27 @@ class PyBoard(object):
     def is_closed(self):
         return not self._open_flag
 
+    @property
+    def async_tx(self):
+        return self._async_transmit.is_set()
+
+    @async_tx.setter
+    def async_tx(self, value):
+        value = bool(value)  # cast to boolean
+        if value == self._async_transmit.is_set():
+            return  # do nothing
+
+        # Wait for a break in transmission:
+        #   Don't change exception reporting style half way through
+        #   processing a stack of transmissions... wait until it's clear
+        self._not_transmitting.wait()
+
+        # Apply flag
+        if value:
+            self._async_transmit.set()
+        else:
+            self._async_transmit.clear()
+
     def open(self):
         if self.is_open:
             return  # already open
@@ -194,7 +216,7 @@ class PyBoard(object):
         self._halt_transmit.clear()
 
         # actively transmitting event
-        self._processing_transmit.clear()
+        self._not_transmitting.set()
 
         # ----- Receiver thread
         # empty queue
@@ -233,7 +255,7 @@ class PyBoard(object):
             error_state = False
             try:
                 for line in line_iter():
-                    log.debug("%r --> %r", self, line)
+                    log.debug("{!r} --> {!r}".format(self, line))
                     if line == b'ok':
                         # separate 'ok' receiver queue (as responses to received requests)
                         self._receive_ok_queue.put(line)
@@ -251,6 +273,8 @@ class PyBoard(object):
                 # an exception, and returned to a REPL.
                 # This will cause the pyboard-based exception error text to be send
                 # over serial... so we should print out the entire queue
+
+                # Collect exception stack trace line-by-line
                 def _err_line_gen():
                     yield line  # this is the line that initially failed
                     for l in line_iter(end_on_timeout=True):
@@ -261,7 +285,17 @@ class PyBoard(object):
                     msg_lines.append(
                         '  ' + l.decode().lstrip('\r\n').rstrip('\r\n')
                     )
-                self._receive_queue.put(PyBoardError('\n'.join(msg_lines)))
+                exception = PyBoardError('\n'.join(msg_lines))
+
+                # Push received exception to queue
+                if self._async_transmit.is_set():
+                    print('receive queue <- {!r}'.format(exception))
+                    self._receive_queue.put(exception)
+                else:
+                    if self._not_transmitting.is_set():
+                        self._receive_queue.put(exception)
+                    else:
+                        self._receive_ok_queue.put(exception)
 
         # start process
         self._receive_thread = threading.Thread(
@@ -277,19 +311,29 @@ class PyBoard(object):
                 try:
                     # Send request
                     line = self._transmit_queue.get(timeout=self.WRITE_TIMEOUT)
-                    self._processing_transmit.set()
                     log.debug("%r <-- %r", self, line)
+                    self._not_transmitting.clear()
                     self.comport.write(line)
 
                     # Block until response (or timeout & fail)
-                    try:
-                        response = self._receive_ok_queue.get(timeout=self.RESPONSE_TIMEOUT)
-                        # note: nothing done with response (yet)
-                    except queue.Empty:
-                        raise ResponseTimeoutException("{!r}".format(self))
-                    finally:
-                        if self._transmit_queue.empty():
-                            self._processing_transmit.clear()
+                    if self._async_transmit.is_set():
+                        # Pull the 'ok' from the queue, and continue
+                        #   If an exception is raiesd, it populates the receive
+                        #   queue.
+                        try:
+                            response = self._receive_ok_queue.get(timeout=self.RESPONSE_TIMEOUT)
+                            if isinstance(response, Exception):
+                                raise response  # shouldn't happen
+                        except queue.Empty:
+                            raise ResponseTimeoutException("{!r}".format(self))
+                        finally:
+                            if self._transmit_queue.empty():
+                                self._not_transmitting.set()
+                    else:
+                        # Wait for self.send() to indicate transmission completion
+                        while not self._not_transmitting.wait(timeout=0.05):
+                            if self._halt_transmit.is_set():
+                                break  # handle halt case
 
                 except queue.Empty:
                     continue
@@ -351,6 +395,22 @@ class PyBoard(object):
         line = json.dumps(obj, separators=(',',':')).encode()
         self._transmit_queue.put(line + b'\r')  # will be picked up and processed by self._transmit_thread
 
+        if not self._async_transmit.is_set():
+            # Non async transmission behaviour:
+            #   The send function blocks until we receive:
+            #       - 'ok' indicating success on the remote
+            #       - an exception with details of what went wrong.
+            try:
+                response = self._receive_ok_queue.get(timeout=self.RESPONSE_TIMEOUT)
+                print('response: {!r}'.format(response))
+                if isinstance(response, Exception):
+                    raise response
+            except queue.Empty:
+                raise ResponseTimeoutException("{!r}".format(self))
+            finally:
+                if self._transmit_queue.empty():
+                    self._not_transmitting.set()
+
         # return receiver method
         return self.receive
 
@@ -395,7 +455,7 @@ class PyBoard(object):
         :type period: :class:`float`
         """
         # FIXME: this is just polling, is there a better way to block until queue is empty?
-        while not (self._transmit_queue.empty() and not self._processing_transmit.is_set()):
+        while not (self._transmit_queue.empty() and self._not_transmitting.is_set()):
             time.sleep(period)
 
     def reset(self, hard=False):
