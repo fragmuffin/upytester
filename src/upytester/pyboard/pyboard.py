@@ -28,11 +28,8 @@ class PyBoard(object):
     # Timeouts
     #   maximum timeout value is the max time to wait for threads to finish.
     READ_TIMEOUT = 0.1  # maximum time per read (unit: sec)
-    READ_CHUNKSIZE = 1  # maximum bytes to receive
-
-    WRITE_TIMEOUT = 0.1 # maximum time to wait while reading transmit queue
-
-    RESPONSE_TIMEOUT = 1
+    WRITE_TIMEOUT = 0.1  # maximum time to wait while reading transmit queue
+    RESPONSE_TIMEOUT = 1  # (unit: sec)
 
     # Defaults
     DEFAULT_BAUDRATE = 115200
@@ -235,19 +232,15 @@ class PyBoard(object):
                 # yields each line (not including line end character)
                 line = b''
                 while not self._halt_receive.is_set():
-                    chunk = self.comport.read(self.READ_CHUNKSIZE)
-                    if chunk:
-                        #log.debug("%r --> (chunk) %r", self, chunk)
-                        while chunk:
-                            i = chunk.find(b'\r')
-                            if i >= 0:
-                                line += chunk[:i]
-                                chunk = chunk[i+1:]
-                                yield line
-                                line = b''
-                            else:
-                                line += chunk
-                                chunk = b''
+                    c = self.comport.read(1)
+                    #log.debug("%r --> (c) %r", self, c)
+                    if c:
+                        if c == b'\r':
+                            log.debug("{!r} --> {!r}".format(self, line))
+                            yield line
+                            line = b''
+                        else:
+                            line += c
                     elif end_on_timeout:
                         break
 
@@ -255,7 +248,6 @@ class PyBoard(object):
             error_state = False
             try:
                 for line in line_iter():
-                    log.debug("{!r} --> {!r}".format(self, line))
                     if line == b'ok':
                         # separate 'ok' receiver queue (as responses to received requests)
                         self._receive_ok_queue.put(line)

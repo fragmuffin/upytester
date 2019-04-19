@@ -1,6 +1,7 @@
 import unittest
 import upytester
 
+# Uncomment to observe serial communication
 import logging
 import sys
 logging.basicConfig(stream=sys.stdout, level=logging.DEBUG)
