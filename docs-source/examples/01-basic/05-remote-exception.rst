@@ -12,8 +12,7 @@ remote.
 
 .. note::
 
-   Exceptions should not be raised (without being caught) on your test-bench
-   by design.
+   The :class:`PyBoardError` should not be raised by design.
 
    An exception will halt the runtime on the pyboard, effectively rendering
    your test-bench useless for the remaining tests.
