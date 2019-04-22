@@ -16,4 +16,5 @@ class ReactionTimeTest(unittest.TestCase):
         """
         time.sleep(2 + random.random() * 5)  # wait random time
         t = self.pyb_a.reaction_time()(timeout=1)
+        self.assertIsNotNone(t)
         self.assertLess(t, 300)
