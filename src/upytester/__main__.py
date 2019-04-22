@@ -282,7 +282,7 @@ def action_sync():
 
 
 def action_reset():
-    pyboard = upytester.PyBoard(args.serialnum)
+    pyboard = upytester.PyBoard(args.serialnum, auto_open=False)
     pyboard.reset(hard=True)
 
 
