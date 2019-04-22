@@ -86,8 +86,11 @@ sys.path.append('/sd/lib_bench')
 sys.path.append('/flash/lib_bench')
 try:
     import bench
-except ImportError:
-    pass  # fail quietly
+except ImportError as e:
+    if "'bench'" not in e.args[0]:
+        # import error was not from a nested library fault
+        raise
+    pass  # else: fail quietly
 
 # Main loop
 try:
