@@ -1,19 +1,17 @@
-import re
-import sys
-import serial
-import itertools
-import os
-import winreg
-
-
-raise NotImplementedError("Windows not supported, yet")
-
 # FIXME: Experimental Code
 #   As of writing this, most of this module's code was written in an attempt
 #   to get a reliable working system on Windows 10.
 #   The challenge was in mapping:
 #       serial_number -> comport (eg: 'COM3')
 #       serial_number -> mountpoint (eg: 'D:\')
+raise NotImplementedError("Windows not supported, yet")
+
+import re
+import sys
+import serial
+import itertools
+import os
+import winreg
 
 
 # ---- winreg utilities -----
