@@ -57,6 +57,7 @@ class PyBoard(object):
         self._halt_receive = threading.Event()
         self._not_transmitting = threading.Event()
         self._async_transmit = threading.Event()
+        self._remote_exception = threading.Event()
 
         self._open_flag = False
 
@@ -64,6 +65,7 @@ class PyBoard(object):
         self._receive_queue = queue.Queue()
         self._receive_ok_queue = queue.Queue()
         self._transmit_queue = queue.Queue()
+        self._remote_exception_queue = queue.Queue()
 
         # Instruction List
         self._instruction_list = None
@@ -265,6 +267,7 @@ class PyBoard(object):
                 # an exception, and returned to a REPL.
                 # This will cause the pyboard-based exception error text to be send
                 # over serial... so we should print out the entire queue
+                self._remote_exception.set()
 
                 # Collect exception stack trace line-by-line
                 def _err_line_gen():
@@ -279,15 +282,19 @@ class PyBoard(object):
                     )
                 exception = PyBoardError('\n'.join(msg_lines))
 
-                # Push received exception to queue
+                # Push received exception to
+                #   - dedicated queue (for self.check_health() method)
+                self._remote_exception_queue.put(exception)
+                #   - receive queue (for quick response)
                 if self._async_transmit.is_set():
-                    print('receive queue <- {!r}'.format(exception))
                     self._receive_queue.put(exception)
                 else:
                     if self._not_transmitting.is_set():
                         self._receive_queue.put(exception)
                     else:
                         self._receive_ok_queue.put(exception)
+
+                self.halt(force=True)
 
         # start process
         self._receive_thread = threading.Thread(
@@ -309,15 +316,21 @@ class PyBoard(object):
 
                     # Block until response (or timeout & fail)
                     if self._async_transmit.is_set():
-                        # Pull the 'ok' from the queue, and continue
-                        #   If an exception is raiesd, it populates the receive
-                        #   queue.
+                        # Pull the 'ok' from the queue, and continue.
+                        #   If an exception is raiesd, it populates the
+                        #   receive queue.
                         try:
                             response = self._receive_ok_queue.get(timeout=self.RESPONSE_TIMEOUT)
                             if isinstance(response, Exception):
                                 raise response  # shouldn't happen
                         except queue.Empty:
-                            raise ResponseTimeoutException("{!r}".format(self))
+                            if self._remote_exception.is_set():
+                                # While expecting to receive an 'ok', we
+                                # detected an exception on the host.
+                                # That's why our receive request timed out
+                                pass  # so do nothing
+                            else:
+                                raise ResponseTimeoutException("{!r}".format(self))
                         finally:
                             if self._transmit_queue.empty():
                                 self._not_transmitting.set()
@@ -346,16 +359,49 @@ class PyBoard(object):
         # set flag
         self._open_flag = True
 
-    def halt(self):
+    def check_health(self):
+        """
+        Checks for any record of an exception being raised on the remote.
+
+        :raises: :class:`PyBoardError`
+        :return: True if no exception was found
+        """
+        if not self._remote_exception_queue.empty():
+            raise self._remote_exception_queue.get(block=False)
+        return True
+
+    def halt(self, force=False):
+        """
+        Send a halt event to send and receive threads to cleanly stop
+        their execution.
+
+        Timeouts may still need to play through, so the effect will not be
+        instant.
+
+        :param force: If ``True`` transmit queue is also emptied
+        :type force: :class:`bool`
+
+
+        """
         self._halt_transmit.set()
+        if force:
+            # Clean out transmit queue
+            while not self._transmit_queue.empty():
+                self._transmit_queue.get(block=False)
 
     def close(self):
+        """
+        Stop send and receive threads, and close comport.
+
+        #. Calls :meth:`halt`
+        #. Joins send & receive threads
+        #. Closes ``self.comport``
+        """
         if self.is_closed:
             return  # already closed
 
         # set halt event
-        self._halt_transmit.set()
-        # receiver halt will be set by end of transmit process
+        self.halt()
 
         # wait for threads to complete
         self._transmit_thread.join()
@@ -394,7 +440,6 @@ class PyBoard(object):
             #       - an exception with details of what went wrong.
             try:
                 response = self._receive_ok_queue.get(timeout=self.RESPONSE_TIMEOUT)
-                print('response: {!r}'.format(response))
                 if isinstance(response, Exception):
                     raise response
             except queue.Empty:
