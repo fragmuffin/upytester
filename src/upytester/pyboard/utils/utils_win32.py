@@ -5,6 +5,7 @@
 #       serial_number -> comport (eg: 'COM3')
 #       serial_number -> mountpoint (eg: 'D:\')
 raise NotImplementedError("Windows not supported, yet")
+# ref: https://github.com/fragmuffin/upytester/issues/2
 
 import re
 import sys
