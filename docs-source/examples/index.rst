@@ -24,8 +24,8 @@ Configure
 
 Each test searches for a ``.upytester.yml`` file, in the order:
 
-#. ``~`` - current working
-#. ``.`` - user's home directory
+#. ``.`` - current working
+#. ``~`` - user's home directory
 
 This file maps a pyboard's serial number to a name used to setup the bench.
 You'll need to create this file.
