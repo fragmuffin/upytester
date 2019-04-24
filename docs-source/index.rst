@@ -5,6 +5,7 @@ Welcome to ``upytester``'s documentation!
    :maxdepth: 2
    :caption: Contents:
 
+   about/index
    examples/index
    api/host/modules
    api/pyboard/modules
