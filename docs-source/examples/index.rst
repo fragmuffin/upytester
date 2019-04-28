@@ -1,5 +1,5 @@
-Examples
-==============
+Example Test Cases
+==========================
 
 Example tests are stored in the
 `examples folder <https://github.com/fragmuffin/upytester/tree/master/examples>`_.
@@ -92,7 +92,7 @@ For :ref:`examples.basic.ping` you would run::
    OK
 
 
-Example Test-Cases
+Example List
 ----------------------
 
 The following pages in this documentation walk through each example, and how
@@ -107,7 +107,3 @@ and how to use it.
    01-basic/index
    02-on-board-components/index
    03-sample-project/index
-
-
-Example Circuitry
-----------------------
