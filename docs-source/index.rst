@@ -41,8 +41,8 @@ create messy test code (if at all).
    :caption: Contents:
 
    about/index
-   examples/index
-   circuitry/index
+   ex-testcases/index
+   ex-circuitry/index
    api/host/modules
    api/pyboard/modules
 
