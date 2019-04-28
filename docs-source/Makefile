@@ -25,10 +25,16 @@ install:
 apidoc:
 	# Host
 	rm $(API_DIR)/host/*.rst ; exit 0
-	python $(SPHINXAPIDOC) -o $(API_DIR)/host $(SRC)/upytester
+	python $(SPHINXAPIDOC) \
+		-o $(API_DIR)/host \
+		-H "API: upytester" \
+		$(SRC)/upytester
 	# Pyboard
 	rm $(API_DIR)/pyboard/*.rst ; exit 0
-	python $(SPHINXAPIDOC) -o $(API_DIR)/pyboard $(SRC)/upytester/content/sd/lib/upyt
+	python $(SPHINXAPIDOC) \
+		-o $(API_DIR)/pyboard \
+		-H "API: upyt" \
+		$(SRC)/upytester/content/sd/lib/upyt
 
 all: apidoc html
 	@exit 0

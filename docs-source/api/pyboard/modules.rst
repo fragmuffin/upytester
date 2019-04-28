@@ -1,5 +1,5 @@
-upyt
-====
+API: upyt
+=========
 
 .. toctree::
    :maxdepth: 4

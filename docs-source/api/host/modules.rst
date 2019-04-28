@@ -1,5 +1,5 @@
-upytester
-=========
+API: upytester
+==============
 
 .. toctree::
    :maxdepth: 4
