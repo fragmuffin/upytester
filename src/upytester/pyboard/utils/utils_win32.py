@@ -4,15 +4,16 @@
 #   The challenge was in mapping:
 #       serial_number -> comport (eg: 'COM3')
 #       serial_number -> mountpoint (eg: 'D:\')
-raise NotImplementedError("Windows not supported, yet")
+import os
+import sys
+if not os.path.basename(sys.argv[0]).startswith('sphinx'):
+    raise NotImplementedError("Windows not supported, yet")
+    import winreg
 # ref: https://github.com/fragmuffin/upytester/issues/2
 
 import re
-import sys
 import serial
 import itertools
-import os
-import winreg
 
 
 # ---- winreg utilities -----

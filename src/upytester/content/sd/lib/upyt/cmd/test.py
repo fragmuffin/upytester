@@ -5,7 +5,7 @@ from .mapping import instruction, send
 
 @instruction
 def ping(value=0):
-    return {'r': 'ping', 'value': value + 1}
+    return {'value': value + 1}
 
 
 @instruction

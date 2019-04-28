@@ -92,7 +92,7 @@ For :ref:`examples.basic.ping` you would run::
    OK
 
 
-Examples Contents
+Example Test-Cases
 ----------------------
 
 The following pages in this documentation walk through each example, and how
@@ -107,3 +107,7 @@ and how to use it.
    01-basic/index
    02-on-board-components/index
    03-sample-project/index
+
+
+Example Circuitry
+----------------------
