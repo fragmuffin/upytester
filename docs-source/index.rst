@@ -42,6 +42,7 @@ create messy test code (if at all).
 
    about/index
    examples/index
+   circuitry/index
    api/host/modules
    api/pyboard/modules
 
