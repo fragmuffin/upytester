@@ -103,7 +103,7 @@ args = parser.parse_args()
 
 # Default Serial Number
 #   If no serial is given, and only 1 pyboard is connected, default to that
-if (args.serialnum is None) and (args.action not in ('list',)):
+if (args.serialnum is None) and (args.action[0] not in ('list',)):
     serial_numbers = serial_numbers = upytester.PyBoard.connected_serial_numbers()
     if len(serial_numbers) <= 0:
         raise ValueError("no connected pyboards found")
