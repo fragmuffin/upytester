@@ -16,22 +16,13 @@ _this_path = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentfram
 # Defaults
 DEFAULT_SOURCE = os.path.join(_this_path, 'content')
 
+ACTION_MAP = {}  # populated by @action('foo') decorator
 
-# ====================== Argument Parsing ======================
-# Artument Types
-ALLOWED_ACTIONS = (
-    'list',
-    'mount',
-    'unmount',
-    'comport',
-    'sync',
-    'reset',
-    'break',
-)
 
+# ====================== Parameter Types ======================
 def t_action(value):
     value = value.lower()
-    if value not in ALLOWED_ACTIONS:
+    if value not in ACTION_MAP:
         raise argparse.ArgumentTypeError(
             "action {!r} not recognized".format(value)
         )
@@ -48,69 +39,6 @@ def t_serial_number(pattern):
         )
     return serial_numbers[0]
 
-# Parser
-parser = argparse.ArgumentParser(
-    description="Control and query how a PyBoard is connected",
-)
-
-parser.add_argument(
-    'action', default=None, type=t_action, metavar="ACTION", nargs=1,
-    help="What action to perform, options are: {{{}}}".format(
-        "|".join(ALLOWED_ACTIONS),
-    ),
-)
-parser.add_argument(
-    'serialnum', default=None, type=t_serial_number, metavar="SERIAL", nargs="?",
-    help="PyBoard's serial number (run with --list to list all connected devices)",
-)
-parser.add_argument(
-    '--source', default=None, type=str,
-    help="If the action is to SYNC, the contents of this folder is "
-         "synchronised to the pyboard's SD card (instead of the default)",
-)
-
-parser.add_argument(
-    '--force', default=False, action='store_true',
-    help="if the action is to SYNC, marker file(s) presence in the "
-         "destination folder is ignored.",
-)
-parser.add_argument(
-    '--dryrun', default=False, action='store_true',
-    help="if the action is to SYNC, the source & destination folders are "
-         "printed to stdout, but no action is taken",
-)
-parser.add_argument(
-    '--quiet', default=False, action='store_true',
-    help="if set, output to STDOUT will be minimal",
-)
-parser.add_argument(
-    '--flash', default=False, action='store_true',
-    help="If set, actions such as {mount|unmount|sync} are performed on flash, "
-         "the default is sd",
-)
-parser.add_argument(
-    '--softreset', '-r', default=False, action='store_true',
-    help="If set with sync action, pyboard is soft reset after sync is performed",
-)
-parser.add_argument(
-    '--hardreset', '-R', default=False, action='store_true',
-    help="If set with sync action, pyboard is hard reset after sync is performed",
-)
-
-# Evaluate
-args = parser.parse_args()
-
-
-# Default Serial Number
-#   If no serial is given, and only 1 pyboard is connected, default to that
-if (args.serialnum is None) and (args.action[0] not in ('list',)):
-    serial_numbers = serial_numbers = upytester.PyBoard.connected_serial_numbers()
-    if len(serial_numbers) <= 0:
-        raise ValueError("no connected pyboards found")
-    elif len(serial_numbers) > 1:
-        raise ValueError("multiple pyboards found, specify one by SERIAL")
-    else:
-        args.serialnum = serial_numbers[0]
 
 # ====================== Retry Loop Utility ======================
 from contextlib import contextmanager
@@ -161,7 +89,18 @@ def retry(title=None):
         return inner
     return retry_decorator
 
+
 # ====================== Actions ======================
+def action(name):
+    # action method decorator
+    def inner(func):
+        assert name not in ACTION_MAP, "2 actions with the same name"
+        ACTION_MAP[name] = func
+        return func
+    return inner
+
+
+@action('list')
 def action_list():
     _log("Connected PyBoards: <serial> <comport> <mountpoint>\n")
 
@@ -181,6 +120,7 @@ def action_list():
         ))
 
 
+@action('mount')
 def action_mount():
     medium = 'flash' if args.flash else 'sd'
     @retry("Mounting " + medium)
@@ -190,6 +130,7 @@ def action_mount():
     mount()
 
 
+@action('unmount')
 def action_unmount():
     medium = 'flash' if args.flash else 'sd'
     @retry("Unmounting " + medium)
@@ -199,11 +140,13 @@ def action_unmount():
     unmount()
 
 
+@action('comport')
 def action_comport():
     pyboard = upytester.PyBoard(args.serialnum, auto_open=False)
     _log("{}\n".format(pyboard.comport.port))
 
 
+@action('sync')
 def action_sync():
     # Create instance
     @retry("Object")
@@ -244,6 +187,7 @@ def action_sync():
             force=args.force,
             dryrun=args.dryrun,
             quiet=args.quiet,
+            subdir=args.dest,
             exclude=exclude,
         )
     sync_main()
@@ -257,7 +201,7 @@ def action_sync():
             force=args.force,
             dryrun=args.dryrun,
             quiet=args.quiet,
-            subdir='lib_bench',
+            subdir=args.dest + '/lib_bench',
         )
 
     if prj_lib:
@@ -281,11 +225,13 @@ def action_sync():
     return 0
 
 
+@action('reset')
 def action_reset():
     pyboard = upytester.PyBoard(args.serialnum, auto_open=False)
     pyboard.reset(hard=True)
 
 
+@action('break')
 def action_break():
     pyboard = upytester.PyBoard(args.serialnum)
     pyboard.break_loop()
@@ -293,9 +239,84 @@ def action_break():
 
 
 # ====================== Mainline ======================
-errorcode = 0
-if args.action:
-    # Execute whatever action was requested
-    errorcode = globals()['action_{}'.format(args.action[0])]()
+def main():
+    parser = argparse.ArgumentParser(
+        description="Control and query how a PyBoard is connected",
+    )
 
-exit(errorcode)
+    parser.add_argument(
+        'action', default=None, type=t_action, metavar="ACTION", nargs=1,
+        help="What action to perform, options are: {{{}}}".format(
+            "|".join(sorted(ACTION_MAP.keys())),
+        ),
+    )
+    parser.add_argument(
+        'serialnum', default=None, type=t_serial_number, metavar="SERIAL", nargs="?",
+        help="PyBoard's serial number (run with --list to list all connected devices)",
+    )
+    parser.add_argument(
+        '--source', default=None, type=str,
+        help="If the action is to SYNC, the contents of this folder is "
+             "synchronised to the pyboard's SD card (instead of the default)",
+    )
+    parser.add_argument(
+        '--dest', default='.', type=str,
+        help="destination folder on the pybyard's SD card to synchronise to "
+             "(default '.')",
+    )
+
+    parser.add_argument(
+        '--force', default=False, action='store_true',
+        help="if the action is to SYNC, marker file(s) presence in the "
+             "destination folder is ignored.",
+    )
+    parser.add_argument(
+        '--dryrun', default=False, action='store_true',
+        help="if the action is to SYNC, the source & destination folders are "
+             "printed to stdout, but no action is taken",
+    )
+    parser.add_argument(
+        '--quiet', default=False, action='store_true',
+        help="if set, output to STDOUT will be minimal",
+    )
+    parser.add_argument(
+        '--flash', default=False, action='store_true',
+        help="If set, actions such as {mount|unmount|sync} are performed on flash, "
+             "the default is sd",
+    )
+    parser.add_argument(
+        '--softreset', '-r', default=False, action='store_true',
+        help="If set with sync action, pyboard is soft reset after sync is performed",
+    )
+    parser.add_argument(
+        '--hardreset', '-R', default=False, action='store_true',
+        help="If set with sync action, pyboard is hard reset after sync is performed",
+    )
+
+    # Evaluate
+    global args  # this feels like cheating
+    args = parser.parse_args()
+
+
+    # Default Serial Number
+    #   If no serial is given, and only 1 pyboard is connected, default to that
+    if (args.serialnum is None) and (args.action[0] not in ('list',)):
+        serial_numbers = serial_numbers = upytester.PyBoard.connected_serial_numbers()
+        if len(serial_numbers) <= 0:
+            raise ValueError("no connected pyboards found")
+        elif len(serial_numbers) > 1:
+            raise ValueError("multiple pyboards found, specify one by SERIAL")
+        else:
+            args.serialnum = serial_numbers[0]
+
+    # ====================== Mainline ======================
+    errorcode = 0
+    if args.action:
+        # Execute whatever action was requested
+        errorcode = ACTION_MAP[args.action[0]]()
+
+    exit(errorcode)
+
+
+if __name__ == '__main__':
+    main()
