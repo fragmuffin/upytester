@@ -26,7 +26,11 @@ def connected_serial_numbers():
     serial_numbers = []
     for port_info in comports():
         is_pyboard = all(
-            regex.search(getattr(port_info, key))
+            (
+                regex.search(getattr(port_info, key))
+                if getattr(port_info, key, None)
+                else False
+            )
             for (key, regex) in PORT_INFO_REGEX_MAP.items()
         )
         if is_pyboard:
