@@ -222,4 +222,5 @@ texinfo_documents = [
 # Example configuration for intersphinx: refer to the Python standard library.
 intersphinx_mapping = {
     'python': ('https://docs.python.org/', None),
+    'pyb': ('http://docs.micropython.org/en/v1.9.3/pyboard/', None),
 }

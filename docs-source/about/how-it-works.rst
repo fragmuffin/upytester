@@ -136,15 +136,3 @@ Where:
 
 Of course, this wouldn't go well because the :meth:`ping() <upyt.cmd.test.ping>`
 instruction is very simple, and won't accept these parameters.
-
-
-Stimulus / Evaluation Circuitry
-----------------------------------------
-
-Examples of circuitry:
-
-* opamps
-* voltage dividers
-* isolators
-* relays & drivers
-* DACs over SPI
