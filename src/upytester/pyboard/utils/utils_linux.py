@@ -69,7 +69,7 @@ class StorageDevice:
     @classmethod
     def find_device_file(cls, pyboard, suffix='-part1'):
         device_list = glob(
-            '/dev/disk/by-id/usb-uPy_microSD_{prefix}_{serial}-*{suffix}'.format(
+            '/dev/disk/by-id/usb-*_{prefix}_{serial}-*{suffix}'.format(
                 prefix=cls.DEVICE_FILE_PREFIX,
                 serial=pyboard.serial_number,
                 suffix=suffix,
