@@ -232,8 +232,9 @@ class StorageDevice:
             #           -D  preserve devices & special files
             #
             #       -h  output numbers in a human-readable format
+            #       -c  skip based on checksum, not mod-time & size
             #       -v  verbose
-            cmd = ['rsync', '-rLptgoDhv', '--delete']
+            cmd = ['rsync', '-rLptgoDhcv', '--delete']
             for pattern in exclude:
                 cmd += ['--exclude', pattern]
             cmd += [abs_source, abs_dest]
