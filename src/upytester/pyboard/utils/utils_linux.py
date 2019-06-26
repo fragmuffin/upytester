@@ -10,6 +10,11 @@ from collections import defaultdict
 from .exceptions import PyBoardNotFoundError, DeviceFileNotFoundError
 
 
+# rsync line filtering
+DELETE_REGEX = re.compile(r'^deleting ')
+FOLDER_REGEX = re.compile(r'/$')
+
+
 # ========================== COM port & Info ==========================
 PORT_INFO_REGEX_MAP = {
     'manufacturer': re.compile(r'micropython', re.IGNORECASE),
@@ -251,7 +256,10 @@ class StorageDevice:
             if not quiet:
                 for line in process.stdout:
                     process.poll()
-                    print(line.decode().rstrip('\n'))
+                    l = line.decode().rstrip('\n')
+                    # print all lines that are NOT simply listing "some/folder/"
+                    if not(FOLDER_REGEX.search(l) and not DELETE_REGEX.search(l)):
+                        print(l)
             process.wait()
 
 
