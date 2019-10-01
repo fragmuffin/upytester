@@ -10,6 +10,8 @@ if not os.path.basename(sys.argv[0]).startswith('sphinx'):
     #import winreg
     pass
 
+import yaml
+
 # ref: https://github.com/fragmuffin/upytester/issues/2
 
 OVERRIDE_ENV_VAR = 'PYBOARD_CONFIG_FILE'
@@ -150,5 +152,5 @@ def sync_files_to(source_path, pyboard, subdir='.', force=False, dryrun=False, q
 #   (I know that doesn't make sense, but I'm sort of in a hurry)
 from functools import wraps
 for suffix in ('_sd', '_flash'):
-    for func_name in ('find_mountpoint', 'mount', 'umount', 'sync_files_to'):
+    for func_name in ('find_mountpoint', 'mount', 'unmount', 'sync_files_to'):
         globals()['{}{}'.format(func_name, suffix)] = globals()[func_name]
