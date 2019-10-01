@@ -7,105 +7,98 @@
 import os
 import sys
 if not os.path.basename(sys.argv[0]).startswith('sphinx'):
-    raise NotImplementedError("Windows not supported, yet")
-    import winreg
+    #import winreg
+    pass
+
 # ref: https://github.com/fragmuffin/upytester/issues/2
 
-import re
-import serial
-import itertools
+OVERRIDE_ENV_VAR = 'PYBOARD_CONFIG_FILE'
+
+_override_dict = None
+
+def _get_override_config():
+    return {  # TODO: get from local file
+        '327834873036': {
+            'comport': 'COM3',
+            'mountpoint': 'D:\\',
+        },
+        '3976346C3436': {
+            'comport': 'COM4',
+            'mountpoint': 'E:\\',
+        },
+    }
+
+    global _override_dict
+    if _override_dict is None:
+        filename = os.environ.get(OVERRIDE_ENV_VAR, None)
+        if filename and os.path.isfile(filename):
+            with open(filename, 'r') as fh:
+                _override_dict = yaml.load(fh)
+        else:
+            _override_dict = {}
+
+    return _override_dict
 
 
-# ---- winreg utilities -----
-def _EnumKey_iter(key):
-    for i in itertools.count():
-        try:
-            yield winreg.EnumKey(key, i)
-        except OSError:
-            break
+def connected_serial_numbers():
+    overrides = _get_override_config()
+    if overrides:
+        return overrides.keys()
+    else:
+        raise NotImplemented("not implemented for win32")  # [issue #1]
 
 
-def _pyboard_serial_number(port):
-    port_match = re.search(r'^\d+-((?P<hub>\d+).)?(?P<port>\d+):', port.location)
+def find_portinfo(pyboard):
+    # --- All serial ports
+    overrides = _get_override_config()
+    if overrides:
+        from serial.tools.list_ports import comports
+        port_info_list = [
+            c for c in comports()
+            if c.device == overrides[pyboard.serial_number]['comport']
+        ]
+    else:
+        raise NotImplemented("not implemented for win32")  # [issue #1]
 
-    group_equal = lambda m1, m2, k: int(m1.group(k)) == int(m2.group(k))
+    if not port_info_list:
+        raise PyBoardNotFoundError("pyboard not found: '%s'" % pyboard.serial_number)
+    elif len(port_info_list) > 1:
+        raise PyBoardNotFoundError("multiple pyboards found: '%s'" % pyboard.serial_number)
 
-    # Pull the device serial from windows registry
-    import winreg
-    key_path = r'SYSTEM\ControlSet001\Enum\USB\VID_{VID:X}&PID_{PID:X}'.format(
-        VID=port.vid,
-        PID=port.pid,
-    )
-    usb_key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, key_path)
-    for name in _EnumKey_iter(usb_key):
-        # Registry USB Location
-        key = winreg.OpenKey(winreg.HKEY_LOCAL_MACHINE, '{}\\{}'.format(key_path, name))
-        location_info = winreg.QueryValueEx(key, 'LocationInformation')[0]
-        reg_match = re.search(r'^Port_#(?P<port>\d+)\.Hub_#(?P<hub>\d+)', location_info)
-        if group_equal(port_match, reg_match, 'hub') and group_equal(port_match, reg_match, 'port'):
-            return name
-
-    raise ValueError("Could not find pyboard for port {}".format(port.usb_info()))
+    return port_info_list[0]
 
 
-def _pyboard_mounted_sd(serial_number):
-    # IMPORTANT:
-    #   registry will show last mounted location, so before syncing
-    #   to device, make sure it's connected.
-    #   note: if comport exists, then it's connected ;)
-    import winreg
-    parent_key = winreg.OpenKey(
-        winreg.HKEY_LOCAL_MACHINE,
-        r'SOFTWARE\Microsoft\Windows Portable Devices\Devices'
-    )
-    for name in _EnumKey_iter(parent_key):
-        # example sub_key name
-        #  SWD#WPDBUSENUM#_??_USBSTOR#DISK&VEN_UPY&PROD_MICROSD_SD_CARD&REV_1.00#7&2CF2AA75&0&3976346C3436&0#{53F56307-B6BF-11D0-94F2-00A0C91EFB8B}
-        split_name = name.split('&')
-        if all((k in split_name) for k in [serial_number, 'VEN_UPY', 'PROD_MICROSD_SD_CARD']):
-            key = winreg.OpenKey(
-                winreg.HKEY_LOCAL_MACHINE,
-                r'SOFTWARE\Microsoft\Windows Portable Devices\Devices\{}'.format(name)
-            )
-            return winreg.QueryValueEx(key, 'FriendlyName')[0]
+def find_mountpoint(pyboard):
+    overrides = _get_override_config()
+    if overrides:
+        return overrides[pyboard.serial_number]['mountpoint']
+    else:
+        raise NotImplemented("not implemented for win32")  # [issue #1]
 
 
-def get_pyboard_map(refresh=False):
-    """
-    Get a dict mapping pyboard serial numbers to the connected
-    serial ports, and mount-points.
-
-    Return Example::
-
-        >>> get_pyboard_map()
-        {
-            '3976346C3436': {
-                'port': <serial.tools.list_ports_common.ListPortInfo at 0x20a82202be1>,
-                'mount': 'G:\\'
-            }
-        }
-
-    :param refresh: If ``True``, the OS is interrogated and replaces any
-                    previous map
-    :type refresh: :class:`bool`
-    :param clean: Clear cache before processing request (default: ``False``)
-    :type clean: :class:`bool`
-    """
-    map = {}
-    from serial.tools.list_ports import comports
-    for port in comports():
-        serial_number = _pyboard_serial_number(port)
-        if serial_number:
-            # (serial_number, port)
-            map[serial_number] = {
-                'port': port,
-                'mount': _pyboard_mounted_sd(serial_number),
-            }
-
-    return map
+def mount(pyboard):
+    overrides = _get_override_config()
+    if overrides:
+        # Assumption: assume it's already mounted
+        mountpoint = overrides[pyboard.serial_number]['mountpoint']
+        if not os.path.isdir(mountpoint):
+            raise ValueError("{} drive for {!r} not mounted".format(mountpoint, pyboard))
+        # TODO: how to mount device in windows?
+    else:
+        raise NotImplemented("not implemented for win32")  # [issue #1]
 
 
-def sync_path_to_sd(source_path, pyboard):
+def unmount(pyboard):
+    overrides = _get_override_config()
+    if overrides:
+        # Don't unmount... risk bad stuff happening
+        pass
+        # TODO: how to "eject" device in windows?
+    else:
+        raise NotImplemented("not implemented for win32")  # [issue #1]
+
+
+def sync_files_to(source_path, pyboard, subdir='.', force=False, dryrun=False, quiet=False, exclude=[]):
     """
     :param source_path: Source folder to sync with SD card
     :type source_path: :class:`str`
@@ -122,8 +115,8 @@ def sync_path_to_sd(source_path, pyboard):
             "pyboard's mountpoint '{}' does not exist (or is not a folder)".format(mountpoint)
         )
 
-    CHECK_FILES = ['main.py', '.pyboard-sd']
-    if not all(os.path.exists(os.path.join(mountpoint, f)) for f in CHECK_FILES):
+    CHECK_FILES = ['.pyboard-sd', '.pyboard-flash']  # TODO: interchangable SD / Flash
+    if not any(os.path.exists(os.path.join(mountpoint, f)) for f in CHECK_FILES):
         raise ValueError(
             (
                 "mountpoint does not contain {files} file(s), are you sure you "
@@ -134,19 +127,39 @@ def sync_path_to_sd(source_path, pyboard):
             )
         )
 
+    # Create & Run sync process
+    abs_source = os.path.abspath(source_path)
+    abs_dest = os.path.abspath(os.path.join(mountpoint, subdir))
+
+    assert os.path.relpath(abs_dest, 'C:\\') != '.', "destination is C: drive!!?"
+
+    if not quiet:
+        print("Synchronising files:")
+        print("    - source: {!r}".format(abs_source))
+        print("    - dest:   {!r}".format(abs_dest))
+
     # Create & Run process
-    process = subprocess.Popen(
-        [
-            'Robocopy.exe',
-            os.path.abspath(source_path),
-            os.path.abspath(mountpoint),
-            '/MIR', '/Z', '/W:5',
-        ],
-        shell=True,
-        stdout=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    for line in process.stdout:
-        process.poll()
-        print(line.decode().rstrip('\n'))
-    process.wait()
+    if not dryrun:
+        process = subprocess.Popen(
+            [
+                'Robocopy.exe',
+                abs_source, abs_dest,
+                '/MIR', '/Z', '/W:5',
+            ],
+            shell=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        for line in process.stdout:
+            process.poll()
+            print(line.decode().rstrip('\n'))
+        process.wait()
+
+
+# Duplicate functions for SD and Flash.
+# Assume they're both the same
+#   (I know that doesn't make sense, but I'm sort of in a hurry)
+from functools import wraps
+for suffix in ('_sd', '_flash'):
+    for func_name in ('find_mountpoint', 'mount', 'umount', 'sync_files_to'):
+        globals()['{}{}'.format(func_name, suffix)] = globals()[func_name]
