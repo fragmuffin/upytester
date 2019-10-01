@@ -19,6 +19,16 @@ OVERRIDE_ENV_VAR = 'PYBOARD_CONFIG_FILE'
 _override_dict = None
 
 def _get_override_config():
+    r"""
+    Example yaml content::
+
+        '327834873036':
+            comport: COM3
+            mountpoint: "D:\\"
+        '3976346C3436':
+            comport: COM4
+            mountpoint: "E:\\"
+    """
     global _override_dict
     if _override_dict is None:
         filename = os.environ.get(OVERRIDE_ENV_VAR, None)
