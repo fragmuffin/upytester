@@ -24,7 +24,7 @@ def _get_override_config():
         filename = os.environ.get(OVERRIDE_ENV_VAR, None)
         if filename and os.path.isfile(filename):
             with open(filename, 'r') as fh:
-                _override_dict = yaml.load(fh)
+                _override_dict = yaml.load(fh, Loader=yaml.FullLoader)
         else:
             _override_dict = {}
 
