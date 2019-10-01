@@ -44,7 +44,7 @@ def _get_override_config():
 def connected_serial_numbers():
     overrides = _get_override_config()
     if overrides:
-        return overrides.keys()
+        return list(overrides.keys())
     else:
         raise NotImplementedError("not implemented for win32")  # [issue #2]
 
