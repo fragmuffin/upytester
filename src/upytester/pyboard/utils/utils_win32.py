@@ -141,6 +141,7 @@ def sync_files_to(source_path, pyboard, subdir='.', force=False, dryrun=False, q
 
     # Create & Run process
     if not dryrun:
+        import subprocess
         process = subprocess.Popen(
             [
                 'Robocopy.exe',
