@@ -34,7 +34,7 @@ def connected_serial_numbers():
     if overrides:
         return overrides.keys()
     else:
-        raise NotImplemented("not implemented for win32")  # [issue #1]
+        raise NotImplemented("not implemented for win32")  # [issue #2]
 
 
 def find_portinfo(pyboard):
@@ -47,7 +47,7 @@ def find_portinfo(pyboard):
             if c.device == overrides[pyboard.serial_number]['comport']
         ]
     else:
-        raise NotImplemented("not implemented for win32")  # [issue #1]
+        raise NotImplemented("not implemented for win32")  # [issue #2]
 
     if not port_info_list:
         raise PyBoardNotFoundError("pyboard not found: '%s'" % pyboard.serial_number)
@@ -62,7 +62,7 @@ def find_mountpoint(pyboard):
     if overrides:
         return overrides[pyboard.serial_number]['mountpoint']
     else:
-        raise NotImplemented("not implemented for win32")  # [issue #1]
+        raise NotImplemented("not implemented for win32")  # [issue #2]
 
 
 def mount(pyboard):
@@ -74,7 +74,7 @@ def mount(pyboard):
             raise ValueError("{} drive for {!r} not mounted".format(mountpoint, pyboard))
         # TODO: how to mount device in windows?
     else:
-        raise NotImplemented("not implemented for win32")  # [issue #1]
+        raise NotImplemented("not implemented for win32")  # [issue #2]
 
 
 def unmount(pyboard):
@@ -84,7 +84,7 @@ def unmount(pyboard):
         pass
         # TODO: how to "eject" device in windows?
     else:
-        raise NotImplemented("not implemented for win32")  # [issue #1]
+        raise NotImplemented("not implemented for win32")  # [issue #2]
 
 
 def sync_files_to(source_path, pyboard, subdir='.', force=False, dryrun=False, quiet=False, exclude=[]):
