@@ -132,7 +132,7 @@ def sync_files_to(source_path, pyboard, subdir='.', force=False, dryrun=False, q
     abs_source = os.path.abspath(source_path)
     abs_dest = os.path.abspath(os.path.join(mountpoint, subdir))
 
-    assert os.path.relpath(abs_dest, 'C:\\') != '.', "destination is C: drive!!?"
+    assert os.path.splitdrive(abs_dest)[0] != 'C:', "destination is C: drive!!?"
 
     if not quiet:
         print("Synchronising files:")
