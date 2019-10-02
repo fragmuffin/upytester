@@ -44,7 +44,13 @@ def _get_override_config():
 def connected_serial_numbers():
     overrides = _get_override_config()
     if overrides:
-        return list(overrides.keys())
+        device2serial_map = {overrides[k]['comport']: k for k in overrides}
+        from serial.tools.list_ports import comports
+        return [
+            device2serial_map[c.device]
+            for c in comports()
+            if c.device in device2serial_map
+        ]
     else:
         raise NotImplementedError("not implemented for win32")  # [issue #2]
 
