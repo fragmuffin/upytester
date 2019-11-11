@@ -9,22 +9,13 @@ import json
 import uasyncio as asyncio
 
 # upytester module(s)
-from upyt.utils import external_interrupt
 from upyt.cmd import interpret, set_serial_port
+from upyt.utils import startup_sequence
 import upyt.sched
 
 
 # Allocate memory for callback debugging
 micropython.alloc_emergency_exception_buf(100)
-
-def _startup_flash():
-    # Flash onboard LEDs in sequence
-    for i in [4, 3, 2, 1, 2, 3, 4]:
-        pyb.LED(i).on()
-        time.sleep(0.05)
-        pyb.LED(i).off()
-
-_startup_flash()
 
 vcp = pyb.USB_VCP()
 set_serial_port(vcp)
@@ -94,7 +85,7 @@ except ImportError as e:
 
 # Main loop
 try:
-    # start asyncio.get_event_loop()
+    upyt.sched.loop.create_task(startup_sequence())
     upyt.sched.loop.run_until_complete(listener())
 except Exception as e:
     with open('/sd/exception.txt', 'w') as fh:
