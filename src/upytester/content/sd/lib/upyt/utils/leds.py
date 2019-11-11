@@ -14,7 +14,7 @@ class _LedOnContext(object):
 
 def led_on(*args, **kwargs):
     """
-    Keeps a LED on while in context.
+    Keep a LED on while in context.
 
     For example, the following code will turn the red LED on for 100ms::
 

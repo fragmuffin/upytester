@@ -1,5 +1,4 @@
 import pyb
-import machine
 import sys
 import micropython
 
@@ -20,7 +19,9 @@ micropython.alloc_emergency_exception_buf(100)
 vcp = pyb.USB_VCP()
 set_serial_port(vcp)
 
+
 def process_line(line):
+    """Process received line as a upyt command."""
     # Receive & decode data
     try:
         obj = json.loads(line)
@@ -48,11 +49,9 @@ def process_line(line):
     interpret(obj)
     vcp.write(b'ok\r')
 
+
 async def listener():
-    """
-    Reads lines from Virtual Comm Port (VCP) and send them to be
-    processed.
-    """
+    """Read and process lines from Virtual Comm Port (VCP)."""
     # TODO: create a global buffer, and populate via memoryview
     line = b''
 
@@ -76,7 +75,7 @@ upyt.sched.init_loop()  # initialize asyncio loop object
 sys.path.append('/sd/lib_bench')
 sys.path.append('/flash/lib_bench')
 try:
-    import bench
+    import bench  # noqa: F401
 except ImportError as e:
     if "'bench'" not in e.args[0]:
         # import error was not from a nested library fault
