@@ -1,5 +1,4 @@
 import pyb
-import machine
 import sys
 import micropython
 
@@ -9,27 +8,20 @@ import json
 import uasyncio as asyncio
 
 # upytester module(s)
-from upyt.utils import external_interrupt
 from upyt.cmd import interpret, set_serial_port
+from upyt.utils import startup_sequence
 import upyt.sched
 
 
 # Allocate memory for callback debugging
 micropython.alloc_emergency_exception_buf(100)
 
-def _startup_flash():
-    # Flash onboard LEDs in sequence
-    for i in [4, 3, 2, 1, 2, 3, 4]:
-        pyb.LED(i).on()
-        time.sleep(0.05)
-        pyb.LED(i).off()
-
-_startup_flash()
-
 vcp = pyb.USB_VCP()
 set_serial_port(vcp)
 
+
 def process_line(line):
+    """Process received line as a upyt command."""
     # Receive & decode data
     try:
         obj = json.loads(line)
@@ -57,11 +49,9 @@ def process_line(line):
     interpret(obj)
     vcp.write(b'ok\r')
 
+
 async def listener():
-    """
-    Reads lines from Virtual Comm Port (VCP) and send them to be
-    processed.
-    """
+    """Read and process lines from Virtual Comm Port (VCP)."""
     # TODO: create a global buffer, and populate via memoryview
     line = b''
 
@@ -85,7 +75,7 @@ upyt.sched.init_loop()  # initialize asyncio loop object
 sys.path.append('/sd/lib_bench')
 sys.path.append('/flash/lib_bench')
 try:
-    import bench
+    import bench  # noqa: F401
 except ImportError as e:
     if "'bench'" not in e.args[0]:
         # import error was not from a nested library fault
@@ -94,7 +84,7 @@ except ImportError as e:
 
 # Main loop
 try:
-    # start asyncio.get_event_loop()
+    upyt.sched.loop.create_task(startup_sequence())
     upyt.sched.loop.run_until_complete(listener())
 except Exception as e:
     with open('/sd/exception.txt', 'w') as fh:

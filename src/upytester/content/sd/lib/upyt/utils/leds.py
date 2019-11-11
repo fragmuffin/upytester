@@ -1,5 +1,5 @@
 import pyb
-
+import uasyncio as asyncio
 
 class _LedOnContext(object):
     def __init__(self, led_index):
@@ -14,7 +14,7 @@ class _LedOnContext(object):
 
 def led_on(*args, **kwargs):
     """
-    Keeps a LED on while in context.
+    Keep a LED on while in context.
 
     For example, the following code will turn the red LED on for 100ms::
 
@@ -24,3 +24,12 @@ def led_on(*args, **kwargs):
         ...     sleep(0.1)
     """
     return _LedOnContext(*args, **kwargs)
+
+
+async def startup_sequence():
+    """Flash onboard LEDs in sequence indicating successful start."""
+    leds = [pyb.LED(i+1) for i in range(4)]
+    for i in [3, 2, 1, 0, 1, 2, 3]:
+        leds[i].on()
+        await asyncio.sleep_ms(50)
+        leds[i].off()
