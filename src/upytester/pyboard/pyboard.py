@@ -431,6 +431,14 @@ class PyBoard(object):
             self._remote_class_list = self.receive(timeout=0.1)
         return self._remote_class_list
 
+    def _json_default_encoding(self, obj):
+        if isinstance(obj, type(self).RemoteClass):
+            if obj._pyboard is not self:
+                raise ValueError("cannot pass remote object reference from {!r} to {!r}".format(obj._pyboard, self))  # noqa: E501
+        if hasattr(obj, '__json__'):
+            return obj.__json__()
+        raise TypeError("Object of type '{}' is not JSON serializable".format(type(obj).__name__))  # noqa: E501
+
     def send(self, obj):
         """
         Transmit given object encoded as json.
@@ -441,7 +449,11 @@ class PyBoard(object):
         if self._halt_transmit.is_set():
             raise RuntimeError("Cannot send more commands while {!r} is being closed".format(self))  # noqa: E501
 
-        line = json.dumps(obj, separators=(',', ':')).encode()
+        line = json.dumps(
+            obj,
+            separators=(',', ':'),
+            default=self._json_default_encoding,
+        ).encode()
         # will be picked up and processed by self._transmit_thread
         self._transmit_queue.put(line + b'\r')
 
@@ -609,3 +621,10 @@ class PyBoard(object):
                 return self._pyboard.send(payload)
             func.__name__ = key
             return func
+
+        def __json__(self):
+            """Serialise for transmission to a remote."""
+            return {
+                'cls': type(self).__name__,
+                'idx': self._idx,
+            }
