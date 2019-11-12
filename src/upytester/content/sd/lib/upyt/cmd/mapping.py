@@ -113,12 +113,12 @@ def list_remote_classes():
 @instruction
 def clean_remote_classes():
     """Remove all instances from map and re-claim memory."""
-    while _remote_class_map:
-        for (i, obj) in _remote_class_map.items():
+    while _remote_instance_map:
+        for (i, obj) in _remote_instance_map.items():
             del_func = getattr(obj, '__del__', None)
             if del_func:
                 del_func()
-            del _remote_class_map[i]
+            del _remote_instance_map[i]
         gc.collect()
     # note: _remote_instance_index is NOT reset to mitigate the risk of
     #       re-using a cleaned object on the host, and inadvertently
