@@ -8,7 +8,8 @@ import json
 import uasyncio as asyncio
 
 # upytester module(s)
-from upyt.cmd import interpret, set_serial_port
+from upyt.cmd import interpret
+from upyt.cmd.mapping import set_serial_port
 from upyt.utils import startup_sequence
 import upyt.sched
 
