@@ -1,37 +1,43 @@
 import pyb
 
 import upyt.sched
-from .mapping import instruction, send
+from .mapping import remote
 
 
-@instruction
-def blink_led(led=1, intensity=0xff, duration=1):
-    """
-    Turn LED on for a set duration
+@remote
+class LED:
+    """Remotely accessible LED."""
 
-    :param led: index of LED 1=red, 2=green, 3=yellow, and 4=blue
-    :type led: :class:`int`
-    :param intensity: brightness of LED (0-0xff)
-    :type intensity: :class:`int`
-    :param duration: time to leave LED on
-    :type duration: :class:`int`
-    """
-    led_obj = pyb.LED(led)
-    # Turn LED on
-    led_obj.intensity(intensity)
-    # Turn LED off (after a delay)
-    upyt.sched.loop.call_later_ms(duration, lambda: led_obj.intensity(0))
+    def __init__(self, idx):
+        """
+        Remote for :class:`pyb.LED`.
 
+        :param idx: :class:`int` of range ``{1 <= idx <= 4}``
+        """
+        self.obj = pyb.LED(idx)
 
-@instruction
-def set_led(led=1, intensity=0xff):
-    """
-    Turn LED on for a set duration
+    def on(self):
+        """Turn LED on."""
+        self.obj.on()
 
-    :param led: index of LED 1=red, 2=green, 3=yellow, and 4=blue
-    :type led: :class:`int`
-    :param intensity: brightness of LED (0-0xff)
-    :type intensity: :class:`int`
-    """
-    led_obj = pyb.LED(led)
-    led_obj.intensity(intensity)
+    def off(self):
+        """Turn LED off."""
+        self.obj.off()
+
+    def intensity(self, val):
+        """Set LED intensity."""
+        self.obj.intensity(val)
+
+    def blink(self, duration: int = 1, intensity: int = 0xff):
+        """
+        Turn LED on for the duration at the given intensity.
+
+        note: process is non-blocking
+
+        :param duration: time to keep the LED on (unit: ms)
+        :param intensity: intensity of LED (if supported) (range: ``0-255``)
+        """
+        # Turn LED on
+        self.obj.intensity(max(0, min(intensity, 0xff)))
+        # Turn LED off (after a delay)
+        upyt.sched.loop.call_later_ms(duration, self.obj.off)

@@ -67,8 +67,9 @@ class PyBoard(object):
         self._transmit_queue = queue.Queue()
         self._remote_exception_queue = queue.Queue()
 
-        # Instruction List
+        # Instruction & Remote Class Lists
         self._instruction_list = None
+        self._remote_class_list = None
 
         self._comport = comport
 
@@ -353,8 +354,9 @@ class PyBoard(object):
         self._transmit_thread.daemon = True  # kills thread when main process dies
         self._transmit_thread.start()
 
-        # populate instruction_list
-        self.instruction_list  # getting it populates it, but don't do anything with it.
+        # populate lists
+        self.instruction_list
+        self.remote_class_list
 
         # set flag
         self._open_flag = True
@@ -420,6 +422,14 @@ class PyBoard(object):
             self.send({'i': 'list_instructions'})
             self._instruction_list = self.receive(timeout=0.1)
         return self._instruction_list
+
+    @property
+    def remote_class_list(self):
+        """List of names of remotely accessible classes."""
+        if self._remote_class_list is None:
+            self.send({'i': 'list_remote_classes'})
+            self._remote_class_list = self.receive(timeout=0.1)
+        return self._remote_class_list
 
     def send(self, obj):
         """
@@ -540,8 +550,21 @@ class PyBoard(object):
             name=(": {}".format(self.name)) if self.name else "",
         )
 
+    @staticmethod
+    def _payload(payload, *args, **kwargs):
+        if args:
+            payload['a'] = args
+        if kwargs:
+            payload['k'] = kwargs
+        return payload
+
     def __getattr__(self, key):
-        if (self._instruction_list is not None) and (key in self._instruction_list):
+        # --- Instruction
+        is_instruction = all((
+            self._instruction_list is not None,
+            key in self._instruction_list,
+        ))
+        if is_instruction:
             # Create a callable that will send apropriately formatted object
             def instruction(*args, **kwargs):
                 payload = {'i': key}
@@ -551,7 +574,36 @@ class PyBoard(object):
                     payload['k'] = kwargs
                 return self.send(payload)
             instruction.__name__ = key  # function has key name
-
             return instruction
 
-        raise AttributeError("'{}' object has no attribute '{}'".format(type(self).__name__, key))
+        # --- Remote Class
+        is_remote_class = all((
+            self._remote_class_list is not None,
+            key in self._remote_class_list,
+        ))
+        if is_remote_class:
+            # Create instance of object on pyboard.
+            def constructor(*args, **kwargs):
+                payload = self._payload({'rc': key}, *args, **kwargs)
+                return type(key, (type(self).RemoteClass,), {})(
+                    self, self.send(payload)()
+                )
+            return constructor
+
+        raise AttributeError("'{}' object has no attribute '{}'".format(
+            type(self).__name__, key
+        ))
+
+    class RemoteClass:
+        def __init__(self, pyboard, idx):
+            self._pyboard = pyboard
+            self._idx = idx
+
+        def __getattr__(self, key):
+            def func(*args, **kwargs):
+                payload = self._pyboard._payload(
+                    {'rid': self._idx, 'i': key}, *args, **kwargs
+                )
+                return self._pyboard.send(payload)
+            func.__name__ = key
+            return func

@@ -1,4 +1,5 @@
 import json
+import gc
 
 # -------------- Map Decorator --------------
 _instruction_map = {}
@@ -42,6 +43,83 @@ def instruction(func):
 def list_instructions():
     return sorted(_instruction_map.keys())
 
+
+# -------------- Remote Objects --------------
+_remote_class_map = {}
+_remote_instance_map = {}
+_remote_instance_index = 0
+
+
+def remote(cls):
+    """
+    Map a class as being accessible via remote instance.
+
+    To create a remote class on the pyboard::
+
+        import pyb
+        from upyt.mapping import remote
+
+        @remote
+        class Pin:
+            def __init__(self, name, mode='in')
+                self._pin = pyb.Pin(
+                    name,
+                    pyb.Pin.OUT if mode == 'out' else pyb.Pin.IN,
+                )
+
+            def value(self, v=None):
+                return self._pin.value(v)
+
+            def high(self):
+                self.value(True)
+
+            def low(self):
+                self.value(False)
+
+    Then, to create and access a remote instance from the tester PC::
+
+        import unittest
+        import upytester
+
+        class TestPin(unittest.TestCase):
+            @classmethod
+            def setUpClass(cls):
+                cls.pyb_a = upytester.project.get_device('pyb_a')
+                cls.my_pin = cls.pyb_a.Pin('X1', mode='in')
+
+            def test_pin_stuff(self):
+                self.pin.value(1)
+                self.assertTrue(self.pin.value())
+                self.pin.value(0)
+                self.assertFalse(self.pin.value())
+    """
+    assert isinstance(cls, type), "must decorate a class"
+    assert cls.__name__ not in _remote_class_map, "duplicate remote defined"
+    _remote_class_map[cls.__name__] = cls
+    return cls
+
+
+@instruction
+def list_remote_classes():
+    """List classes decorated as remotes."""
+    return sorted(_remote_class_map.keys())
+
+
+@instruction
+def clean_remote_classes():
+    """Remove all instances from map and re-claim memory."""
+    while _remote_class_map:
+        for (i, obj) in _remote_class_map.items():
+            del_func = getattr(obj, '__del__', None)
+            if del_func:
+                del_func()
+            del _remote_class_map[i]
+        gc.collect()
+    # note: _remote_instance_index is NOT reset to mitigate the risk of
+    #       re-using a cleaned object on the host, and inadvertently
+    #       invoking another that's been created since.
+
+
 # -------------- Interpreter --------------
 _serial_port = None
 
@@ -81,26 +159,138 @@ def send(obj):
     _serial_port.write(json.dumps(obj).encode() + b'\r')
 
 
-def interpret(obj):
+def interpret_instruction(obj: dict):
     """
-    Perform the action defined in the given object
+    Interpret obj as arguments for the named instruction.
 
-    :param obj: deserialized JSON object received from host
-    :type obj: :class:`dict`
+    ``obj`` must be of the format::
+
+        {
+            'i': <instruction name>,
+            'a': <args list>,
+            'k': <kwargs dict>,
+        }
+
+    For example::
+
+        {'i': 'func_name', 'a': [10, 'abc'], 'k': {'x': 1, 'y': 2}}
+
+    Will internally call the instruction ``func_name`` with::
+
+        func_name(10, 'abc', x=1, y=2)
+
+    Then transmit the returned value to the host (if not ``None``).
     """
-
-    # Find referenced function
-    if not isinstance(obj, dict):
-        return
-
-    instruction_name = obj.pop('i', None)
+    instruction_name = obj.get('i')
     if instruction_name not in _instruction_map:
         return
 
     # Execute function
     func = _instruction_map[instruction_name]
-    response = func(*obj.pop('a', []), **obj.pop('k', {}))
+    response = func(*obj.get('a', []), **obj.get('k', {}))
 
     # Send response (if any given)
     if response is not None:
         send(response)
+
+
+def interpret_new_remote_instance(obj: dict):
+    """
+    Interpret obj as constructor arguments for the named remote class.
+
+    ``obj`` must be of the format::
+
+        {
+            'rc': <class name>,  # remote class
+            'a': <args list>,
+            'k': <kwargs dict>,
+        }
+
+    For example::
+
+        {'rc': 'MyRemote', 'a': [10, 'abc'], 'k': {'x': 1, 'y': 2}}
+
+    Will internally instantiate a new instance of ``MyRemote`` with::
+
+        MyRemote(10, 'abc', x=1, y=2)
+
+    Each instance will get a unique ID, and that ID will be send back to
+    the host.
+
+    Once an instance has been created, call upon it using
+    :meth:`interpret_remote_instruction`.
+    """
+    global _remote_instance_index
+
+    # Create Instance (assign unique id)
+    cls = _remote_class_map[obj.get('rc')]
+    instance = cls(*obj.get('a', []), **obj.get('k', {}))
+
+    # Save to instance map
+    instance._upyt_id = _remote_instance_index
+    _remote_instance_index += 1
+    _remote_instance_map[instance._upyt_id] = instance
+
+    # Respond with instance ID
+    send(instance._upyt_id)
+
+
+def interpret_remote_instruction(obj: dict):
+    """
+    Interpret obj as a function call to an existing remote class instance.
+
+    ``obj`` must be a :class:`dict` of the format::
+
+        {
+            'rid': <remote instance id>,  # remote id
+            'i': <method name>,
+            'a': <args list>,
+            'k': <kwargs dict>,
+        }
+
+    When instantiating new instance of class::
+
+        {'rid': 17, 'i': 'get_thing', 'a': [10, 'abc'], 'k': {'x': 1, 'y': 2}}
+
+    Will call a previously instantiated remote which was given the id ``17``::
+
+        internal_obj.get_thing(10, 'abc', x=1, y=2)
+
+    Then transmit the returned value to the host (if not ``None``).
+    """
+    # Fetch remote instance from ID
+    instance = _remote_instance_map[obj.get('rid')]
+    #raise TypeError("instance is: {!r}".format(type(instance)))
+    attr = getattr(instance, obj.get('i'))
+    if callable(attr):
+        response = attr(*obj.get('a', []), **obj.get('k', {}))
+    else:
+        response = attr
+
+    # Send response (if any given)
+    if response is not None:
+        send(response)
+
+
+def interpret(obj):
+    """
+    Perform the action defined in the given object.
+
+    :param obj: deserialized JSON object received from host
+    :type obj: :class:`dict`
+
+    Given ``obj`` must be accepted by either :meth:`interpret_instruction`
+    or :meth:`interpret_new_remote_instance`.
+    """
+    # Find referenced function
+    if not isinstance(obj, dict):
+        return
+
+    if 'rid' in obj:
+        interpret_remote_instruction(obj)
+    elif 'rc' in obj:
+        interpret_new_remote_instance(obj)
+    elif 'i' in obj:
+        interpret_instruction(obj)
+    else:
+        pass  # ignore instruction
