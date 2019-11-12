@@ -87,6 +87,8 @@ except ImportError as e:
 try:
     upyt.sched.loop.create_task(startup_sequence())
     upyt.sched.loop.run_until_complete(listener())
+except KeyboardInterrupt:
+    pass  # nothing special, just stop
 except Exception as e:
     with open('/sd/exception.txt', 'w') as fh:
         fh.write(repr(e))
