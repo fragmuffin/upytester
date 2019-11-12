@@ -125,6 +125,22 @@ def clean_remote_classes():
     #       invoking another that's been created since.
 
 
+def _get_obj_ver_iter(ref):
+    yield isinstance(ref, dict)
+    yield 'cls' in ref
+    yield 'idx' in ref
+
+
+def get_obj(ref):
+    """Convert serialised reference into local object instance."""
+    if not all(_get_obj_ver_iter(ref)):
+        raise ValueError("cannot infer instance from reference: {!r}".format(ref))  # noqa: E501
+    obj = _remote_instance_map[ref['idx']]
+    if type(obj).__name__ != ref['cls']:
+        raise TypeError("Referenced object {!r} is of a different type {!r}".format(ref, type(obj)))  # noqa: E501
+    return obj
+
+
 # -------------- Interpreter --------------
 _serial_port = None
 
