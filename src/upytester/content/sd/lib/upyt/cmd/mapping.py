@@ -1,13 +1,15 @@
+"""Decorators and inherant upyt instructions for querying."""
 import json
 import gc
 
-# -------------- Map Decorator --------------
+
+# -------------- Instructions --------------
 _instruction_map = {}
 
 
 def instruction(func):
-    """
-    Maps a function to an incoming instruction
+    r"""
+    Map a function to an incoming instruction.
 
     Usage::
 
@@ -15,10 +17,11 @@ def instruction(func):
         def ping(value=0):
             return {'r': 'ping', 'value': value + 1}
 
-    With this implemented, when a host sends ``{'i': 'ping', 'k': {'value': 10}}``,
-    it will receive ``{'r': 'ping', 'value': 11}``
+    With this implemented, when a host sends
+    ``{'i': 'ping', 'k': {'value': 10}}``, it will receive
+    ``{'r': 'ping', 'value': 11}``
 
-    **Format of Request**\
+    **Format of Request**
     When transmitting a request from a host machine, the ``dict`` format is::
 
         {
@@ -34,13 +37,15 @@ def instruction(func):
     Because the method name, and keyword arguments are serialized and
     transmitted, consider keeping argument & method names short.
     """
-    assert func.__name__ not in _instruction_map, "duplicate instruction defined"
+    assert isinstance(func, type(lambda: None)), "must decorate a function"
+    assert func.__name__ not in _instruction_map, "duplicate instruction defined"  # noqa: E501
     _instruction_map[func.__name__] = func
     return func
 
 
 @instruction
 def list_instructions():
+    """List functions decorated as instructions."""
     return sorted(_instruction_map.keys())
 
 
@@ -127,6 +132,7 @@ _serial_port = None
 def set_serial_port(given_port):
     """
     Set the serial object through which to send serialized data.
+
     See :meth:`send` for more details.
 
     :param given_port: Port through which to send serialized data
@@ -138,7 +144,7 @@ def set_serial_port(given_port):
 
 def send(obj):
     """
-    Send serial data over the preset serial port
+    Send serial data over the preset serial port.
 
     Usage:
 

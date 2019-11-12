@@ -302,7 +302,7 @@ class PyBoard(object):
             target=receiver_proc,
             name='{!r} receiver'.format(self),
         )
-        self._receive_thread.daemon = True  # kills thread when main process dies
+        self._receive_thread.daemon = True  # thread dies with main process
         self._receive_thread.start()
 
         # ----- Transmitter thread
@@ -351,7 +351,7 @@ class PyBoard(object):
             target=transmit_proc,
             name='{!r} transmitter'.format(self),
         )
-        self._transmit_thread.daemon = True  # kills thread when main process dies
+        self._transmit_thread.daemon = True  # thread dies with main process
         self._transmit_thread.start()
 
         # populate lists
@@ -363,7 +363,7 @@ class PyBoard(object):
 
     def check_health(self):
         """
-        Checks for any record of an exception being raised on the remote.
+        Check for any record of an exception being raised on the remote.
 
         :raises: :class:`PyBoardError`
         :return: True if no exception was found
@@ -374,8 +374,7 @@ class PyBoard(object):
 
     def halt(self, force=False):
         """
-        Send a halt event to send and receive threads to cleanly stop
-        their execution.
+        Send a halt event to send and receive threads to cleanly stop.
 
         Timeouts may still need to play through, so the effect will not be
         instant.
@@ -418,6 +417,7 @@ class PyBoard(object):
 
     @property
     def instruction_list(self):
+        """List of names of instruction methods."""
         if self._instruction_list is None:
             self.send({'i': 'list_instructions'})
             self._instruction_list = self.receive(timeout=0.1)
@@ -433,15 +433,17 @@ class PyBoard(object):
 
     def send(self, obj):
         """
-        Transmit given object encoded as json
+        Transmit given object encoded as json.
+
         :param obj: object to json encode and transmit
         :type obj: anthing serializable
         """
         if self._halt_transmit.is_set():
-            raise RuntimeError("Cannot send more commands while {!r} is being closed".format(self))
+            raise RuntimeError("Cannot send more commands while {!r} is being closed".format(self))  # noqa: E501
 
-        line = json.dumps(obj, separators=(',',':')).encode()
-        self._transmit_queue.put(line + b'\r')  # will be picked up and processed by self._transmit_thread
+        line = json.dumps(obj, separators=(',', ':')).encode()
+        # will be picked up and processed by self._transmit_thread
+        self._transmit_queue.put(line + b'\r')
 
         if not self._async_transmit.is_set():
             # Non async transmission behaviour:
