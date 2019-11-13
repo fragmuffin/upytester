@@ -125,20 +125,38 @@ def clean_remote_classes():
     #       invoking another that's been created since.
 
 
-def _get_obj_ver_iter(ref):
-    yield isinstance(ref, dict)
-    yield 'cls' in ref
-    yield 'idx' in ref
+_GET_OBJ_REF_FORMAT_MSG = "object reference must be of the format: " \
+                          "{'cls': <class name>, 'idx': <remote index int>}"
 
 
-def get_obj(ref):
-    """Convert serialised reference into local object instance."""
-    if not all(_get_obj_ver_iter(ref)):
-        raise ValueError("cannot infer instance from reference: {!r}".format(ref))  # noqa: E501
-    obj = _remote_instance_map[ref['idx']]
-    if type(obj).__name__ != ref['cls']:
-        raise TypeError("Referenced object {!r} is of a different type {!r}".format(ref, type(obj)))  # noqa: E501
-    return obj
+def _assert_get_obj_ref(ref):
+    assert isinstance(ref, dict), _GET_OBJ_REF_FORMAT_MSG
+    assert set(ref.keys()) == {'cls', 'idx'}, _GET_OBJ_REF_FORMAT_MSG
+    assert isinstance(ref['cls'], str), _GET_OBJ_REF_FORMAT_MSG
+    assert isinstance(ref['idx'], int), _GET_OBJ_REF_FORMAT_MSG
+
+
+def get_obj(ref: dict, *args):
+    """
+    Get a remotely set object from it's reference dict.
+
+    :param ref: :class:`dict` of the form:
+                ``{'cls': <class name>, 'idx': <remote index>}``
+    :param default: default value to return if object
+                    cannot be found [optional]
+    """
+    try:
+        """Convert serialised reference into local object instance."""
+        _assert_get_obj_ref(ref)
+        obj = _remote_instance_map[ref['idx']]
+        if type(obj).__name__ != ref['cls']:
+            raise TypeError("Referenced object {!r} is of a different type {!r}".format(ref, type(obj)))  # noqa: E501
+        return obj
+    except Exception:
+        if args:
+            assert len(args) == 1, "only 1 [optional] default can be given"
+            return args[0]  # give default
+        raise  # no default specified, be strict.
 
 
 # -------------- Interpreter --------------
