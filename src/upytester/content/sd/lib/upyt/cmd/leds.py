@@ -6,7 +6,7 @@ from .mapping import remote
 
 @remote
 class LED(pyb.LED):
-    """Remotely accessible LED."""
+    """Remotely accessible :class:`pyb.LED`."""
 
     def blink(self, duration: int=1, intensity: int=0xff):
         """
