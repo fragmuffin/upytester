@@ -98,7 +98,6 @@ def remote(cls):
                 self.pin.value(0)
                 self.assertFalse(self.pin.value())
     """
-    assert isinstance(cls, type), "must decorate a class"
     assert cls.__name__ not in _remote_class_map, "duplicate remote defined"
     _remote_class_map[cls.__name__] = cls
     return cls
