@@ -68,3 +68,8 @@ class Pin(pyb.Pin):
         # Set initial value (if given)
         if value is not None:
             self.value(value)
+
+
+@remote
+class Switch(pyb.Switch):
+    """Remote switch."""
