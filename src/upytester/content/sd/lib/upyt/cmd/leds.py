@@ -8,7 +8,7 @@ from .mapping import remote
 class LED(pyb.LED):
     """Remotely accessible LED."""
 
-    def blink(self, duration: int = 1, intensity: int = 0xff):
+    def blink(self, duration: int=1, intensity: int=0xff):
         """
         Turn LED on for the duration at the given intensity.
 
