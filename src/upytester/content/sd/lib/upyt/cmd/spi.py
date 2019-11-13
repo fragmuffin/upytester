@@ -1,7 +1,42 @@
 import pyb
+import struct
 
-from .mapping import instruction, send
+from .mapping import instruction
+from .mapping import remote
 
+
+@remote
+class SPI(pyb.SPI):
+    def __init__(self, bus, **kwargs):
+        """
+        :param bus: integer index of :class:`pyb.SPI` to use.
+        :param mode: string, either ``'master'`` (default) or ``'slave'``.
+
+        Also accepts :meth:`pyb.SPI.init` parameters
+        (with the above exceptions)
+        """
+        super().__init__(bus)
+        kwargs['mode'] = {
+            'master': pyb.SPI.MASTER,
+            'slave': pyb.SPI.SLAVE,
+        }[kwargs.get('mode', 'master')]
+        self.init(**kwargs)
+
+    @staticmethod
+    def _data2bytes(data):
+        if isinstance(data, bytes):
+            return data
+        elif isinstance(data, str):
+            return data.encode()
+        elif isinstance(data, int):
+            return struct.pack('B', data)
+        elif isinstance(data, list):
+            return struct.pack('B' * len(data), *data)
+        raise ValueError("cannot convert {!r} to bytes".format(data))
+
+    def send(self, data):
+        """Transmit data."""
+        self.send(self._data2bytes(data))
 
 # ------- Map(s)
 spi_map = {}  # {<idx>: <pyb.SPI>, ... }
