@@ -37,8 +37,12 @@ def instruction(func):
     Because the method name, and keyword arguments are serialized and
     transmitted, consider keeping argument & method names short.
     """
-    assert isinstance(func, type(lambda: None)), "must decorate a function"
-    assert func.__name__ not in _instruction_map, "duplicate instruction defined"  # noqa: E501
+    if not isinstance(func, type(lambda: None)):
+        raise ValueError("{!r} is not a method".format(func))
+    if func.__name__ in _instruction_map:
+        raise ValueError("duplicate instruction; can't replace {old!r} with {new!r}".format(  # noqa: E501
+            old=_instruction_map[func.__name__], new=func,
+        ))
     _instruction_map[func.__name__] = func
     return func
 
@@ -98,7 +102,10 @@ def remote(cls):
                 self.pin.value(0)
                 self.assertFalse(self.pin.value())
     """
-    assert cls.__name__ not in _remote_class_map, "duplicate remote defined"
+    if cls.__name__ in _remote_class_map:
+        raise ValueError("duplicate remote class; can't replace {old!r} with {new!r}".format(  # noqa: E501
+            old=_remote_class_map[cls.__name__], new=cls,
+        ))
     _remote_class_map[cls.__name__] = cls
     return cls
 
