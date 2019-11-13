@@ -13,7 +13,7 @@ from .mapping import instruction, send
 @instruction
 def machine_reset(t=50):
     """
-    Resets the pyboard.
+    Reset the pyboard.
 
     :param t: time until reset (unit: ms) (default: 50ms)
     :type t: :class:`int`
