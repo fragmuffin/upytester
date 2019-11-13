@@ -34,7 +34,7 @@ class PyBoard(object):
     # Defaults
     DEFAULT_BAUDRATE = 115200
 
-    def __init__(self, serial_number, name=None, comport=None, auto_open=True):
+    def __init__(self, serial_number, name=None, comport=None, auto_open=True, heartbeat=True):  # noqa: E501
         """
         :param serial_number: Serial number of PyBoard instance
         :type serial_number: :class:`str`
@@ -72,6 +72,8 @@ class PyBoard(object):
         self._remote_class_list = None
 
         self._comport = comport
+
+        self._heartbeat = heartbeat
 
         if auto_open:
             self.open()
@@ -354,9 +356,14 @@ class PyBoard(object):
         self._transmit_thread.daemon = True  # thread dies with main process
         self._transmit_thread.start()
 
+        # --- Communication is open
         # populate lists
         self.instruction_list
         self.remote_class_list
+
+        # show heartbeat (indicates link is active)
+        if self._heartbeat:
+            self.heartbeat(True)
 
         # set flag
         self._open_flag = True
@@ -400,6 +407,10 @@ class PyBoard(object):
         """
         if self.is_closed:
             return  # already closed
+
+        # stop heartbeat (fault tolerant)
+        if self._heartbeat:
+            self.heartbeat(False)
 
         # set halt event
         self.halt()
@@ -609,6 +620,8 @@ class PyBoard(object):
         ))
 
     class RemoteClass:
+        """Enables access to an instance on a remote."""
+
         def __init__(self, pyboard, idx):
             self._pyboard = pyboard
             self._idx = idx
