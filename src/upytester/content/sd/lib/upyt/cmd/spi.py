@@ -23,7 +23,7 @@ class SPI(pyb.SPI):
         self.init(**kwargs)
 
     @staticmethod
-    def _data2bytes(data):
+    def _encode(data) -> bytes:
         if isinstance(data, bytes):
             return data
         elif isinstance(data, str):
@@ -34,38 +34,19 @@ class SPI(pyb.SPI):
             return struct.pack('B' * len(data), *data)
         raise ValueError("cannot convert {!r} to bytes".format(data))
 
-    def send(self, data):
-        """Transmit data."""
-        self.send(self._data2bytes(data))
+    # ----- Remote functions
+    # Why not override core functions?
+    #   send & receive data must be a bytes, memoryview, or an array, none of
+    #   which will be decoded from a message from a remote.
+    #   (ie: will not be an output of json.loads())
+    def r_send(self, data, timeout: int=5000):
+        """Transmit data, compatible with json encoding."""
+        self.send(self._encode(data), timeout=timeout)
 
-# ------- Map(s)
-spi_map = {}  # {<idx>: <pyb.SPI>, ... }
+    def r_recv(self, count: int, timeout: int=5000):
+        """Receive data, compatible with json encoding."""
+        return list(self.recv(count, timeout=timeout))
 
-
-# ------- Configure
-@instruction
-def config_spi(idx):
-    """
-    Configure SPI bus
-
-    :param idx: pyboard SPI index (1 or 2)
-    :type idx: :class:`int` (1 or 2)
-    """
-    spi = pyb.SPI(idx, pyb.SPI.MASTER)
-    spi_map[idx] = spi
-
-
-@instruction
-def spi_send(idx, data):
-    """
-    Note: SPI must be configured via instruction :meth:`config_spi` before
-    sending with this method.
-
-    :param idx: pyboard SPI index (1 or 2)
-    :type idx: :class:`int`
-    :param data:
-    :type data: :class:`list` of :class:`int`
-    """
-    spi = spi_map[idx]
-    recv = spi.send_recv(bytes(data))
-    # TODO: send received bytes
+    def r_send_recv(self, data, timeout: int=5000):
+        """Transmit and receive data, compatible with json encoding."""
+        return list(self.send_recv(self._encode(data), timeout=timeout))
