@@ -21,6 +21,9 @@ class SPI(pyb.SPI):
         }[kwargs.get('mode', 'master')]
         self.init(**kwargs)
 
+    def __del__(self):
+        self.deinit()
+
     @staticmethod
     def _encode(data) -> bytes:
         if isinstance(data, bytes):
