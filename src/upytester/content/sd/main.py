@@ -90,10 +90,6 @@ try:
     upyt.sched.loop.run_until_complete(listener_coroutine)
 
 except KeyboardInterrupt:
-    # Turn off all LEDs
-    for i in range(4):
-        pyb.LED(i + 1).off()
-
     # Blink Green LED
     pyb.LED(2).on()
     time.sleep(0.05)
@@ -105,5 +101,7 @@ except Exception as e:
         fh.write(repr(e))
     raise
 
-# after mainloop, flash LED, close serial over USB.
-#   (end of mainloop will open a repl for debugging)
+finally:
+    # Turn off all LEDs
+    for i in range(4):
+        pyb.LED(i + 1).off()
