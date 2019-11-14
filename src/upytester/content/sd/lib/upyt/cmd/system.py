@@ -52,11 +52,11 @@ HEARTBEAT_PERIOD = 1000  # time between led flashes (unit: ms)
 def heartbeat(enabled=True):
     """Show LED indicator that the async loop is running."""
     global _heartbeat_coroutine
+    blue_led = pyb.LED(4)  # blue
 
     if enabled and (_heartbeat_coroutine is None):
         # Start
         async def heartbeat_task():
-            blue_led = pyb.LED(4)  # blue
             while True:
                 blue_led.on()
                 await asyncio.sleep_ms(HEARTBEAT_PULSE)
@@ -68,6 +68,7 @@ def heartbeat(enabled=True):
     elif (not enabled) and (_heartbeat_coroutine is not None):
         # Stop
         asyncio.cancel(_heartbeat_coroutine)
+        blue_led.off()
         _heartbeat_coroutine = None
 
 
