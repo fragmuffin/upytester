@@ -1,5 +1,5 @@
 # ------- Package Meta Data
-__version__ = "0.1.dev1"
+__version__ = "0.1.dev2"
 
 __title__ = 'upytester'
 __description__ = 'Hardware test environment using MicroPython hardware as an interface'
