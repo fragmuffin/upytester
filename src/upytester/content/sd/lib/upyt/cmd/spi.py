@@ -1,7 +1,6 @@
 import pyb
 import struct
 
-from .mapping import instruction
 from .mapping import remote
 
 

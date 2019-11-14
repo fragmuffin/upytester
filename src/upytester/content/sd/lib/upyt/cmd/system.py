@@ -45,7 +45,7 @@ def break_loop():
 _heartbeat_coroutine = None
 
 HEARTBEAT_PULSE = 20  # duration led is on (unit: ms)
-HEARTBEAT_PERIOD = 1000  # time between rising edge of led (unit: ms)
+HEARTBEAT_PERIOD = 1000  # time between led flashes (unit: ms)
 
 
 @instruction
