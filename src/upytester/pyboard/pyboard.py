@@ -34,7 +34,7 @@ class PyBoard(object):
     # Defaults
     DEFAULT_BAUDRATE = 115200
 
-    def __init__(self, serial_number, name=None, comport=None, auto_open=True):
+    def __init__(self, serial_number, name=None, comport=None, auto_open=True, heartbeat=True):  # noqa: E501
         """
         :param serial_number: Serial number of PyBoard instance
         :type serial_number: :class:`str`
@@ -67,10 +67,13 @@ class PyBoard(object):
         self._transmit_queue = queue.Queue()
         self._remote_exception_queue = queue.Queue()
 
-        # Instruction List
+        # Instruction & Remote Class Lists
         self._instruction_list = None
+        self._remote_class_list = None
 
         self._comport = comport
+
+        self._heartbeat = heartbeat
 
         if auto_open:
             self.open()
@@ -301,7 +304,7 @@ class PyBoard(object):
             target=receiver_proc,
             name='{!r} receiver'.format(self),
         )
-        self._receive_thread.daemon = True  # kills thread when main process dies
+        self._receive_thread.daemon = True  # thread dies with main process
         self._receive_thread.start()
 
         # ----- Transmitter thread
@@ -350,18 +353,24 @@ class PyBoard(object):
             target=transmit_proc,
             name='{!r} transmitter'.format(self),
         )
-        self._transmit_thread.daemon = True  # kills thread when main process dies
+        self._transmit_thread.daemon = True  # thread dies with main process
         self._transmit_thread.start()
 
-        # populate instruction_list
-        self.instruction_list  # getting it populates it, but don't do anything with it.
+        # --- Communication is open
+        # populate lists
+        self.instruction_list
+        self.remote_class_list
+
+        # show heartbeat (indicates link is active)
+        if self._heartbeat:
+            self.heartbeat(True)
 
         # set flag
         self._open_flag = True
 
     def check_health(self):
         """
-        Checks for any record of an exception being raised on the remote.
+        Check for any record of an exception being raised on the remote.
 
         :raises: :class:`PyBoardError`
         :return: True if no exception was found
@@ -372,8 +381,7 @@ class PyBoard(object):
 
     def halt(self, force=False):
         """
-        Send a halt event to send and receive threads to cleanly stop
-        their execution.
+        Send a halt event to send and receive threads to cleanly stop.
 
         Timeouts may still need to play through, so the effect will not be
         instant.
@@ -400,6 +408,10 @@ class PyBoard(object):
         if self.is_closed:
             return  # already closed
 
+        # stop heartbeat (fault tolerant)
+        if self._heartbeat:
+            self.heartbeat(False)
+
         # set halt event
         self.halt()
 
@@ -416,22 +428,45 @@ class PyBoard(object):
 
     @property
     def instruction_list(self):
+        """List of names of instruction methods."""
         if self._instruction_list is None:
             self.send({'i': 'list_instructions'})
             self._instruction_list = self.receive(timeout=0.1)
         return self._instruction_list
 
+    @property
+    def remote_class_list(self):
+        """List of names of remotely accessible classes."""
+        if self._remote_class_list is None:
+            self.send({'i': 'list_remote_classes'})
+            self._remote_class_list = self.receive(timeout=0.1)
+        return self._remote_class_list
+
+    def _json_default_encoding(self, obj):
+        if isinstance(obj, type(self).RemoteClass):
+            if obj._pyboard is not self:
+                raise ValueError("cannot pass remote object reference from {!r} to {!r}".format(obj._pyboard, self))  # noqa: E501
+        if hasattr(obj, '__json__'):
+            return obj.__json__()
+        raise TypeError("Object of type '{}' is not JSON serializable".format(type(obj).__name__))  # noqa: E501
+
     def send(self, obj):
         """
-        Transmit given object encoded as json
+        Transmit given object encoded as json.
+
         :param obj: object to json encode and transmit
         :type obj: anthing serializable
         """
         if self._halt_transmit.is_set():
-            raise RuntimeError("Cannot send more commands while {!r} is being closed".format(self))
+            raise RuntimeError("Cannot send more commands while {!r} is being closed".format(self))  # noqa: E501
 
-        line = json.dumps(obj, separators=(',',':')).encode()
-        self._transmit_queue.put(line + b'\r')  # will be picked up and processed by self._transmit_thread
+        line = json.dumps(
+            obj,
+            separators=(',', ':'),
+            default=self._json_default_encoding,
+        ).encode()
+        # will be picked up and processed by self._transmit_thread
+        self._transmit_queue.put(line + b'\r')
 
         if not self._async_transmit.is_set():
             # Non async transmission behaviour:
@@ -540,8 +575,21 @@ class PyBoard(object):
             name=(": {}".format(self.name)) if self.name else "",
         )
 
+    @staticmethod
+    def _payload(payload, *args, **kwargs):
+        if args:
+            payload['a'] = args
+        if kwargs:
+            payload['k'] = kwargs
+        return payload
+
     def __getattr__(self, key):
-        if (self._instruction_list is not None) and (key in self._instruction_list):
+        # --- Instruction
+        is_instruction = all((
+            self._instruction_list is not None,
+            key in self._instruction_list,
+        ))
+        if is_instruction:
             # Create a callable that will send apropriately formatted object
             def instruction(*args, **kwargs):
                 payload = {'i': key}
@@ -551,7 +599,45 @@ class PyBoard(object):
                     payload['k'] = kwargs
                 return self.send(payload)
             instruction.__name__ = key  # function has key name
-
             return instruction
 
-        raise AttributeError("'{}' object has no attribute '{}'".format(type(self).__name__, key))
+        # --- Remote Class
+        is_remote_class = all((
+            self._remote_class_list is not None,
+            key in self._remote_class_list,
+        ))
+        if is_remote_class:
+            # Create instance of object on pyboard.
+            def constructor(*args, **kwargs):
+                payload = self._payload({'rc': key}, *args, **kwargs)
+                return type(key, (type(self).RemoteClass,), {})(
+                    self, self.send(payload)()
+                )
+            return constructor
+
+        raise AttributeError("'{}' object has no attribute '{}'".format(
+            type(self).__name__, key
+        ))
+
+    class RemoteClass:
+        """Enables access to an instance on a remote."""
+
+        def __init__(self, pyboard, idx):
+            self._pyboard = pyboard
+            self._idx = idx
+
+        def __getattr__(self, key):
+            def func(*args, **kwargs):
+                payload = self._pyboard._payload(
+                    {'rid': self._idx, 'i': key}, *args, **kwargs
+                )
+                return self._pyboard.send(payload)
+            func.__name__ = key
+            return func
+
+        def __json__(self):
+            """Serialise for transmission to a remote."""
+            return {
+                'cls': type(self).__name__,
+                'idx': self._idx,
+            }

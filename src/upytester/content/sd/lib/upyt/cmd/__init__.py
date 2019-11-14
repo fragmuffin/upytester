@@ -3,10 +3,13 @@ __all__ = [
     'interpret',
     'get_sender',
     'send',
+    'remote',
+    'get_obj',
 ]
 
 
-from .mapping import instruction, interpret, set_serial_port, send
+from .mapping import instruction, interpret, send
+from .mapping import remote, get_obj
 
 # Import all sub-modules (forces instructions to register)
 from . import system

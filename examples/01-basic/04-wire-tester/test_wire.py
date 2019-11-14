@@ -37,22 +37,16 @@ class BenchTest(unittest.TestCase):
     def setUpClass(cls):
         # PyBoard device(s)
         cls.pyb_a = upytester.project.get_device('pyb_a')
-
         # Simulation / Evaluation Bench Components
-        cls.wire_stim = Socket(
-            device=cls.pyb_a,
-            pin=cls.PIN_MAP['STIM_SOCKET'],
-            mode='stim',
-            value=0,
-        )
-        cls.wire_eval = Socket(
-            device=cls.pyb_a,
-            pin=cls.PIN_MAP['EVAL_SOCKET'],
-            mode='eval',
-        )
+        cls.wire_stim = cls.pyb_a.Pin(cls.PIN_MAP['STIM_SOCKET'], mode='out')
+        cls.wire_eval = cls.pyb_a.Pin(cls.PIN_MAP['EVAL_SOCKET'], mode='in', pull='down')
+
+    def setUp(self):
+        self.wire_stim.low()
 
     @classmethod
     def tearDownClass(cls):
+        cls.pyb_a.clean_remote_classes()
         cls.pyb_a.close()
 
 
@@ -60,17 +54,12 @@ class BenchTest(unittest.TestCase):
 
 class WireTest(BenchTest):
     def test_wire_low(self):
-        """
-        Signal connected as LOW
-        """
-        self.assertFalse(self.wire_stim.value)
-        self.assertFalse(self.wire_eval.value)
+        """Signal connected as LOW."""
+        self.assertFalse(self.wire_stim.value()())
+        self.assertFalse(self.wire_eval.value()())
 
     def test_wire_high(self):
-        """
-        Signal connected as HIGH
-        """
-        self.wire_stim.value = 1
-        self.assertTrue(self.wire_stim.value)
-        self.assertTrue(self.wire_eval.value)
-        self.wire_stim.value = 0  # revert at end of test
+        """Signal connected as HIGH."""
+        self.wire_stim.high()
+        self.assertTrue(self.wire_stim.value()())
+        self.assertTrue(self.wire_eval.value()())

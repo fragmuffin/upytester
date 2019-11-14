@@ -8,7 +8,8 @@ import json
 import uasyncio as asyncio
 
 # upytester module(s)
-from upyt.cmd import interpret, set_serial_port
+from upyt.cmd import interpret
+from upyt.cmd.mapping import set_serial_port
 from upyt.utils import startup_sequence
 import upyt.sched
 
@@ -85,14 +86,24 @@ except ImportError as e:
 # Main loop
 try:
     upyt.sched.loop.create_task(startup_sequence())
-    upyt.sched.loop.run_until_complete(listener())
+    listener_coroutine = listener()
+    upyt.sched.loop.run_until_complete(listener_coroutine)
+
+except KeyboardInterrupt:
+    # Turn off all LEDs
+    for i in range(4):
+        pyb.LED(i + 1).off()
+
+    # Blink Green LED
+    pyb.LED(2).on()
+    time.sleep(0.05)
+    pyb.LED(2).off()
+
 except Exception as e:
-    with open('/sd/exception.txt', 'w') as fh:
+    # Save Exception for further analysis
+    with open('exception.txt', 'w') as fh:
         fh.write(repr(e))
     raise
 
 # after mainloop, flash LED, close serial over USB.
 #   (end of mainloop will open a repl for debugging)
-pyb.LED(2).on()
-time.sleep(0.05)
-pyb.LED(2).off()
