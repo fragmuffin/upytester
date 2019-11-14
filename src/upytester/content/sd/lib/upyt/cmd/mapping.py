@@ -306,12 +306,10 @@ def interpret_remote_instruction(obj: dict):
     """
     # Fetch remote instance from ID
     instance = _remote_instance_map[obj.get('rid')]
-    #raise TypeError("instance is: {!r}".format(type(instance)))
     attr = getattr(instance, obj.get('i'))
-    if callable(attr):
-        response = attr(*obj.get('a', []), **obj.get('k', {}))
-    else:
-        response = attr
+    if not callable(attr):
+        raise AttributeError("non-callable attributes are not supported")
+    response = attr(*obj.get('a', []), **obj.get('k', {}))
 
     # Send response (if any given)
     if response is not None:
