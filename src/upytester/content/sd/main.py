@@ -53,7 +53,7 @@ except KeyboardInterrupt:
 except Exception as e:
     # Save Exception for further analysis
     with open('exception.txt', 'w') as fh:
-        fh.write(repr(e))
+        sys.print_exception(e, fh)
     raise
 
 finally:
