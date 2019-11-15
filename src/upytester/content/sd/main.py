@@ -102,6 +102,8 @@ except Exception as e:
     raise
 
 finally:
+    # Cancel listener task
+    asyncio.cancel(listener_coroutine)
     # Turn off all LEDs
     for i in range(4):
         pyb.LED(i + 1).off()
