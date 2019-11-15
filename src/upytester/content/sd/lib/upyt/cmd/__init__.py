@@ -5,11 +5,13 @@ __all__ = [
     'send',
     'remote',
     'get_obj',
+    'listener',
 ]
 
 
-from .mapping import instruction, interpret, send
+from .mapping import instruction, send
 from .mapping import remote, get_obj
+from .process import listener, interpret
 
 # Import all sub-modules (forces instructions to register)
 from . import system
