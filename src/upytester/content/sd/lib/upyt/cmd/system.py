@@ -36,11 +36,6 @@ def bootloader_mode(t=50):
     upyt.sched.loop.call_later_ms(t, pyb.bootloader)
 
 
-@instruction
-def break_loop():
-    upyt.sched.keepalive = False
-
-
 # ------- heartbeat
 _heartbeat_coroutine = None
 
