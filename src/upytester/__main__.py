@@ -231,13 +231,6 @@ def action_reset():
     pyboard.reset(hard=True)
 
 
-@action('break')
-def action_break():
-    pyboard = upytester.PyBoard(args.serialnum)
-    pyboard.break_loop()
-    pyboard.close()
-
-
 # ====================== Mainline ======================
 def main():
     parser = argparse.ArgumentParser(
