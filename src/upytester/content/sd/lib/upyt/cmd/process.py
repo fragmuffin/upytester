@@ -2,10 +2,7 @@ import uasyncio as asyncio
 import json
 
 from . import mapping
-
-# ref: https://forum.micropython.org/viewtopic.php?t=5538
-TYPE_GEN = type((lambda: (yield))())  # Generator type
-TYPE_GEN_FUNC = type((lambda: (yield)))  # Generator function
+from .types import type_gen_func
 
 
 async def interpret_instruction(obj: dict):
@@ -36,7 +33,7 @@ async def interpret_instruction(obj: dict):
 
     # Execute (async / non-async)
     func = mapping._instruction_map[instruction_name]
-    if isinstance(func, TYPE_GEN_FUNC):  # assumed async
+    if isinstance(func, type_gen_func):  # assumed async
         response = await func(*obj.get('a', []), **obj.get('k', {}))
     else:
         response = func(*obj.get('a', []), **obj.get('k', {}))
@@ -119,7 +116,7 @@ async def interpret_remote_instruction(obj: dict):
         raise AttributeError("non-callable attributes are not supported")
 
     # Execute (async / non-async)
-    if isinstance(func, TYPE_GEN_FUNC):  # assumed async
+    if isinstance(func, type_gen_func):  # assumed async
         response = await func(*obj.get('a', []), **obj.get('k', {}))
     else:
         response = func(*obj.get('a', []), **obj.get('k', {}))

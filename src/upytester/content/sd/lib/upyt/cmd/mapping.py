@@ -2,6 +2,7 @@
 import json
 import gc
 
+from .types import type_gen_func, type_func
 
 # -------------- Instructions --------------
 _instruction_map = {}
@@ -37,7 +38,7 @@ def instruction(func):
     Because the method name, and keyword arguments are serialized and
     transmitted, consider keeping argument & method names short.
     """
-    if not isinstance(func, type(lambda: None)):
+    if not isinstance(func, (type_func, type_gen_func)):
         raise ValueError("{!r} is not a method".format(func))
     if func.__name__ in _instruction_map:
         raise ValueError("duplicate instruction; can't replace {old!r} with {new!r}".format(  # noqa: E501
