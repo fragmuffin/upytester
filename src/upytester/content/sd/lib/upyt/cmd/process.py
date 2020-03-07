@@ -2,7 +2,7 @@ import uasyncio as asyncio
 import json
 
 from . import mapping
-from .types import type_gen_func
+from .types import type_coro, type_bound_coro
 
 
 async def interpret_instruction(obj: dict):
@@ -33,10 +33,9 @@ async def interpret_instruction(obj: dict):
 
     # Execute (async / non-async)
     func = mapping._instruction_map[instruction_name]
-    if isinstance(func, type_gen_func):  # assumed async
-        response = await func(*obj.get('a', []), **obj.get('k', {}))
-    else:
-        response = func(*obj.get('a', []), **obj.get('k', {}))
+    response = func(*obj.get('a', []), **obj.get('k', {}))
+    if isinstance(response, type_coro):  # assumed async
+        response = await response
 
     # Send response (if any given)
     if response is not None:
@@ -116,10 +115,9 @@ async def interpret_remote_instruction(obj: dict):
         raise AttributeError("non-callable attributes are not supported")
 
     # Execute (async / non-async)
-    if isinstance(func, type_gen_func):  # assumed async
-        response = await func(*obj.get('a', []), **obj.get('k', {}))
-    else:
-        response = func(*obj.get('a', []), **obj.get('k', {}))
+    response = func(*obj.get('a', []), **obj.get('k', {}))
+    if isinstance(response, type_bound_coro):
+        response = await response
 
     # Send response (if any given)
     if response is not None:
