@@ -626,6 +626,13 @@ class PyBoard(object):
             self._pyboard = pyboard
             self._idx = idx
 
+        def __repr__(self):
+            return "<{cls}: @remote[{idx}] on {pyboard!r}>".format(
+                cls=self.__class__.__name__,
+                idx=self._idx,
+                pyboard=self._pyboard,
+            )
+
         def __getattr__(self, key):
             def func(*args, **kwargs):
                 payload = self._pyboard._payload(

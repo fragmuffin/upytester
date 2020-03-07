@@ -2,12 +2,13 @@
 import json
 import gc
 
+from .types import type_gen_func, type_func
 
 # -------------- Instructions --------------
 _instruction_map = {}
 
 
-def instruction(func):
+def instruction(arg):
     r"""
     Map a function to an incoming instruction.
 
@@ -37,14 +38,25 @@ def instruction(func):
     Because the method name, and keyword arguments are serialized and
     transmitted, consider keeping argument & method names short.
     """
-    if not isinstance(func, type(lambda: None)):
-        raise ValueError("{!r} is not a method".format(func))
-    if func.__name__ in _instruction_map:
-        raise ValueError("duplicate instruction; can't replace {old!r} with {new!r}".format(  # noqa: E501
-            old=_instruction_map[func.__name__], new=func,
-        ))
-    _instruction_map[func.__name__] = func
-    return func
+    if isinstance(arg, str):
+        name = arg
+    else:
+        name = arg.__name__
+
+    def decorator(func):
+        if not isinstance(func, (type_func, type_gen_func)):
+            raise ValueError("{!r} is not a method".format(func))
+        if name in _instruction_map:
+            raise ValueError("duplicate instruction; can't replace {old!r} with {new!r}".format(  # noqa: E501
+                old=_instruction_map[name], new=func,
+            ))
+        _instruction_map[name] = func
+        return func
+
+    if isinstance(arg, str):
+        return decorator
+    else:
+        return decorator(arg)
 
 
 @instruction
