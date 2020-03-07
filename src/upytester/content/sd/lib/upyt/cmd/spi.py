@@ -1,11 +1,19 @@
 import pyb
 import struct
 
+from asyn import Lock
+
 from .mapping import remote
 
 
 @remote
 class SPI(pyb.SPI):
+    """
+    Remote of pyb.SPI.
+
+    Offers some advantages over standard SPI object, including JSON
+    serializable send/receive functions (prefixed with ``r_`` for _remote_).
+    """
     def __init__(self, bus, **kwargs):
         """
         :param bus: integer index of :class:`pyb.SPI` to use.
@@ -21,11 +29,18 @@ class SPI(pyb.SPI):
         }[kwargs.get('mode', 'master')]
         self.init(**kwargs)
 
+        self.bus = bus
+        self.lock = Lock()
+
     def __del__(self):
         self.deinit()
 
+    def __hash__(self):
+        return self.bus
+
     @staticmethod
-    def _encode(data) -> bytes:
+    def encode(data) -> bytes:
+        """Encode data to be transmitted over SPI (into :class:`bytes`)."""
         if isinstance(data, bytes):
             return data
         elif isinstance(data, str):
@@ -43,7 +58,7 @@ class SPI(pyb.SPI):
     #   (ie: will not be an output of json.loads())
     def r_send(self, data, timeout: int=5000):
         """Transmit data, compatible with json encoding."""
-        self.send(self._encode(data), timeout=timeout)
+        self.send(self.encode(data), timeout=timeout)
 
     def r_recv(self, count: int, timeout: int=5000):
         """Receive data, compatible with json encoding."""
@@ -51,4 +66,4 @@ class SPI(pyb.SPI):
 
     def r_send_recv(self, data, timeout: int=5000):
         """Transmit and receive data, compatible with json encoding."""
-        return list(self.send_recv(self._encode(data), timeout=timeout))
+        return list(self.send_recv(self.encode(data), timeout=timeout))

@@ -2,9 +2,10 @@ import uasyncio as asyncio
 import json
 
 from . import mapping
+from .types import type_coro, type_bound_coro
 
 
-def interpret_instruction(obj: dict):
+async def interpret_instruction(obj: dict):
     """
     Interpret obj as arguments for the named instruction.
 
@@ -30,9 +31,11 @@ def interpret_instruction(obj: dict):
     if instruction_name not in mapping._instruction_map:
         return
 
-    # Execute function
+    # Execute (async / non-async)
     func = mapping._instruction_map[instruction_name]
     response = func(*obj.get('a', []), **obj.get('k', {}))
+    if isinstance(response, type_coro):  # assumed async
+        response = await response
 
     # Send response (if any given)
     if response is not None:
@@ -80,7 +83,7 @@ def interpret_new_remote_instance(obj: dict):
     mapping.send(instance._upyt_id)
 
 
-def interpret_remote_instruction(obj: dict):
+async def interpret_remote_instruction(obj: dict):
     """
     Interpret obj as a function call to an existing remote class instance.
 
@@ -105,36 +108,44 @@ def interpret_remote_instruction(obj: dict):
     """
     # Fetch remote instance from ID
     instance = mapping._remote_instance_map[obj.get('rid')]
-    attr = getattr(instance, obj.get('i'))
-    if not callable(attr):
+
+    # Get function as attribute of instance
+    func = getattr(instance, obj.get('i'))
+    if not callable(func):
         raise AttributeError("non-callable attributes are not supported")
-    response = attr(*obj.get('a', []), **obj.get('k', {}))
+
+    # Execute (async / non-async)
+    response = func(*obj.get('a', []), **obj.get('k', {}))
+    if isinstance(response, type_bound_coro):
+        response = await response
 
     # Send response (if any given)
     if response is not None:
         mapping.send(response)
 
 
-def interpret(obj):
+async def interpret(obj):
     """
     Perform the action defined in the given object.
 
     :param obj: deserialized JSON object received from host
     :type obj: :class:`dict`
 
-    Given ``obj`` must be accepted by either :meth:`interpret_instruction`
-    or :meth:`interpret_new_remote_instance`.
+    Given ``obj`` must be accepted by either
+    :meth:`interpret_instruction`,
+    :meth:`interpret_new_remote_instance`, or
+    :meth:`interpret_remote_instruction`.
     """
     # Find referenced function
     if not isinstance(obj, dict):
         return
 
     if 'rid' in obj:
-        interpret_remote_instruction(obj)
+        await interpret_remote_instruction(obj)
     elif 'rc' in obj:
         interpret_new_remote_instance(obj)
     elif 'i' in obj:
-        interpret_instruction(obj)
+        await interpret_instruction(obj)
     else:
         pass  # ignore instruction
 
@@ -159,7 +170,7 @@ async def listener(stream):
                 #       to complete before the host can begin to process the next command.
                 #       However, it does enable tests to... you know... fail when they
                 #       should. So the choice seems like a no-brainer.
-                interpret(json.loads(line))
+                await interpret(json.loads(line))
                 stream.write(b'ok\r')
                 # Clear line
                 line = b''
