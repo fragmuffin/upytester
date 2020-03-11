@@ -178,7 +178,7 @@ def action_sync():
     def sync_main():
         global pyboard
         # Excluded patterns
-        exclude = ['.git', '*/__pycache__']  # always ignored stuff
+        exclude = ['.git*', '*/__pycache__']  # always ignored stuff
         if prj_lib:
             exclude.append(os.path.join('lib_bench', '*'))
         # run sync
@@ -202,6 +202,7 @@ def action_sync():
             dryrun=args.dryrun,
             quiet=args.quiet,
             subdir=args.dest + '/lib_bench',
+            exclude=['.git*', '*/__pycache__'],  # always ignored stuff
         )
 
     if prj_lib:
