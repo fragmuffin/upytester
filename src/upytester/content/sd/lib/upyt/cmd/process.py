@@ -1,5 +1,6 @@
 import uasyncio as asyncio
 import json
+import gc
 
 from . import mapping
 from .types import type_coro, type_bound_coro
@@ -69,6 +70,7 @@ def interpret_new_remote_instance(obj: dict):
     :meth:`interpret_remote_instruction`.
     """
     global _remote_instance_index
+    gc.collect()
 
     # Create Instance (assign unique id)
     cls = mapping._remote_class_map[obj.get('rc')]
