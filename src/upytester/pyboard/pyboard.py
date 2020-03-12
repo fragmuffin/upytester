@@ -555,8 +555,8 @@ class PyBoard(object):
             self.comport.close()
             # note: an alternative is to send ctrl+d (b'\x1a') (untested)
         else:
-            self.machine_reset(t=500)
-            self.close()
+            self.comport.write(b'\x03\x04')  # [Ctrl+C] + [Ctrl+D]
+            self.comport.close()
         self._comport = None
 
     # ==================== Context Management ====================
