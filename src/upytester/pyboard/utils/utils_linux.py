@@ -95,19 +95,16 @@ class StorageDevice:
 
         try:
             # Run
-            process = subprocess.Popen(
-                ['udisksctl', 'info', '--block-device', cls.find_device_file(pyboard)],
-                stdout=subprocess.PIPE,
-            )
-
-            # Map output to dict
-            info_regex = re.compile(r'^\s+(?P<key>\S+):\s+(?P<value>.*)\s*$')
-            for line in process.stdout:
-                process.poll()
-                match = info_regex.search(line.decode())
-                if match:
-                    info_dict[match.group('key')] = match.group('value')
-            process.wait()
+            cmd = ['udisksctl', 'info', '--block-device', cls.find_device_file(pyboard)]
+            with subprocess.Popen(cmd, stdout=subprocess.PIPE) as process:
+                # Map output to dict
+                info_regex = re.compile(r'^\s+(?P<key>\S+):\s+(?P<value>.*)\s*$')
+                for line in process.stdout:
+                    process.poll()
+                    match = info_regex.search(line.decode())
+                    if match:
+                        info_dict[match.group('key')] = match.group('value')
+                process.wait()
 
         except DeviceFileNotFoundError:
             pass  # fail nicely; return an empty dict
