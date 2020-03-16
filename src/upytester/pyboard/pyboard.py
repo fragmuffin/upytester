@@ -34,13 +34,23 @@ class PyBoard(object):
     # Defaults
     DEFAULT_BAUDRATE = 115200
 
-    def __init__(self, serial_number, name=None, comport=None, auto_open=True, heartbeat=True):  # noqa: E501
+    def __init__(self,
+            serial_number,
+            name=None,
+            comport=None,
+            comport_class=serial.Serial,
+            auto_open=True,
+            heartbeat=True,
+        ):
         """
         :param serial_number: Serial number of PyBoard instance
         :type serial_number: :class:`str`
         :param name: Pyboard's Name [optional] to identify more easily in a
                      larger scale project.
         :type name: :class:`str`
+        :param comport: serial stream (optional)
+        :param comport_class: optional class to customize stream behaviour,
+                              defaults to :class:`serial.Serial`
 
         To get a list of valid `serial_number` values call
         :meth:`<upytester.PyBoard.connected_serial_numbers> connected_serial_numbers`::
@@ -71,6 +81,7 @@ class PyBoard(object):
         self._instruction_list = None
         self._remote_class_list = None
 
+        self.comport_class = comport_class
         self._comport = comport
 
         self._heartbeat = heartbeat
@@ -166,7 +177,7 @@ class PyBoard(object):
     def comport(self):
         if self._comport is None:
             port_info = utils.find_portinfo(self)
-            self._comport = serial.Serial(
+            self._comport = self.comport_class(
                 port=port_info.device,
                 baudrate=self.DEFAULT_BAUDRATE,
             )
