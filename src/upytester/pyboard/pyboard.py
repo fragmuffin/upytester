@@ -564,7 +564,7 @@ class PyBoard(object):
         if hard:
             self.comport.write(b'\x03\r\nimport pyb\r\npyb.hard_reset()\r\n')
             self.comport.close()
-            # note: an alternative is to send ctrl+d (b'\x1a') (untested)
+            time.sleep(2.5)  # wait reasonable time for USB to re-connect to OS
         else:
             self.comport.write(b'\x03\x04')  # [Ctrl+C] + [Ctrl+D]
             self.comport.close()
