@@ -43,7 +43,7 @@ def get_bench_config(filename=None):
     return data
 
 
-def get_device(name, config=None):
+def get_device(name, config=None, **kwargs):
     """
     Get a PyBoard device by name, configured in the project.
 
@@ -57,4 +57,5 @@ def get_device(name, config=None):
     return PyBoard(
         serial_number=config['devices'][name]['serial'],
         name=name,
+        **kwargs,
     )
