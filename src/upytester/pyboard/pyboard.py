@@ -135,10 +135,13 @@ class PyBoard(object):
         :type dryrun: :class:`bool`
         :param quiet: If `True` process will not print anything to stdout
         :type quiet: :class:`bool`
+        :param unmount: if ``False``, will not unmount drive after sync
         """
+        unmount = kwargs.pop('unmount', True)
         self.mount_sd()
         return utils.sync_files_to_sd(source, self, **kwargs)
-        self.unmount_sd()
+        if unmount:
+            self.unmount_sd()
 
     # ----- Flash
     def mount_flash(self):
@@ -168,9 +171,11 @@ class PyBoard(object):
         Just like :meth:`PyBoard.sync_to_sd` but to Flash
         (instead of the SD card).
         """
+        unmount = kwargs.pop('unmount', True)
         self.mount_flash()
         return utils.sync_files_to_flash(source, self, **kwargs)
-        self.unmount_flash()
+        if unmount:
+            self.unmount_flash()
 
     # ==================== Serial Communication ====================
     @property
