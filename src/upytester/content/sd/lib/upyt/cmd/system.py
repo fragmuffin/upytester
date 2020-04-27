@@ -79,5 +79,10 @@ def get_system_info():
 
 @instruction
 def get_ticks_ms():
-    """Get ticks since boot."""
+    """Get ticks since boot (unit: ms)."""
     return time.ticks_ms()
+
+@instruction
+def get_ticks_us():
+    """Get ticks since boot (unit: us)."""
+    return time.ticks_us()
